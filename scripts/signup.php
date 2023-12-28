@@ -1,9 +1,20 @@
 <?php
 
-// Include the database connection file
-include('connection.php');
+// Database connection details
+$database_hostname ="localhost";
+$database_username = "user";
+$database_password = "php";
+$database_name = "socialmedia_db";
 
-// Process the form data
+// Create connection
+$conn = new mysqli($database_hostname, $database_username, $database_password, $database_name);
+
+// Check connection
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
+// Process the signup form data
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = $_POST["email"];
     $username = $_POST["username"];
@@ -27,7 +38,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         echo "Username already exists. Please choose a different username.";
     } else {
         // Use prepared statements to prevent SQL injection
-        $stmt = $conn->prepare("INSERT INTO $tableName (email, username, password) VALUES (?, ?, ?)");
+        $stmt = $conn->prepare("INSERT INTO users (email, username, password_hash) VALUES (?, ?, ?)");
         $stmt->bind_param("sss", $email, $username, $password_hash);
 
         // Hash the password before storing it in the database

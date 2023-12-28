@@ -1,7 +1,18 @@
 <?php
 
-// Include the database connection file
-include('connection.php');
+// Database connection details
+$database_hostname ="localhost";
+$database_username = "user";
+$database_password = "php";
+$database_name = "socialmedia_db";
+
+// Create connection
+$conn = new mysqli($database_hostname, $database_username, $database_password, $database_name);
+
+// Check connection
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
 
 // Process the login form data
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -9,14 +20,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $password = $_POST["password"];
 
     // Use prepared statements to prevent SQL injection
-    $stmt = $conn->prepare("SELECT username, password FROM $tableName WHERE username = ?");
+    $stmt = $conn->prepare("SELECT username, password_hash FROM users WHERE username = ?");
     $stmt->bind_param("s", $username);
     $stmt->execute();
-    $stmt->bind_result($dbUsername, $dbPassword);
+    $stmt->bind_result($db_username, $db_password_hash);
 
     if ($stmt->fetch()) {
         // Verify the password
-        if (password_verify($password, $dbPassword)) {
+        if (password_verify($password, $db_password_hash)) {
             echo "Login successful!";
             // Add session handling or redirect to a secure area here
         } else {
