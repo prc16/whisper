@@ -32,7 +32,7 @@ if ($conn->connect_error) {
 }
 
 // Function to create the table
-function createTable() {
+function create_table() {
     global $conn;
     
     $sql = "CREATE TABLE IF NOT EXISTS users (
@@ -50,7 +50,7 @@ function createTable() {
 }
 
 // Function to delete the table
-function deleteTable() {
+function delete_table() {
     global $conn;
 
     $sql = "DROP TABLE IF EXISTS users";
@@ -64,12 +64,12 @@ function deleteTable() {
 
 // Check if the form is submitted for table creation
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["create_table"])) {
-    createTable();
+    create_table();
 }
 
 // Check if the form is submitted for table deletion
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["delete_table"])) {
-    deleteTable();
+    delete_table();
 }
 
 $conn->close();
