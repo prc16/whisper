@@ -1,26 +1,14 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin home</title>
-</head>
-<body>
-
-    <form method="post" action="<?php echo $_SERVER["PHP_SELF"]; ?>">
-        <button type="submit" name="create_table">Create Table</button>
-        <button type="submit" name="delete_table">Delete Table</button>
-    </form>
-
-</body>
-</html>
-
 <?php
 
-// Database connection details
-$database_hostname ="localhost";
-$database_username = "admin";
-$database_password = "password";
+session_start();
+
+// Access the variables from the session
+$database_hostname = $_SESSION['database_hostname'];
+$database_username = $_SESSION['database_username'];
+$database_password = $_SESSION['database_password'];
+
+// TODO: php function to create socialmedia_db 
+// TODO: php function to create user named user with SELECT, INSERT, UPDATE, DELETE privileges
 $database_name = "socialmedia_db";
 
 // Create connection
