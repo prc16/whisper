@@ -8,7 +8,7 @@ $database_hostname = isset($_POST['database_hostname']) ? $_POST['database_hostn
 $database_username = isset($_POST['database_username']) ? $_POST['database_username'] : '';
 $database_password = isset($_POST['database_password']) ? $_POST['database_password'] : '';
 
-if (empty($database_hostname) || empty($database_username) || empty($database_password)) {
+if (empty($database_hostname) || empty($database_username)) {
     die("Please provide all required information.");
 }
 
