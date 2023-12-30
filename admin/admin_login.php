@@ -43,24 +43,30 @@ try {
                 $_SESSION['admin_username'] = $admin_username;
                 $_SESSION['admin_password'] = $admin_password;
 
+                // Release the session lock
+                session_write_close();
+
                 // Close the database connection
                 $conn->close();
 
                 // Redirect to admin home page
-                header("Location: admin_home.html");
+                header("Location: admin_home.php");
                 exit();
             }
         }
     } else {
         // Handle the case where the query failed
-        echo "Error: " . $conn->error;
+        throw new Exception("Error: " . $conn->error);
     }
 } catch (Exception $e) {
-    // Handle exceptions, if any
-    echo "Error: " . $e->getMessage();
-} finally {
-    // Close the database connection
-    $conn->close();
-}
+    // Log the exception for reference
+    error_log("Exception: " . $e->getMessage());
 
-?>
+    // Handle exceptions, if any
+    echo "An error occurred. Please try again later.";
+} finally {
+    // Close the database connection if it's set
+    if (isset($conn)) {
+        $conn->close();
+    }
+}
