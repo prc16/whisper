@@ -4,15 +4,17 @@ session_start();
 
 // Constants
 define('TABLE_NAME', 'users');
+define('DATABASE_USERNAME', 'user');
+define('DATABASE_PASSWORD', 'php');
 define('DATABASE_NAME', 'socialmedia_db');
 
 // Function to establish a database connection
 function connectToDatabase() {
     $database_hostname = $_SESSION['database_hostname'];
-    $database_username = $_SESSION['database_username'];
-    $database_password = $_SESSION['database_password'];
+    $admin_username = $_SESSION['admin_username'];
+    $admin_password = $_SESSION['admin_password'];
 
-    $conn = new mysqli($database_hostname, $database_username, $database_password, DATABASE_NAME);
+    $conn = new mysqli($database_hostname, $admin_username, $admin_password, DATABASE_NAME);
 
     if ($conn->connect_error) {
         die("Connection failed: " . $conn->connect_error);
