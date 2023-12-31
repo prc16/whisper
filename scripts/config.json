@@ -1,7 +1,0 @@
-{
-    "database_host": "localhost",
-    "database_user": "user",
-    "database_password": "php",
-    "database_name": "socialmedia_db",
-    "table_name": "users"
-}

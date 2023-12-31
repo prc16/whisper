@@ -1,0 +1,72 @@
+<?php
+
+// Define privileges as constants
+define('PRIVILEGE_TO_CHECK', 'WITH GRANT OPTION');
+
+// Input validation
+$database_hostname = isset($_POST['database_hostname']) ? $_POST['database_hostname'] : '';
+$admin_username = isset($_POST['admin_username']) ? $_POST['admin_username'] : '';
+$admin_password = isset($_POST['admin_password']) ? $_POST['admin_password'] : '';
+
+if (empty($database_hostname) || empty($admin_username)) {
+    die("Please provide all required information.");
+}
+
+try {
+    // Database connection
+    $conn = new mysqli($database_hostname, $admin_username, $admin_password);
+
+    // Check the connection
+    if ($conn->connect_error) {
+        die("Connection failed: " . $conn->connect_error);
+    }
+
+    // Sanitize input to prevent SQL injection
+    $admin_username = $conn->real_escape_string($admin_username);
+    $database_hostname = $conn->real_escape_string($database_hostname);
+
+    // Query to check if the user has the specified privilege
+    $query = "SHOW GRANTS FOR '$admin_username'@'$database_hostname'";
+    $result = $conn->query($query);
+
+    // Check if the query was successful
+    if ($result) {
+        while ($row = $result->fetch_assoc()) {
+            // Check if the privilege is granted
+            if (strpos($row['Grants for ' . $admin_username . '@' . $database_hostname], PRIVILEGE_TO_CHECK) !== false) {
+                // Secure session handling
+                session_start();
+                session_regenerate_id();
+
+                // Code to process and set variables
+                $_SESSION['database_hostname'] = $database_hostname;
+                $_SESSION['admin_username'] = $admin_username;
+                $_SESSION['admin_password'] = $admin_password;
+
+                // Release the session lock
+                session_write_close();
+
+                // Close the database connection
+                $conn->close();
+
+                // Redirect to admin home page
+                header("Location: admin_home.php");
+                exit();
+            }
+        }
+    } else {
+        // Handle the case where the query failed
+        throw new Exception("Error: " . $conn->error);
+    }
+} catch (Exception $e) {
+    // Log the exception for reference
+    error_log("Exception: " . $e->getMessage());
+
+    // Handle exceptions, if any
+    echo "An error occurred. Please try again later.";
+} finally {
+    // Close the database connection if it's set
+    if (isset($conn)) {
+        $conn->close();
+    }
+}
