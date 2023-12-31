@@ -49,93 +49,84 @@
 
     </form>
 
-</body>
+    <?php
 
-</html>
-<?php
+    session_start();
 
-session_start();
+    // Constants
+    define('TABLE_NAME', 'users');
+    define('DATABASE_USERNAME', 'user');
+    define('DATABASE_PASSWORD', 'php');
+    define('DATABASE_NAME', 'socialmedia_db');
 
-// Constants
-define('TABLE_NAME', 'users');
-define('DATABASE_USERNAME', 'user');
-define('DATABASE_PASSWORD', 'php');
-define('DATABASE_NAME', 'socialmedia_db');
+    $database_hostname = $_SESSION['database_hostname'];
+    $admin_username = $_SESSION['admin_username'];
+    $admin_password = $_SESSION['admin_password'];
 
-$database_hostname = $_SESSION['database_hostname'];
-$admin_username = $_SESSION['admin_username'];
-$admin_password = $_SESSION['admin_password'];
+    // Function to establish a database connection
+    function connectToDatabase()
+    {
+        global $database_hostname;
+        global $admin_username;
+        global $admin_password;
 
-// Function to establish a database connection
-function connectToDatabase()
-{
-    global $database_hostname;
-    global $admin_username;
-    global $admin_password;
+        $conn = new mysqli($database_hostname, $admin_username, $admin_password);
 
-    $conn = new mysqli($database_hostname, $admin_username, $admin_password);
+        if ($conn->connect_error) {
+            die("Connection failed: " . $conn->connect_error);
+        }
 
-    if ($conn->connect_error) {
-        die("Connection failed: " . $conn->connect_error);
+        return $conn;
     }
 
-    return $conn;
-}
+    // Function to database
+    function createDatabase($conn)
+    {
+        // Check if the database exists
+        $query = "SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = '" . DATABASE_NAME . "'";
+        $result = $conn->query($query);
 
-// Function to database
-function createDatabase($conn)
-{
-    // Check if the database exists
-    $query = "SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = '" . DATABASE_NAME . "'";
-    $result = $conn->query($query);
-
-    if ($result->num_rows > 0) {
-        // Database already exists
-        echo "Database already exist.<br>";
-    } else {
-        // Database does not exists, create it
-        $createQuery = "CREATE DATABASE " . DATABASE_NAME;
-        if ($conn->query($createQuery) === TRUE) {
-            echo "Database created successfully.<br>";
+        if ($result->num_rows > 0) {
+            // Database already exists
+            echo "Database already exist.<br>";
         } else {
-            echo "Error createing database: " . $conn->error . "<br>";
+            // Database does not exists, create it
+            $createQuery = "CREATE DATABASE " . DATABASE_NAME;
+            if ($conn->query($createQuery) === TRUE) {
+                echo "Database created successfully.<br>";
+            } else {
+                echo "Error creating database: " . $conn->error . "<br>";
+            }
         }
     }
-}
 
-// Function to delete database
-function deleteDatabase($conn)
-{
-    // Check if the database exists
-    $query = "SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = '" . DATABASE_NAME . "'";
-    $result = $conn->query($query);
+    // Function to delete database
+    function deleteDatabase($conn)
+    {
+        // Check if the database exists
+        $query = "SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = '" . DATABASE_NAME . "'";
+        $result = $conn->query($query);
 
-    if ($result->num_rows > 0) {
-        // Database exists, delete it
-        $dropQuery = "DROP DATABASE " . DATABASE_NAME;
-        $dropResult = $conn->query($dropQuery);
-        if ($dropResult === TRUE) {
-            echo "Database deleted successfully.<br>";
+        if ($result->num_rows > 0) {
+            // Database exists, delete it
+            $dropQuery = "DROP DATABASE " . DATABASE_NAME;
+            $dropResult = $conn->query($dropQuery);
+            if ($dropResult === TRUE) {
+                echo "Database deleted successfully.<br>";
+            } else {
+                echo "Error deleting database: " . $conn->error . "<br>";
+            }
         } else {
-            echo "Error deleting database: " . $conn->error . "<br>";
+            // Database does not exist
+            echo "Database does not exist.<br>";
         }
-    } else {
-        // Database does not exist
-        echo "Database does not exist.<br>";
     }
-}
 
-// Function to create the table
-function createUser($conn)
-{
-    global $database_hostname;
+    // Function to create the table
+    function createUser($conn)
+    {
+        global $database_hostname;
 
-    // Check if the database exists
-    $query = "SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = '" . DATABASE_NAME . "'";
-    $result = $conn->query($query);
-
-    if ($result->num_rows > 0) {
-        // Database exists, create user
         // Check if the user exists before attempting to drop it
         $checkUserQuery = "SELECT 1 FROM mysql.user WHERE user = '" . DATABASE_USERNAME . "' AND host = '$database_hostname'";
         $checkUserResult = $conn->query($checkUserQuery);
@@ -171,38 +162,26 @@ function createUser($conn)
                 echo "Error flushing privileges: " . $conn->error . "<br>";
             }
         }
-    } else {
-        // Database does not exist
-        echo "Database does not exist, cannot create user without database.<br>";
     }
-}
 
-// Function to delete the user
-function deleteUser($conn)
-{
-    global $database_hostname;
+    // Function to delete the user
+    function deleteUser($conn)
+    {
+        global $database_hostname;
 
-    // Check if the database exists
-    $query = "SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = '" . DATABASE_NAME . "'";
-    $result = $conn->query($query);
-
-    if ($result->num_rows > 0) {
-        // Database exists, create user
-
-        // Check if the user exists before attempting to drop it
         $checkUserQuery = "SELECT 1 FROM mysql.user WHERE user = '" . DATABASE_USERNAME . "' AND host = '$database_hostname'";
         $checkUserResult = $conn->query($checkUserQuery);
 
         if ($checkUserResult->num_rows > 0) {
-            // User already exists
-            
-            // Grant privileges
-            $grantPrivilegesQuery = "REVOKE ALL PRIVILEGES ON *.* FROM '" . DATABASE_USERNAME . "'@'$database_hostname';";
-            $grantPrivilegesResult = $conn->query($grantPrivilegesQuery);
-            if ($grantPrivilegesResult === TRUE) {
+            // User exists
+
+            // Revoke privileges
+            $revokePrivilegesQuery = "REVOKE ALL PRIVILEGES ON " . DATABASE_NAME . ".* FROM '" . DATABASE_USERNAME . "'@'$database_hostname'";
+            $revokePrivilegesResult = $conn->query($revokePrivilegesQuery);
+            if ($revokePrivilegesResult === TRUE) {
                 echo "Privileges revoked successfully.<br>";
             } else {
-                echo "Error granting privileges: " . $conn->error . "<br>";
+                echo "Error revoking privileges: " . $conn->error . "<br>";
             }
 
             // Flush privileges
@@ -226,107 +205,108 @@ function deleteUser($conn)
             // User does not exist
             echo "User does not exist.<br>";
         }
-    } else {
-        // Database does not exist
-        echo "Database does not exist, cannot create user without database.<br>";
     }
-}
 
 
-// Function to create the table
-function createTable($conn)
-{
-    // Check if the database exists
-    $query = "SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = '" . DATABASE_NAME . "'";
-    $result = $conn->query($query);
+    // Function to create the table
+    function createTable($conn)
+    {
+        // Check if the database exists
+        $query = "SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = '" . DATABASE_NAME . "'";
+        $result = $conn->query($query);
 
-    if ($result->num_rows > 0) {
-        // Database exists
-        // Select database
-        $conn->select_db(DATABASE_NAME);
+        if ($result->num_rows > 0) {
+            // Database exists
 
-        // Check if table exists before attempting to creat it
-        $checkTableQuery = "SHOW TABLES LIKE '" . TABLE_NAME . "'";
-        $checkTableResult = $conn->query($checkTableQuery);
+            // Select database
+            $conn->select_db(DATABASE_NAME);
 
-        if ($checkTableResult->num_rows > 0) {
-            // Table already exists
-            echo "Table already exist<br>";
-        } else {
-            // Table does not exist, create it
-            $createTableQuary = "CREATE TABLE " . TABLE_NAME . " (
-            user_id INT PRIMARY KEY AUTO_INCREMENT,
-            email VARCHAR(50) NOT NULL UNIQUE,
-            username VARCHAR(20) NOT NULL UNIQUE,
-            password_hash VARCHAR(60) NOT NULL
-        )";
+            // Check if table exists before attempting to creat it
+            $checkTableQuery = "SHOW TABLES LIKE '" . TABLE_NAME . "'";
+            $checkTableResult = $conn->query($checkTableQuery);
 
-            $createTableResult = $conn->query($createTableQuary);
-            if ($createTableResult === TRUE) {
-                echo "Table created successfully<br>";
+            if ($checkTableResult->num_rows > 0) {
+                // Table already exists
+                echo "Table already exist<br>";
             } else {
-                echo "Error creating table: " . $conn->error . "<br>";
-            }
-        }
-    } else {
-        // Database does not exists
-        echo "Database does not exists, cannot create table without database.";
-    }
-}
+                // Table does not exist, create it
+                $createTableQuery = "CREATE TABLE " . TABLE_NAME . " (
+                    user_id INT PRIMARY KEY AUTO_INCREMENT,
+                    email VARCHAR(50) NOT NULL UNIQUE,
+                    username VARCHAR(20) NOT NULL UNIQUE,
+                    password_hash VARCHAR(60) NOT NULL
+                )";
 
-// Function to delete the table
-function deleteTable($conn)
-{
-    // Check if the database exists
-    $query = "SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = '" . DATABASE_NAME . "'";
-    $result = $conn->query($query);
-
-    if ($result->num_rows > 0) {
-        // Database exists, delete it
-        // Select database
-        $conn->select_db(DATABASE_NAME);
-
-        // Check if table exists before attempting to delete it
-        $checkTableQuery = "SHOW TABLES LIKE '" . TABLE_NAME . "'";
-        $checkTableResult = $conn->query($checkTableQuery);
-
-        if ($checkTableResult->num_rows > 0) {
-            // Table exists, delete it
-            $dropTableQuary = "DROP TABLE " . TABLE_NAME;
-            $dropTableResult = $conn->query($dropTableQuary);
-            if ($dropTableResult === TRUE) {
-                echo "Table dropped successfully.<br>";
-            } else {
-                // Table does not exist
-                echo "Error dropping table: " . $conn->error . "<br>";
+                $createTableResult = $conn->query($createTableQuery);
+                if ($createTableResult === TRUE) {
+                    echo "Table created successfully<br>";
+                } else {
+                    echo "Error creating table: " . $conn->error . "<br>";
+                }
             }
         } else {
-            echo "Table does not exist.<br>";
+            // Database does not exists
+            echo "Database does not exists, cannot create table without database.";
         }
-    } else {
-        // Database does not exist
-        echo "Database does not exists, cannot delete table without database.";
-    }
-}
-
-// Check the form submission and take appropriate action
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $conn = connectToDatabase();
-
-    if (isset($_POST["create_database"])) {
-        createDatabase($conn);
-    } elseif (isset($_POST["create_user"])) {
-        createUser($conn);
-    } elseif (isset($_POST["create_table"])) {
-        createTable($conn);
-    } elseif (isset($_POST["delete_database"])) {
-        deleteDatabase($conn);
-    } elseif (isset($_POST["delete_user"])) {
-        deleteUser($conn);
-    } elseif (isset($_POST["delete_table"])) {
-        deleteTable($conn);
     }
 
-    $conn->close();
-}
-?>
+    // Function to delete the table
+    function deleteTable($conn)
+    {
+        // Check if the database exists
+        $query = "SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = '" . DATABASE_NAME . "'";
+        $result = $conn->query($query);
+
+        if ($result->num_rows > 0) {
+            // Database exists
+
+            // Select database
+            $conn->select_db(DATABASE_NAME);
+
+            // Check if table exists before attempting to delete it
+            $checkTableQuery = "SHOW TABLES LIKE '" . TABLE_NAME . "'";
+            $checkTableResult = $conn->query($checkTableQuery);
+
+            if ($checkTableResult->num_rows > 0) {
+                // Table exists, delete it
+                $dropTableQuery = "DROP TABLE " . TABLE_NAME;
+                $dropTableResult = $conn->query($dropTableQuery);
+                if ($dropTableResult === TRUE) {
+                    echo "Table dropped successfully.<br>";
+                } else {
+                    // Table does not exist
+                    echo "Error dropping table: " . $conn->error . "<br>";
+                }
+            } else {
+                echo "Table does not exist.<br>";
+            }
+        } else {
+            // Database does not exist
+            echo "Database does not exists, cannot delete table without database.";
+        }
+    }
+
+    // Check the form submission and take appropriate action
+    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+        $conn = connectToDatabase();
+
+        if (isset($_POST["create_database"])) {
+            createDatabase($conn);
+        } elseif (isset($_POST["create_user"])) {
+            createUser($conn);
+        } elseif (isset($_POST["create_table"])) {
+            createTable($conn);
+        } elseif (isset($_POST["delete_database"])) {
+            deleteDatabase($conn);
+        } elseif (isset($_POST["delete_user"])) {
+            deleteUser($conn);
+        } elseif (isset($_POST["delete_table"])) {
+            deleteTable($conn);
+        }
+
+        $conn->close();
+    }
+    ?>
+</body>
+
+</html>
