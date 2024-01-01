@@ -52,7 +52,7 @@ try {
                 $conn->close();
 
                 // Redirect to admin home page
-                header("Location: admin_home.php");
+                header("Location: admin_home.html");
                 exit();
             }
         }
