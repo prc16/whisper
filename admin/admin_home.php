@@ -45,7 +45,9 @@
 
         <button type="submit" name="delete_database">Delete Database</button>
         <button type="submit" name="delete_user">Delete User</button>
-        <button type="submit" name="delete_table">Delete Table</button><br>
+        <button type="submit" name="delete_table">Delete Table</button><br><br>
+
+        <button type="submit" name="logout">Logout</button>
 
     </form>
 
@@ -288,6 +290,13 @@
         }
     }
 
+    function logout() {
+        session_unset();
+        session_destroy();
+        header("Location: ../index.html");
+        exit();
+    }
+
     // Check the form submission and take appropriate action
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $conn = connectToDatabase();
@@ -304,6 +313,8 @@
             deleteUser($conn);
         } elseif (isset($_POST["delete_table"])) {
             deleteTable($conn);
+        } elseif (isset($_POST["logout"])) {
+            logout();
         }
 
         $conn->close();
