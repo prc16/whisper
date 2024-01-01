@@ -4,9 +4,9 @@
 define('PRIVILEGE_TO_CHECK', 'WITH GRANT OPTION');
 
 // Input validation
-$database_hostname = isset($_POST['database_hostname']) ? $_POST['database_hostname'] : '';
-$admin_username = isset($_POST['admin_username']) ? $_POST['admin_username'] : '';
-$admin_password = isset($_POST['admin_password']) ? $_POST['admin_password'] : '';
+$database_hostname = $_POST['database_hostname'] ?? '';
+$admin_username = $_POST['admin_username'] ?? '';
+$admin_password = $_POST['admin_password'] ?? '';
 
 if (empty($database_hostname) || empty($admin_username)) {
     die("Please provide all required information.");
@@ -32,8 +32,10 @@ try {
     // Check if the query was successful
     if ($result) {
         while ($row = $result->fetch_assoc()) {
-            // Check if the privilege is granted
+            // Check if the admin has privileges required
             if (strpos($row['Grants for ' . $admin_username . '@' . $database_hostname], PRIVILEGE_TO_CHECK) !== false) {
+                // admin has privileges, start the session
+                
                 // Secure session handling
                 session_start();
                 session_regenerate_id();
@@ -55,17 +57,12 @@ try {
             }
         }
     } else {
-        // Handle the case where the query failed
         throw new Exception("Error: " . $conn->error);
     }
 } catch (Exception $e) {
-    // Log the exception for reference
     error_log("Exception: " . $e->getMessage());
-
-    // Handle exceptions, if any
     echo "An error occurred. Please try again later.";
 } finally {
-    // Close the database connection if it's set
     if (isset($conn)) {
         $conn->close();
     }
