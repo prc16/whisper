@@ -59,6 +59,7 @@
     define('DATABASE_PASSWORD', 'php');
     define('DATABASE_NAME', 'socialmedia_db');
 
+    // Retrieve session data
     $database_hostname = $_SESSION['database_hostname'];
     $admin_username = $_SESSION['admin_username'];
     $admin_password = $_SESSION['admin_password'];
@@ -66,12 +67,13 @@
     // Function to establish a database connection
     function connectToDatabase()
     {
-        global $database_hostname;
-        global $admin_username;
-        global $admin_password;
+        // Access the global variables
+        global $database_hostname, $admin_username, $admin_password;
 
+        // Create a new MySQLi connection
         $conn = new mysqli($database_hostname, $admin_username, $admin_password);
 
+        // Check for connection errors
         if ($conn->connect_error) {
             die("Connection failed: " . $conn->connect_error);
         }
@@ -79,7 +81,7 @@
         return $conn;
     }
 
-    // Function to database
+    // Function to create a database
     function createDatabase($conn)
     {
         // Check if the database exists
@@ -88,9 +90,9 @@
 
         if ($result->num_rows > 0) {
             // Database already exists
-            echo "Database already exist.<br>";
+            echo "Database already exists.<br>";
         } else {
-            // Database does not exists, create it
+            // Database does not exist; create it
             $createQuery = "CREATE DATABASE " . DATABASE_NAME;
             if ($conn->query($createQuery) === TRUE) {
                 echo "Database created successfully.<br>";
@@ -100,7 +102,7 @@
         }
     }
 
-    // Function to delete database
+    // Function to delete a database
     function deleteDatabase($conn)
     {
         // Check if the database exists
@@ -108,7 +110,7 @@
         $result = $conn->query($query);
 
         if ($result->num_rows > 0) {
-            // Database exists, delete it
+            // Database exists; delete it
             $dropQuery = "DROP DATABASE " . DATABASE_NAME;
             $dropResult = $conn->query($dropQuery);
             if ($dropResult === TRUE) {
@@ -122,20 +124,20 @@
         }
     }
 
-    // Function to create the table
+    // Function to create a user
     function createUser($conn)
     {
         global $database_hostname;
 
-        // Check if the user exists before attempting to drop it
+        // Check if the user exists before attempting to create it
         $checkUserQuery = "SELECT 1 FROM mysql.user WHERE user = '" . DATABASE_USERNAME . "' AND host = '$database_hostname'";
         $checkUserResult = $conn->query($checkUserQuery);
 
         if ($checkUserResult->num_rows > 0) {
             // User already exists
-            echo "User already exist.<br>";
+            echo "User already exists.<br>";
         } else {
-
+            // User does not exist; create it
             $createUserQuery = "CREATE USER '" . DATABASE_USERNAME . "'@'$database_hostname' IDENTIFIED BY '" . DATABASE_PASSWORD . "'";
             $createUserResult = $conn->query($createUserQuery);
             if ($createUserResult === TRUE) {
@@ -157,14 +159,14 @@
             $flushPrivilegesQuery = "FLUSH PRIVILEGES";
             $flushPrivilegesResult = $conn->query($flushPrivilegesQuery);
             if ($flushPrivilegesResult === TRUE) {
-                echo "privileges flushed successfully.<br>";
+                echo "Privileges flushed successfully.<br>";
             } else {
                 echo "Error flushing privileges: " . $conn->error . "<br>";
             }
         }
     }
 
-    // Function to delete the user
+    // Function to delete a user
     function deleteUser($conn)
     {
         global $database_hostname;
@@ -188,12 +190,12 @@
             $flushPrivilegesQuery = "FLUSH PRIVILEGES";
             $flushPrivilegesResult = $conn->query($flushPrivilegesQuery);
             if ($flushPrivilegesResult === TRUE) {
-                echo "privileges flushed successfully.<br>";
+                echo "Privileges flushed successfully.<br>";
             } else {
                 echo "Error flushing privileges: " . $conn->error . "<br>";
             }
 
-            // delete user
+            // Delete user
             $deleteUserQuery = "DROP USER '" . DATABASE_USERNAME . "'@'$database_hostname'";
             $deleteUserResult = $conn->query($deleteUserQuery);
             if ($deleteUserResult === TRUE) {
@@ -208,7 +210,7 @@
     }
 
 
-    // Function to create the table
+    // Function to create a table
     function createTable($conn)
     {
         // Check if the database exists
@@ -221,15 +223,15 @@
             // Select database
             $conn->select_db(DATABASE_NAME);
 
-            // Check if table exists before attempting to creat it
+            // Check if table exists before attempting to create it
             $checkTableQuery = "SHOW TABLES LIKE '" . TABLE_NAME . "'";
             $checkTableResult = $conn->query($checkTableQuery);
 
             if ($checkTableResult->num_rows > 0) {
                 // Table already exists
-                echo "Table already exist<br>";
+                echo "Table already exists<br>";
             } else {
-                // Table does not exist, create it
+                // Table does not exist; create it
                 $createTableQuery = "CREATE TABLE " . TABLE_NAME . " (
                     user_id INT PRIMARY KEY AUTO_INCREMENT,
                     email VARCHAR(50) NOT NULL UNIQUE,
@@ -245,12 +247,12 @@
                 }
             }
         } else {
-            // Database does not exists
-            echo "Database does not exists, cannot create table without database.";
+            // Database does not exist
+            echo "Database does not exist, cannot create table without database.";
         }
     }
 
-    // Function to delete the table
+    // Function to delete a table
     function deleteTable($conn)
     {
         // Check if the database exists
@@ -274,10 +276,10 @@
                 if ($dropTableResult === TRUE) {
                     echo "Table dropped successfully.<br>";
                 } else {
-                    // Table does not exist
                     echo "Error dropping table: " . $conn->error . "<br>";
                 }
             } else {
+                // Table does not exist
                 echo "Table does not exist.<br>";
             }
         } else {
