@@ -56,12 +56,19 @@ try {
                 exit();
             }
         }
+        // User does not have required privileges
+        throw new Exception("Error: User does not have required privileges");
     } else {
         throw new Exception("Error: " . $conn->error);
     }
-} catch (Exception $e) {
-    error_log("Exception: " . $e->getMessage());
-    echo "An error occurred. Please try again later.";
+} catch (Exception $e1) {
+    echo $e1->getMessage();
+} catch (Exception $e2) {
+    error_log("Exception caught: " . $e2->getMessage());
+    // log the exception to the screen for debugging purposes
+    echo "Exception caught: " . $e2->getMessage();
+    // Change the error message on release.
+    //echo "An error occurred. Please try again later.";
 } finally {
     if (isset($conn)) {
         $conn->close();
