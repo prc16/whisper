@@ -52,9 +52,9 @@
     <div id="result"></div>
 
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
+        document.addEventListener("DOMContentLoaded", function () {
             var adminForm = document.getElementById('adminForm');
-            adminForm.addEventListener("click", function(event) {
+            adminForm.addEventListener("click", function (event) {
                 if (event.target.tagName === 'BUTTON') {
                     ajaxRequest(event.target.getAttribute('data-action'));
                 }
@@ -69,6 +69,10 @@
                 if (xhr.readyState === 4) {
                     if (xhr.status === 200) {
                         document.getElementById('result').innerHTML = xhr.responseText;
+                        // Check if the action is 'logout' and perform redirection
+                        if (action === 'logout') {
+                            window.location.href = '../index.html';
+                        }
                     } else {
                         // Handle error
                         console.error('Request failed with status:', xhr.status);
@@ -79,4 +83,5 @@
         }
     </script>
 </body>
+
 </html>
