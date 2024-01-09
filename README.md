@@ -7,8 +7,8 @@ Welcome to SocialMedia, a social media website created using XAMPP. This project
 ## Prerequisites  
 Before getting started, ensure that you have the following prerequisites installed:  
   
-XAMPP: Download and install XAMPP  
-Git: Download and install Git  
+XAMPP: [Download and install XAMPP](https://www.apachefriends.org/download.html)  
+Git: [Download and install Git](https://git-scm.com/downloads)  
 
 ## Setup  
 Follow these steps to set up the SocialMedia project on your local machine:
@@ -27,8 +27,8 @@ Open a terminal or command prompt and run the following command:
 Database Configuration:  
   
     1. Open phpmyadmin in your browser (http://localhost/phpmyadmin).
-    2. Create a new database named socialmedia.
-    3. Import the SQL file located in the database directory of the project.
+    2. Create a new database named 'socialmedia_db' with COLLATE=latin1_swedish_ci.
+    3. Select 'socialmedia_db' and Import the SQL file located in the database directory of the project.
   
 ### Configuration File:  
 Navigate to the config directory.  
@@ -54,7 +54,7 @@ Push your changes to your fork:
 
     git push origin feature-name
 
-Open a pull request on the SocialMedia repository with a detailed description of your changes.
+Open a pull request on the [SocialMedia](https://github.com/prc16/socialmedia) repository with a detailed description of your changes.
   
 ## License
 
