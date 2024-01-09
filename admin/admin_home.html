@@ -5,34 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin home</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f4f4f4;
-        }
-
-        form {
-            text-align: center;
-            margin-top: 50px;
-        }
-
-        button {
-            padding: 10px 20px;
-            font-size: 16px;
-            margin: 5px;
-            cursor: pointer;
-            background-color: #3498db;
-            color: #fff;
-            border: none;
-            border-radius: 5px;
-        }
-
-        button:hover {
-            background-color: #217dbb;
-        }
-    </style>
+    <link rel="stylesheet" href="./css/admin_home.css">
 </head>
 
 <body>
@@ -71,7 +44,7 @@
                         document.getElementById('result').innerHTML = xhr.responseText;
                         // Check if the action is 'logout' and perform redirection
                         if (action === 'logout') {
-                            window.location.href = '../index.html';
+                            window.location.href = '/home/';
                         }
                     } else {
                         // Handle error
