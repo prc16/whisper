@@ -1,10 +1,6 @@
 <?php
 
-// Database connection details
-$database_hostname ="localhost";
-$database_username = "user";
-$database_password = "php";
-$database_name = "socialmedia_db";
+include "../config/config.php";
 
 // Create connection
 $conn = new mysqli($database_hostname, $database_username, $database_password, $database_name);
