@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <style>
+    .cls-1 {
+      fill: #2d2d2d;
+      font-size: 50px;
+      font-family: ArialMT, Arial;
+      letter-spacing: -0.05em;
+    }
+    .cls-2 {
+      fill: #2d2d2d;
+      font-size: 50px;
+      font-family: ArialMT, Arial;
+      letter-spacing: -0.05em;
+    }
+    .cls-3 {
+      fill: #2d2d2d;
+      font-size: 50px;
+      font-family: ArialMT, Arial;
+      letter-spacing: -0.05em;
+    }
+  </style>
+  <text id="Whisper" class="cls-1" transform="translate(0 100)">Whisper</text>
+  <text id="Privacy-Centric" class="cls-2" transform="translate(0 150)">Privacy-Centric</text>
+  <text id="Social-Media-Platform" class="cls-3" transform="translate(0 200)">Social Media Platform</text>
+</svg>
