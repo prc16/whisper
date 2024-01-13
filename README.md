@@ -46,16 +46,16 @@ Open a terminal or command prompt and run the following command:
   
 ### Database Configuration:  
 Open phpmyadmin in your browser (http://localhost/phpmyadmin).  
-Import the SQL file located in the root directory of the project.  
+Import database.sql file.
   
 ### Configuration File:  
 Update the database connection details in config.php with your MySQL credentials.  
-
+  
 ### Access the Website:
 Open your web browser and navigate to http://localhost/. You should see the Whisper website.
   
 ## Contributing
-
+  
 ### If you would like to contribute to Whisper, please follow these steps:
 
 Fork the repository.

@@ -1,41 +1,49 @@
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Arial', sans-serif;
     background-color: #f4f4f4;
     margin: 0;
     padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
 }
 
 header {
-    background-color: #4CAF50;
-    color: white;
     text-align: center;
-    padding: 1em;
+    margin-bottom: 30px;
 }
 
-section {
-    max-width: 600px;
-    margin: auto;
-    padding: 20px;
-    background-color: white;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    margin-top: 20px;
+h1 {
+    color: #333;
 }
 
-.login-signup {
+.buttons {
+    display: flex;
+    gap: 20px;
+}
+
+.login-btn, .signup-btn {
+    padding: 15px 30px;
+    font-size: 16px;
     text-align: center;
-    margin-top: 20px;
-}
-
-.login-signup a {
-    display: inline-block;
-    padding: 10px 20px;
-    background-color: #4CAF50;
-    color: white;
     text-decoration: none;
+    color: #fff;
+    border: none;
     border-radius: 5px;
-    margin-right: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
 }
 
-.login-signup a:hover {
-    background-color: #45a049;
+.login-btn {
+    background-color: #3498db;
+}
+
+.signup-btn {
+    background-color: #2ecc71;
+}
+
+.login-btn:hover, .signup-btn:hover {
+    background-color: #1e6fa0;
 }
