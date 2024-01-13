@@ -2,33 +2,28 @@
 
 [![Whisper](https://raw.githubusercontent.com/prc16/whisper/master/.github/whisper-logo.png)](#readme)
 
+### A Privacy-Centric Social Media Platform.  
+
+Whisper is a social media website that places user privacy at its core. In an era where data security and confidentiality are paramount concerns, Whisper provides a refreshing approach to online social interaction.  
+  
 </div>
 
-# Whisper  
-A Privacy-Centric Social Media Platform.
-  
-## Introduction  
-Whisper is a social media website that places user privacy at
-its core. In an era where data security and confidentiality are
-paramount concerns, Whisper provides a refreshing approach
-to online social interaction.
-  
 ## Key Features:  
   
-### Anonymous Posting:  
-Users can share their thoughts, photos, and updates without revealing their true identity.  
+* Anonymous Posting:  
+    * Users can share their thoughts, photos, and updates without revealing their true identity.  
   
-### End-to-End Encryption:  
-Private messages and media files are protected with end-to-end encryption.  
+* End-to-End Encryption:  
+    * Private messages and media files are protected with end-to-end encryption.  
   
-### Customizable Privacy Settings:  
-Tailor settings to individual privacy needs for a personalized online presence.  
+* Customizable Privacy Settings:  
+    * Tailor settings to individual privacy needs for a personalized online presence.  
 
-### Community-driven Moderation:  
-Empower users to actively participate in maintaining a safe and respectful online environment.  
+* Community-driven Moderation:  
+    * Empower users to actively participate in maintaining a safe and respectful online environment.  
 
-### Self-Destructing Content:
-Users can set a time limit on their posts, after which the content automatically disappears.
+* Self-Destructing Content:
+    * Users can set a time limit on their posts, after which the content automatically disappears.
   
 ## Prerequisites  
 Before getting started, ensure that you have the following prerequisites installed:  
@@ -54,7 +49,6 @@ Open phpmyadmin in your browser (http://localhost/phpmyadmin).
 Import the SQL file located in the root directory of the project.  
   
 ### Configuration File:  
-Navigate to the config directory.  
 Update the database connection details in config.php with your MySQL credentials.  
 
 ### Access the Website:
