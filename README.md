@@ -1,6 +1,6 @@
 <div align="center">
 
-[![Whisper](https://raw.githubusercontent.com/prc16/whisper/master/.github/logo.svg)](#readme)
+[![Whisper](https://raw.githubusercontent.com/prc16/whisper/master/.github/whisper-logo.png)](#readme)
 
 </div>
 
