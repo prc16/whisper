@@ -12,25 +12,25 @@ if ($conn->connect_error) {
 
 // Process the login form data
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $username = $_POST["username"];
+    $email    = $_POST["email"];
     $password = $_POST["password"];
 
     // Use prepared statements to prevent SQL injection
-    $stmt = $conn->prepare("SELECT username, password_hash FROM users WHERE username = ?");
-    $stmt->bind_param("s", $username);
+    $stmt = $conn->prepare("SELECT uid, password_hash FROM users WHERE email = ?");
+    $stmt->bind_param("s", $email);
     $stmt->execute();
-    $stmt->bind_result($db_username, $db_password_hash);
+    $stmt->bind_result($uid, $password_hash);
 
     if ($stmt->fetch()) {
         // Verify the password
-        if (password_verify($password, $db_password_hash)) {
-            echo "Login successful!";
-            // Add session handling or redirect to a secure area here
+        if (password_verify($password, $password_hash)) {
+            echo "Log In successful!";
+            // TODO: Add session handling or redirect to a secure area here
         } else {
             echo "Invalid password";
         }
     } else {
-        echo "User not found";
+        echo "Email is not registerd. Please Sign Up instead";
     }
 
     // Close the prepared statement

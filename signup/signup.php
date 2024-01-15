@@ -12,8 +12,7 @@ if ($conn->connect_error) {
 
 // Process the signup form data
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $email = $_POST["email"];
-    $username = $_POST["username"];
+    $email    = $_POST["email"];
     $password = $_POST["password"];
 
     // Check if the email already exists
@@ -22,20 +21,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $checkEmailStmt->execute();
     $checkEmailStmt->store_result();
 
-    // Check if the username already exists
-    $checkUsernameStmt = $conn->prepare("SELECT username FROM users WHERE username = ?");
-    $checkUsernameStmt->bind_param("s", $username);
-    $checkUsernameStmt->execute();
-    $checkUsernameStmt->store_result();
-
     if ($checkEmailStmt->num_rows > 0) {
         echo "Email already exists. Please use a different email.";
-    } elseif ($checkUsernameStmt->num_rows > 0) {
-        echo "Username already exists. Please choose a different username.";
     } else {
         // Use prepared statements to prevent SQL injection
-        $stmt = $conn->prepare("INSERT INTO users (email, username, password_hash) VALUES (?, ?, ?)");
-        $stmt->bind_param("sss", $email, $username, $password_hash);
+        $stmt = $conn->prepare("INSERT INTO users (email, password_hash) VALUES (?, ?)");
+        $stmt->bind_param("ss", $email, $password_hash);
 
         // Hash the password before storing it in the database
         $password_hash = password_hash($password, PASSWORD_DEFAULT);
@@ -59,4 +50,3 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 // Close the database connection
 $conn->close();
-?>
