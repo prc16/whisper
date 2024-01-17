@@ -37,8 +37,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Close the email check statement
     $checkEmailStmt->close();
 
-    // Close the username check statement
-    $checkUsernameStmt->close(); // new
 }
 
 // Close the database connection
