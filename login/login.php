@@ -2,7 +2,6 @@
 
 include "../config.php";
 
-
 // Process the login form data
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email    = $_POST["email"];
@@ -17,13 +16,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if ($stmt->fetch()) {
         // Verify the password
         if (password_verify($password, $password_hash)) {
-            echo "Log In successful!";
-            // TODO: Add session handling or redirect to a secure area here
+
+            // Start a PHP session
+            session_start();
+            // Start a user session
+            $_SESSION["user_id"] = $uid;
+
+            // Redirect to the home page
+            header('Location: ../home/');
+            exit;
         } else {
             echo "Invalid password";
         }
     } else {
-        echo "Email is not registerd. Please Sign Up instead";
+        echo "Email is not registered. Please Sign Up instead";
     }
 
     // Close the prepared statement

@@ -5,17 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Whisper - Home</title>
     <link rel="stylesheet" href="home.css">
+    <link rel="stylesheet" href="../navbar/navbar.css">
+    <link rel="stylesheet" href="../posts/posts.css">
+    <script src="../posts/script.js"></script>
 </head>
 <body>
-
-    <header>
-        <h1>Whisper: A Privacy-Centric Social Media Platform.</h1>
-    </header>
-
-    <div class="buttons">
-        <a href="../login/" class="login-btn">Login</a>
-        <a href="../signup/" class="signup-btn">Sign Up</a>
-    </div>
-
+    <?php include '../navbar/navbar.php'; ?>
+    <?php include '../posts/posts.php'; ?>
 </body>
 </html>
