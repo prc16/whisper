@@ -39,7 +39,7 @@ Follow these steps to set up the Whisper project on your local machine:
 ### Clone the Project:
 Open a terminal or command prompt and run the following command:
 
-    git clone https://github.com/prc16/whisper.git C:\xampp\htdocs
+    git clone https://github.com/prc16/whisper.git C:\xampp\htdocs\whisper
   
 ### Start XAMPP:
   Start the XAMPP control panel and ensure that the Apache and MySQL modules are running.  
