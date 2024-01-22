@@ -11,7 +11,7 @@ USE `whisper_db`;
 
 CREATE TABLE `users` (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    uid VARCHAR(50) NOT NULL,
+    uid VARCHAR(50) UNIQUE NOT NULL,
     `email` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
     `password_hash` varchar(60) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='users';
