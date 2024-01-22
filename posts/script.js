@@ -27,7 +27,7 @@ function createPost() {
 
     // AJAX request to create a new post
     const xhr = new XMLHttpRequest();
-    xhr.open('POST', 'server.php', true);
+    xhr.open('POST', '../posts/server.php', true);
     xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
     xhr.onreadystatechange = function () {
         if (xhr.readyState == 4 && xhr.status == 200) {
@@ -46,7 +46,7 @@ function createPost() {
 function upvote(postId) {
     // AJAX request to upvote a post
     const xhr = new XMLHttpRequest();
-    xhr.open('POST', 'server.php', true);
+    xhr.open('POST', '../posts/server.php', true);
     xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
     xhr.onreadystatechange = function () {
         if (xhr.readyState == 4 && xhr.status == 200) {
@@ -61,7 +61,7 @@ function upvote(postId) {
 function downvote(postId) {
     // AJAX request to downvote a post
     const xhr = new XMLHttpRequest();
-    xhr.open('POST', 'server.php', true);
+    xhr.open('POST', '../posts/server.php', true);
     xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
     xhr.onreadystatechange = function () {
         if (xhr.readyState == 4 && xhr.status == 200) {
@@ -74,7 +74,7 @@ function downvote(postId) {
 
 // Initial display of posts
 const xhr = new XMLHttpRequest();
-xhr.open('GET', 'server.php', true);
+xhr.open('GET', '../posts/server.php', true);
 xhr.onreadystatechange = function () {
     if (xhr.readyState == 4 && xhr.status == 200) {
         posts = JSON.parse(xhr.responseText);
