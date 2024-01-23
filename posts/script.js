@@ -1,8 +1,18 @@
-// Dummy data for initial posts
-let posts = [];
+// Function to handle AJAX requests
+function makeRequest(method, url, data, callback) {
+    const xhr = new XMLHttpRequest();
+    xhr.open(method, url, true);
+    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4) {
+            callback(xhr.status, xhr.responseText);
+        }
+    };
+    xhr.send(data);
+}
 
 // Function to display posts
-function displayPosts() {
+function displayPosts(posts) {
     const postsContainer = document.getElementById('postsContainer');
     postsContainer.innerHTML = '';
 
@@ -13,10 +23,30 @@ function displayPosts() {
             <h2>${post.title}</h2>
             <p>${post.content}</p>
             <p>Votes: ${post.votes}</p>
-            <button onclick="upvote(${post.id})">Upvote</button>
-            <button onclick="downvote(${post.id})">Downvote</button>
+            <button onclick="vote('upvote', ${post.id})">Upvote</button>
+            <button onclick="vote('downvote', ${post.id})">Downvote</button>
         `;
         postsContainer.appendChild(postElement);
+    });
+}
+
+// Function to handle post creation and votes
+function vote(type, postId) {
+    // Check if user is logged in
+    const userLoggedIn = true; // Replace with your authentication logic
+    if (!userLoggedIn) {
+        alert(`You need to log in to ${type === 'upvote' ? 'upvote' : 'downvote'} a post.`);
+        return;
+    }
+
+    const data = `action=${type}&postId=${postId}`;
+    makeRequest('POST', '../posts/server.php', data, function (status, responseText) {
+        if (status === 200) {
+            posts = JSON.parse(responseText);
+            displayPosts(posts);
+        } else if (status === 401) {
+            alert(`You need to log in to ${type === 'upvote' ? 'upvote' : 'downvote'} a post.`);
+        }
     });
 }
 
@@ -25,60 +55,32 @@ function createPost() {
     const postTitle = document.getElementById('postTitle').value;
     const postContent = document.getElementById('postContent').value;
 
-    // AJAX request to create a new post
-    const xhr = new XMLHttpRequest();
-    xhr.open('POST', '../posts/server.php', true);
-    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-    xhr.onreadystatechange = function () {
-        if (xhr.readyState == 4 && xhr.status == 200) {
-            posts = JSON.parse(xhr.responseText);
-            displayPosts();
+    // Check if user is logged in
+    const userLoggedIn = true; // Replace with your authentication logic
+    if (!userLoggedIn) {
+        alert('You need to log in to create a post.');
+        return;
+    }
+
+    const data = `action=create&title=${encodeURIComponent(postTitle)}&content=${encodeURIComponent(postContent)}`;
+    makeRequest('POST', '../posts/server.php', data, function (status, responseText) {
+        if (status === 200) {
+            posts = JSON.parse(responseText);
+            displayPosts(posts);
+        } else if (status === 401) {
+            alert('You need to log in to create a post.');
         }
-    };
-    xhr.send(`action=create&title=${encodeURIComponent(postTitle)}&content=${encodeURIComponent(postContent)}`);
+    });
 
     // Clear the form fields
     document.getElementById('postTitle').value = '';
     document.getElementById('postContent').value = '';
 }
 
-// Function to upvote a post
-function upvote(postId) {
-    // AJAX request to upvote a post
-    const xhr = new XMLHttpRequest();
-    xhr.open('POST', '../posts/server.php', true);
-    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-    xhr.onreadystatechange = function () {
-        if (xhr.readyState == 4 && xhr.status == 200) {
-            posts = JSON.parse(xhr.responseText);
-            displayPosts();
-        }
-    };
-    xhr.send(`action=upvote&postId=${postId}`);
-}
-
-// Function to downvote a post
-function downvote(postId) {
-    // AJAX request to downvote a post
-    const xhr = new XMLHttpRequest();
-    xhr.open('POST', '../posts/server.php', true);
-    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-    xhr.onreadystatechange = function () {
-        if (xhr.readyState == 4 && xhr.status == 200) {
-            posts = JSON.parse(xhr.responseText);
-            displayPosts();
-        }
-    };
-    xhr.send(`action=downvote&postId=${postId}`);
-}
-
 // Initial display of posts
-const xhr = new XMLHttpRequest();
-xhr.open('GET', '../posts/server.php', true);
-xhr.onreadystatechange = function () {
-    if (xhr.readyState == 4 && xhr.status == 200) {
-        posts = JSON.parse(xhr.responseText);
-        displayPosts();
+makeRequest('GET', '../posts/server.php', null, function (status, responseText) {
+    if (status === 200) {
+        posts = JSON.parse(responseText);
+        displayPosts(posts);
     }
-};
-xhr.send();
+});
