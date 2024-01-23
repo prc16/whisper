@@ -10,15 +10,19 @@ USE `whisper_db`;
 
 
 CREATE TABLE `users` (
-    id INT AUTO_INCREMENT PRIMARY KEY,
+    id INT AUTO_INCREMENT,
     uid VARCHAR(50) UNIQUE NOT NULL,
-    `email` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-    `password_hash` varchar(60) NOT NULL
+    `email` VARCHAR(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+    `password_hash` VARCHAR(60) NOT NULL,
+    PRIMARY KEY (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='users';
 
-CREATE TABLE posts (
-    id INT AUTO_INCREMENT PRIMARY KEY,
+CREATE TABLE `posts` (
+    id INT AUTO_INCREMENT,
+    uid VARCHAR(50) CHARACTER SET utf8 COLLATE utf8_bin,
     title VARCHAR(255) NOT NULL,
     content TEXT NOT NULL,
-    votes INT NOT NULL
+    votes INT NOT NULL,
+    PRIMARY KEY (id),
+    FOREIGN KEY (uid) REFERENCES users(uid)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci COMMENT='posts';
