@@ -4,7 +4,7 @@ session_start();
 // Check if the user is logged in
 if (isset($_SESSION["user_id"])) {
     $loggedIn = true;
-    $userId = $_SESSION["user_id"];
+    $user_id = $_SESSION["user_id"];
 } else {
     $loggedIn = false;
 }
@@ -20,7 +20,7 @@ if (isset($_SESSION["user_id"])) {
         <?php
         if ($loggedIn) {
             // Display user ID when logged in
-            echo '<p class="user-id">User ID: ' . $userId . '</p>';
+            echo '<p class="user-id">User ID: ' . $user_id . '</p>';
             // Display logout button
             echo '<a href="../logout/logout.php" class="logout-btn">Logout</a>';
         } else {

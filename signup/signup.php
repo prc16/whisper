@@ -2,8 +2,8 @@
 
 include "../config.php";
 
-// Function to generate a random UID
-function generateUID() {
+// Function to generate a random user_id
+function generate_user_id() {
     return uniqid('', true);
 }
 
@@ -22,12 +22,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         echo "Email already exists. Please use a different email.";
     } else {
         // Use prepared statements to prevent SQL injection
-        $stmt = $conn->prepare("INSERT INTO users (email, password_hash, uid) VALUES (?, ?, ?)");
+        $stmt = $conn->prepare("INSERT INTO users (email, password_hash, user_id) VALUES (?, ?, ?)");
         
-        // Generate a random UID
-        $uid = generateUID();
+        // Generate a random user_id
+        $user_id = generate_user_id();
 
-        $stmt->bind_param("sss", $email, $password_hash, $uid);
+        $stmt->bind_param("sss", $email, $password_hash, $user_id);
 
         // Hash the password before storing it in the database
         $password_hash = password_hash($password, PASSWORD_DEFAULT);
@@ -36,7 +36,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             // Start a PHP session
             session_start();
             // Start a user session
-            $_SESSION["user_id"] = $uid;
+            $_SESSION["user_id"] = $user_id;
 
             // Redirect to the home page
             header('Location: ../home/');
