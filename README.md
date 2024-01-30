@@ -49,7 +49,7 @@ Import database.sql file.
 Update the database connection details in config.php with your MySQL credentials.  
   
 ### Access the Website:
-Open your web browser and navigate to http://localhost/. You should see the Whisper website.
+Open your web browser and navigate to http://localhost/whisper. You should see the Whisper website.
   
 ## Contributing
   
