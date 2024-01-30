@@ -33,9 +33,6 @@ XAMPP: [Download and install XAMPP](https://www.apachefriends.org/download.html)
 ## Setup  
 Follow these steps to set up the Whisper project on your local machine:
   
-### Empty htdocs Folder:  
-  Make sure your htdocs folder in the XAMPP installation directory is empty.  
-  
 ### Clone the Project:
 Open a terminal or command prompt and run the following command:
 
