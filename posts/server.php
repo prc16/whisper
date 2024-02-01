@@ -42,6 +42,74 @@ function updatePostVotes($postId, $voteIncrement)
     $conn->query($sql);
 }
 
+
+// Function to create a new vote in the database
+function createVote($userId, $postId, $voteType)
+{
+    global $conn;
+    $userId = $conn->real_escape_string($userId);
+    $postId = (int)$postId;
+    $voteType = $conn->real_escape_string($voteType);
+
+    $sql = "INSERT INTO votes (user_id, post_id, vote_type) VALUES ('$userId', $postId, '$voteType')";
+    $conn->query($sql);
+}
+
+// Function to check if a user has already voted on a post
+function getUserVoteType($userId, $postId)
+{
+    global $conn;
+    $userId = $conn->real_escape_string($userId);
+    $postId = (int)$postId;
+
+    $sql = "SELECT vote_type FROM votes WHERE user_id = '$userId' AND post_id = $postId";
+    $result = $conn->query($sql);
+
+    if ($result->num_rows > 0) {
+        $row = $result->fetch_assoc();
+        return $row['vote_type'];
+    }
+
+    return null;
+}
+
+// Function to remove a user's vote on a post
+function removeUserVote($userId, $postId)
+{
+    global $conn;
+    $userId = $conn->real_escape_string($userId);
+    $postId = (int)$postId;
+
+    $sql = "DELETE FROM votes WHERE user_id = '$userId' AND post_id = $postId";
+    $conn->query($sql);
+}
+
+// Function to handle upvote and downvote
+function handleVote($postId, $voteType)
+{
+    session_start();
+    $userId = $_SESSION['user_id'];
+
+    $currentVoteType = getUserVoteType($userId, $postId);
+
+    if ($currentVoteType === $voteType) {
+        // User is trying to upvote/downvote again on the same post, remove the vote
+        removeUserVote($userId, $postId);
+        updatePostVotes($postId, ($voteType === 'upvote' ? -1 : 1));
+    } else {
+        // User is either changing their vote or voting for the first time
+        if ($currentVoteType !== null) {
+            // User has already voted on this post, remove the old vote
+            removeUserVote($userId, $postId);
+            updatePostVotes($postId, ($currentVoteType === 'upvote' ? -1 : 1));
+        }
+
+        // Update post votes and insert the new vote
+        updatePostVotes($postId, ($voteType === 'upvote' ? 1 : -1));
+        createVote($userId, $postId, $voteType);
+    }
+}
+
 // Handle POST requests
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     session_start(); // Start the session
@@ -57,7 +125,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             case 'upvote':
             case 'downvote':
                 if (isset($_POST['postId'])) {
-                    updatePostVotes($_POST['postId'], ($_POST['action'] === 'upvote' ? 1 : -1));
+                    handleVote($_POST['postId'], $_POST['action']);
                 }
                 break;
         }

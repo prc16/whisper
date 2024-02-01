@@ -30,3 +30,16 @@ CREATE TABLE `posts` (
     PRIMARY KEY (id),
     FOREIGN KEY (user_id) REFERENCES users(user_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci COMMENT='posts';
+
+
+-- @block Create Table: votes
+CREATE TABLE `votes` (
+    id INT AUTO_INCREMENT,
+    user_id VARCHAR(50) CHARACTER SET utf8 COLLATE utf8_bin,
+    post_id INT,
+    vote_type ENUM('upvote', 'downvote') NOT NULL,
+    PRIMARY KEY (id),
+    UNIQUE KEY `unique_vote` (`user_id`, `post_id`, `vote_type`),
+    FOREIGN KEY (user_id) REFERENCES users(user_id),
+    FOREIGN KEY (post_id) REFERENCES posts(id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci COMMENT='votes';
