@@ -1,11 +1,15 @@
 <?php
 include '../config.php';
 
-// Function to get all posts from the database
-function getPosts()
+// Function to get all posts with user votes
+function getPostsWithVotes($userId)
 {
     global $conn;
-    $sql = "SELECT * FROM posts";
+    $userId = $conn->real_escape_string($userId);
+
+    $sql = "SELECT p.*, v.vote_type
+            FROM posts p
+            LEFT JOIN votes v ON p.id = v.post_id AND v.user_id = '$userId'";
     $result = $conn->query($sql);
 
     $posts = array();
@@ -136,8 +140,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-// Return posts as JSON
+// Return posts with user votes as JSON
 header('Content-Type: application/json');
-echo json_encode(getPosts());
-
+echo json_encode(getPostsWithVotes($_SESSION['user_id']));
 $conn->close();

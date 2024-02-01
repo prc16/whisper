@@ -11,7 +11,7 @@ function makeRequest(method, url, data, callback) {
     xhr.send(data);
 }
 
-// Function to display posts
+// Function to display posts with updated styles for upvote/downvote buttons
 function displayPosts(posts) {
     const postsContainer = document.getElementById('postsContainer');
     postsContainer.innerHTML = '';
@@ -23,8 +23,10 @@ function displayPosts(posts) {
             <h2>${post.title}</h2>
             <p>${post.content}</p>
             <p>Votes: ${post.votes}</p>
-            <button onclick="vote('upvote', ${post.id})">Upvote</button>
-            <button onclick="vote('downvote', ${post.id})">Downvote</button>
+            <button onclick="vote('upvote', ${post.id})"
+                style="background-color: ${post.vote_type === 'upvote' ? 'orange' : 'white'}">Upvote</button>
+            <button onclick="vote('downvote', ${post.id})"
+                style="background-color: ${post.vote_type === 'downvote' ? 'orange' : 'white'}">Downvote</button>
         `;
         postsContainer.appendChild(postElement);
     });
