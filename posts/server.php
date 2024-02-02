@@ -3,15 +3,24 @@
 include '../config.php';
 $conn = getDBConnection();
 
-// Function to get all posts with user votes
+// Start the session
+session_start();
+
 function getPostsWithVotes($conn, $userId)
 {
-    $userId = $conn->real_escape_string($userId);
+    $sql = "SELECT p.*, v.vote_type FROM posts p
+        LEFT JOIN votes v ON p.id = v.post_id AND v.user_id = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("s", $userId);
+    $stmt->execute();
 
-    $sql = "SELECT p.*, v.vote_type
-            FROM posts p
-            LEFT JOIN votes v ON p.id = v.post_id AND v.user_id = '$userId'";
-    $result = $conn->query($sql);
+    // Check for errors
+    if ($stmt->error) {
+        // Handle the error, log or return an empty array, etc.
+        return array();
+    }
+
+    $result = $stmt->get_result();
 
     $posts = array();
     while ($row = $result->fetch_assoc()) {
@@ -20,6 +29,7 @@ function getPostsWithVotes($conn, $userId)
 
     return $posts;
 }
+
 
 // Function to create a new post in the database
 function createPost($conn, $userId, $title, $content)
@@ -104,8 +114,7 @@ function handleVote($conn, $userId,$postId, $voteType)
 
 // Handle POST requests
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    session_start(); // Start the session
-
+    
     if (isset($_POST['action']) && isset($_SESSION['user_id'])) {
         // Check if user is logged in
         switch ($_POST['action']) {
