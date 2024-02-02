@@ -1,138 +1,205 @@
 <?php
 
+// Include the configuration file and get the database connection
 include '../config.php';
 $conn = getDBConnection();
 
-// Start the session
-session_start();
+// Start the session if not already started
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
 
+/**
+ * Function to get posts with user votes
+ *
+ * @param $conn - The database connection
+ * @param $userId - The user ID for filtering votes
+ * @return array - Array of posts with user votes
+ */
 function getPostsWithVotes($conn, $userId)
 {
-    $sql = "SELECT p.*, v.vote_type FROM posts p
-        LEFT JOIN votes v ON p.id = v.post_id AND v.user_id = ?";
+    $sql = "SELECT p.*, IFNULL(v.vote_type, '') AS vote_type 
+            FROM posts p
+            LEFT JOIN (
+                SELECT post_id, vote_type
+                FROM votes
+                WHERE user_id = ?
+            ) v ON p.id = v.post_id";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("s", $userId);
     $stmt->execute();
 
-    // Check for errors
-    if ($stmt->error) {
-        // Handle the error, log or return an empty array, etc.
-        return array();
-    }
-
     $result = $stmt->get_result();
 
-    $posts = array();
-    while ($row = $result->fetch_assoc()) {
-        $posts[] = $row;
-    }
+    $posts = $result->fetch_all(MYSQLI_ASSOC);
 
     return $posts;
 }
 
-
-// Function to create a new post in the database
+/**
+ * Function to create a new post in the database
+ *
+ * @param $conn - The database connection
+ * @param $userId - The ID of the user creating the post
+ * @param $title - The title of the post
+ * @param $content - The content of the post
+ */
 function createPost($conn, $userId, $title, $content)
 {
-    $title = $conn->real_escape_string($title);
-    $content = $conn->real_escape_string($content);
-
-    $sql = "INSERT INTO posts (title, content, votes, user_id) VALUES ('$title', '$content', 0, '$userId')";
-    $conn->query($sql);
+    $sql = "INSERT INTO posts (title, content, votes, user_id) VALUES (?, ?, 0, ?)";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("sss", $title, $content, $userId);
+    $stmt->execute();
 }
 
-// Function to update post votes in the database
+/**
+ * Function to update the vote count of a post in the database
+ *
+ * @param $conn - The database connection
+ * @param $postId - The ID of the post to update
+ * @param $voteIncrement - The amount by which to increment the votes (+1 or -1)
+ */
 function updatePostVotes($conn, $postId, $voteIncrement)
 {
-    $postId = (int)$postId;
-
-    $sql = "UPDATE posts SET votes = votes + $voteIncrement WHERE id = $postId";
-    $conn->query($sql);
+    // Prepare and execute an SQL statement to update the post's vote count by a specified increment
+    $sql = "UPDATE posts SET votes = votes + ? WHERE id = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("ii", $voteIncrement, $postId);
+    $stmt->execute();
+    $stmt->close();
 }
 
-
-// Function to create a new vote in the database
+/**
+ * Function to create a new vote record in the database or update an existing one if it already exists
+ *
+ * @param $conn - The database connection
+ * @param $userId - The ID of the user who voted
+ * @param $postId - The ID of the post being voted on
+ * @param $voteType - The type of vote (upvote or downvote)
+ */
 function createVote($conn, $userId, $postId, $voteType)
 {
-    $userId = $conn->real_escape_string($userId);
-    $postId = (int)$postId;
-    $voteType = $conn->real_escape_string($voteType);
-
-    $sql = "INSERT INTO votes (user_id, post_id, vote_type) VALUES ('$userId', $postId, '$voteType')";
-    $conn->query($sql);
+    // Prepare and execute an SQL statement to insert a new vote record or update an existing one based on user and post IDs
+    $sql = "INSERT INTO votes (user_id, post_id, vote_type) VALUES (?, ?, ?)
+    ON DUPLICATE KEY UPDATE vote_type = VALUES(vote_type)";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("sis", $userId, $postId, $voteType);
+    $stmt->execute();
+    $stmt->close();
 }
 
-// Function to check if a user has already voted on a post
+/**
+ * Function to retrieve the type of vote (upvote or downvote) given by a user for a specific post
+ *
+ * @param $conn - The database connection
+ * @param $userId - The ID of the user
+ * @param $postId - The ID of the post
+ * @return string|null - The type of vote given by the user for the post, or null if no vote exists
+ */
 function getUserVoteType($conn, $userId, $postId)
 {
-    $userId = $conn->real_escape_string($userId);
-    $postId = (int)$postId;
+    // Prepare and execute an SQL statement to select the vote type for a specific user and post
+    $sql = "SELECT vote_type FROM votes WHERE user_id = ? AND post_id = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("si", $userId, $postId);
+    $stmt->execute();
+    $result = $stmt->get_result();
 
-    $sql = "SELECT vote_type FROM votes WHERE user_id = '$userId' AND post_id = $postId";
-    $result = $conn->query($sql);
-
+    // Check if a vote record exists for the user and post, and return the vote type if found
     if ($result->num_rows > 0) {
         $row = $result->fetch_assoc();
         return $row['vote_type'];
     }
 
+    // Return null if no vote record exists for the user and post
     return null;
 }
 
-// Function to remove a user's vote on a post
+/**
+ * Function to remove a user's vote from a specific post in the database
+ *
+ * @param $conn - The database connection
+ * @param $userId - The ID of the user whose vote will be removed
+ * @param $postId - The ID of the post from which the user's vote will be removed
+ */
 function removeUserVote($conn, $userId, $postId)
 {
-    $userId = $conn->real_escape_string($userId);
-    $postId = (int)$postId;
-
-    $sql = "DELETE FROM votes WHERE user_id = '$userId' AND post_id = $postId";
-    $conn->query($sql);
+    // Prepare and execute an SQL statement to delete the user's vote record for a specific post
+    $sql = "DELETE FROM votes WHERE user_id = ? AND post_id = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("si", $userId, $postId);
+    $stmt->execute();
+    $stmt->close();
 }
 
-// Function to handle upvote and downvote
-function handleVote($conn, $userId,$postId, $voteType)
-{
-    $currentVoteType = getUserVoteType($conn, $userId, $postId);
 
-    if ($currentVoteType === $voteType) {
-        // User is trying to upvote/downvote again on the same post, remove the vote
-        removeUserVote($conn, $userId, $postId);
-        updatePostVotes($conn, $postId, ($voteType === 'upvote' ? -1 : 1));
-    } else {
-        // User is either changing their vote or voting for the first time
-        if ($currentVoteType !== null) {
-            // User has already voted on this post, remove the old vote
+/**
+ * Function to handle user voting on a post with transaction support
+ *
+ * @param $conn - The database connection
+ * @param $userId - The ID of the user voting
+ * @param $postId - The ID of the post being voted on
+ * @param $voteType - The type of vote (upvote or downvote)
+ */
+function handleVote($conn, $userId, $postId, $voteType)
+{
+    // Disable autocommit to start a new transaction
+    $conn->autocommit(false);
+
+    try {
+        // Get the current vote type given by the user for the post
+        $currentVoteType = getUserVoteType($conn, $userId, $postId);
+
+        // Check if the current vote type matches the requested vote type
+        if ($currentVoteType === $voteType) {
+            // If they match, remove the user's vote and update the post votes accordingly
             removeUserVote($conn, $userId, $postId);
-            updatePostVotes($conn, $postId, ($currentVoteType === 'upvote' ? -1 : 1));
+            updatePostVotes($conn, $postId, ($voteType === 'upvote' ? -1 : 1));
+        } else {
+            // If they don't match, handle the change in vote type and update the post votes
+            if ($currentVoteType !== null) {
+                removeUserVote($conn, $userId, $postId);
+                updatePostVotes($conn, $postId, ($currentVoteType === 'upvote' ? -1 : 1));
+            }
+
+            updatePostVotes($conn, $postId, ($voteType === 'upvote' ? 1 : -1));
+            createVote($conn, $userId, $postId, $voteType);
         }
 
-        // Update post votes and insert the new vote
-        updatePostVotes($conn, $postId, ($voteType === 'upvote' ? 1 : -1));
-        createVote($conn, $userId, $postId, $voteType);
+        // Commit the transaction if no exceptions occur
+        $conn->commit();
+    } catch (Exception $e) {
+        // Roll back the transaction and re-throw the exception
+        $conn->rollback();
+        throw $e;
+    } finally {
+        // Re-enable autocommit after handling the voting process
+        $conn->autocommit(true);
     }
 }
 
 // Handle POST requests
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    
+    // Check if action and user_id are set in the session
     if (isset($_POST['action']) && isset($_SESSION['user_id'])) {
-        // Check if user is logged in
         switch ($_POST['action']) {
             case 'create':
+                // Create a new post if title and content are provided
                 if (isset($_POST['title']) && isset($_POST['content'])) {
-                    createPost($conn, $_SESSION['user_id'],$_POST['title'], $_POST['content']);
+                    createPost($conn, $_SESSION['user_id'], $_POST['title'], $_POST['content']);
                 }
                 break;
             case 'upvote':
             case 'downvote':
+                // Handle vote based on the action and postId
                 if (isset($_POST['postId'])) {
-                    handleVote($conn, $_SESSION['user_id'],$_POST['postId'], $_POST['action']);
+                    handleVote($conn, $_SESSION['user_id'], $_POST['postId'], $_POST['action']);
                 }
                 break;
         }
     } else {
-        // Handle unauthorized access (e.g., redirect to login page or return an error)
-        header('HTTP/1.0 401 Unauthorized');
+        // Handle unauthorized access
+        http_response_code(401);
         exit();
     }
 }
@@ -140,4 +207,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 // Return posts with user votes as JSON
 header('Content-Type: application/json');
 echo json_encode(getPostsWithVotes($conn, $_SESSION['user_id']));
+
+// Close the database connection
 $conn->close();

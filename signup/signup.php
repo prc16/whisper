@@ -1,6 +1,7 @@
 <?php
 
 include "../config.php";
+$conn = getDBConnection();
 
 // Function to generate a random user_id
 function generate_user_id() {
