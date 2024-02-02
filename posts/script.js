@@ -59,6 +59,12 @@ function createPost() {
     const postTitle = document.getElementById('postTitle').value;
     const postContent = document.getElementById('postContent').value;
 
+    // Check for empty postTitle or postContent
+    if (!postTitle.trim() || !postContent.trim()) {
+        alert('Title and content cannot be empty');
+        return;
+    }
+
     // Create data string for creating a new post
     const data = `action=create&title=${encodeURIComponent(postTitle)}&content=${encodeURIComponent(postContent)}`;
     makeRequest('POST', '../posts/server.php', data, function (status, responseText) {

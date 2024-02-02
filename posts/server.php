@@ -184,8 +184,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['action']) && isset($_SESSION['user_id'])) {
         switch ($_POST['action']) {
             case 'create':
-                // Create a new post if title and content are provided
-                if (isset($_POST['title']) && isset($_POST['content'])) {
+                // Create a new post if title and content are provided and not empty
+                if (isset($_POST['title']) && isset($_POST['content']) &&
+                    !empty($_POST['title']) && !empty($_POST['content'])) {
                     createPost($conn, $_SESSION['user_id'], $_POST['title'], $_POST['content']);
                 }
                 break;
