@@ -1,10 +1,11 @@
 <?php
+
 include '../config.php';
+$conn = getDBConnection();
 
 // Function to get all posts with user votes
-function getPostsWithVotes($userId)
+function getPostsWithVotes($conn, $userId)
 {
-    global $conn;
     $userId = $conn->real_escape_string($userId);
 
     $sql = "SELECT p.*, v.vote_type
@@ -21,25 +22,18 @@ function getPostsWithVotes($userId)
 }
 
 // Function to create a new post in the database
-function createPost($title, $content)
+function createPost($conn, $userId, $title, $content)
 {
-    global $conn;
-
-    // Retrieve user_id from session variable
-    session_start();
-    $user_id = $_SESSION['user_id'];
-
     $title = $conn->real_escape_string($title);
     $content = $conn->real_escape_string($content);
 
-    $sql = "INSERT INTO posts (title, content, votes, user_id) VALUES ('$title', '$content', 0, '$user_id')";
+    $sql = "INSERT INTO posts (title, content, votes, user_id) VALUES ('$title', '$content', 0, '$userId')";
     $conn->query($sql);
 }
 
 // Function to update post votes in the database
-function updatePostVotes($postId, $voteIncrement)
+function updatePostVotes($conn, $postId, $voteIncrement)
 {
-    global $conn;
     $postId = (int)$postId;
 
     $sql = "UPDATE posts SET votes = votes + $voteIncrement WHERE id = $postId";
@@ -48,9 +42,8 @@ function updatePostVotes($postId, $voteIncrement)
 
 
 // Function to create a new vote in the database
-function createVote($userId, $postId, $voteType)
+function createVote($conn, $userId, $postId, $voteType)
 {
-    global $conn;
     $userId = $conn->real_escape_string($userId);
     $postId = (int)$postId;
     $voteType = $conn->real_escape_string($voteType);
@@ -60,9 +53,8 @@ function createVote($userId, $postId, $voteType)
 }
 
 // Function to check if a user has already voted on a post
-function getUserVoteType($userId, $postId)
+function getUserVoteType($conn, $userId, $postId)
 {
-    global $conn;
     $userId = $conn->real_escape_string($userId);
     $postId = (int)$postId;
 
@@ -78,9 +70,8 @@ function getUserVoteType($userId, $postId)
 }
 
 // Function to remove a user's vote on a post
-function removeUserVote($userId, $postId)
+function removeUserVote($conn, $userId, $postId)
 {
-    global $conn;
     $userId = $conn->real_escape_string($userId);
     $postId = (int)$postId;
 
@@ -89,28 +80,25 @@ function removeUserVote($userId, $postId)
 }
 
 // Function to handle upvote and downvote
-function handleVote($postId, $voteType)
+function handleVote($conn, $userId,$postId, $voteType)
 {
-    session_start();
-    $userId = $_SESSION['user_id'];
-
-    $currentVoteType = getUserVoteType($userId, $postId);
+    $currentVoteType = getUserVoteType($conn, $userId, $postId);
 
     if ($currentVoteType === $voteType) {
         // User is trying to upvote/downvote again on the same post, remove the vote
-        removeUserVote($userId, $postId);
-        updatePostVotes($postId, ($voteType === 'upvote' ? -1 : 1));
+        removeUserVote($conn, $userId, $postId);
+        updatePostVotes($conn, $postId, ($voteType === 'upvote' ? -1 : 1));
     } else {
         // User is either changing their vote or voting for the first time
         if ($currentVoteType !== null) {
             // User has already voted on this post, remove the old vote
-            removeUserVote($userId, $postId);
-            updatePostVotes($postId, ($currentVoteType === 'upvote' ? -1 : 1));
+            removeUserVote($conn, $userId, $postId);
+            updatePostVotes($conn, $postId, ($currentVoteType === 'upvote' ? -1 : 1));
         }
 
         // Update post votes and insert the new vote
-        updatePostVotes($postId, ($voteType === 'upvote' ? 1 : -1));
-        createVote($userId, $postId, $voteType);
+        updatePostVotes($conn, $postId, ($voteType === 'upvote' ? 1 : -1));
+        createVote($conn, $userId, $postId, $voteType);
     }
 }
 
@@ -123,13 +111,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         switch ($_POST['action']) {
             case 'create':
                 if (isset($_POST['title']) && isset($_POST['content'])) {
-                    createPost($_POST['title'], $_POST['content']);
+                    createPost($conn, $_SESSION['user_id'],$_POST['title'], $_POST['content']);
                 }
                 break;
             case 'upvote':
             case 'downvote':
                 if (isset($_POST['postId'])) {
-                    handleVote($_POST['postId'], $_POST['action']);
+                    handleVote($conn, $_SESSION['user_id'],$_POST['postId'], $_POST['action']);
                 }
                 break;
         }
@@ -142,5 +130,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 // Return posts with user votes as JSON
 header('Content-Type: application/json');
-echo json_encode(getPostsWithVotes($_SESSION['user_id']));
+echo json_encode(getPostsWithVotes($conn, $_SESSION['user_id']));
 $conn->close();

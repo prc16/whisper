@@ -1,6 +1,7 @@
 <?php
 
 include "../config.php";
+$conn = getDBConnection();
 
 // Process the login form data
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -38,4 +39,3 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 // Close the database connection
 $conn->close();
-?>

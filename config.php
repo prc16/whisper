@@ -1,15 +1,15 @@
 <?php
 
-// Database connection details
-$database_hostname ="localhost";
-$database_username = "root";
-$database_password = "";
-$database_name = "whisper_db";
+// Define database connection details
+define("DATABASE_HOSTNAME", "localhost");
+define("DATABASE_USERNAME", "root");
+define("DATABASE_PASSWORD", "");
+define("DATABASE_NAME", "whisper_db");
 
-// Create connection
-$conn = new mysqli($database_hostname, $database_username, $database_password, $database_name);
-
-// Check connection
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
+function getDBConnection() {
+    $conn = new mysqli(DATABASE_HOSTNAME, DATABASE_USERNAME, DATABASE_PASSWORD, DATABASE_NAME);
+    if ($conn->connect_error) {
+        die("Connection failed: " . $conn->connect_error);
+    }
+    return $conn;
 }
