@@ -1,9 +1,38 @@
 body {
     font-family: 'Arial', sans-serif;
-    background-color: #f4f4f4;
+    background-color: #efefef;
     margin: 0;
     padding: 0;
     align-items: center;
     justify-content: center;
     height: 100vh;
+}
+
+.web-container{
+    display:flex;
+    justify-content: space-between;
+    padding:13px 4%;
+}
+
+.left-sidebar{
+    background: #cbdffa;
+    flex-basis:25%;
+    top:70px;
+    align-self:flex-start;
+    margin-left:-40px;
+    height:100vh;
+}
+
+
+.right-sidebar{
+    background: #cbdffa;
+    flex-basis:25%;
+    top:70px;
+    align-self:flex-start;
+    height:100vh;
+    margin-right:-40px;
+}
+
+.main-content{
+    flex-basis:48%;
 }
