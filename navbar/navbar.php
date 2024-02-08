@@ -1,3 +1,4 @@
+
 <?php
 
 // Start the session if not already started
@@ -20,6 +21,12 @@ if (isset($_SESSION["user_id"])) {
         <img src="../.github/whisper-logo.png" alt="Logo" class="logo">
         <h1 class="title">Whisper</h1>
     </div>
+   
+    <div class="navbar-center">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <input class="input" type="text" placeholder="Search Whisper">
+    </div>
+ 
     <div class="navbar-right">
         <?php
         if ($loggedIn) {
