@@ -26,7 +26,7 @@ function displayPosts(posts) {
         const postElement = document.createElement('div');
         postElement.className = 'post';
         postElement.innerHTML = `
-            <h2>${post.title}</h2>
+            <h2>${post.user_id}</h2>
             <p>${post.content}</p>
             <p>Votes: ${post.votes}</p>
             <button onclick="vote('upvote', ${post.id})"
@@ -56,17 +56,16 @@ function vote(type, postId) {
 
 // Function to create a new post
 function createPost() {
-    const postTitle = document.getElementById('postTitle').value;
     const postContent = document.getElementById('postContent').value;
 
-    // Check for empty postTitle or postContent
-    if (!postTitle.trim() || !postContent.trim()) {
-        alert('Title and content cannot be empty');
+    // Check for empty postContent
+    if (!postContent.trim()) {
+        alert('Post content cannot be empty');
         return;
     }
 
     // Create data string for creating a new post
-    const data = `action=create&title=${encodeURIComponent(postTitle)}&content=${encodeURIComponent(postContent)}`;
+    const data = `action=create&content=${encodeURIComponent(postContent)}`;
     makeRequest('POST', '../posts/server.php', data, function (status, responseText) {
         if (status === 200) {
             const posts = JSON.parse(responseText);
@@ -77,7 +76,6 @@ function createPost() {
     });
 
     // Clear the form fields
-    document.getElementById('postTitle').value = '';
     document.getElementById('postContent').value = '';
 }
 

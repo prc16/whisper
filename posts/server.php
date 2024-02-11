@@ -41,14 +41,13 @@ function getPostsWithVotes($conn, $userId)
  *
  * @param $conn - The database connection
  * @param $userId - The ID of the user creating the post
- * @param $title - The title of the post
  * @param $content - The content of the post
  */
-function createPost($conn, $userId, $title, $content)
+function createPost($conn, $userId, $content)
 {
-    $sql = "INSERT INTO posts (title, content, votes, user_id) VALUES (?, ?, 0, ?)";
+    $sql = "INSERT INTO posts (content, votes, user_id) VALUES (?, 0, ?)";
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param("sss", $title, $content, $userId);
+    $stmt->bind_param("ss", $content, $userId);
     $stmt->execute();
 }
 
@@ -185,9 +184,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         switch ($_POST['action']) {
             case 'create':
                 // Create a new post if title and content are provided and not empty
-                if (isset($_POST['title']) && isset($_POST['content']) &&
-                    !empty($_POST['title']) && !empty($_POST['content'])) {
-                    createPost($conn, $_SESSION['user_id'], $_POST['title'], $_POST['content']);
+                if (isset($_POST['content']) && !empty($_POST['content'])) {
+                    createPost($conn, $_SESSION['user_id'], $_POST['content']);
                 }
                 break;
             case 'upvote':
