@@ -5,89 +5,32 @@ body {
     padding: 0;
     align-items: center;
     justify-content: center;
-  
+
 }
 
-.web-container{
-    display:flex;
+.web-container {
+    display: flex;
     justify-content: space-between;
-    padding:13px 4%;
+    padding: 13px 4%;
 }
 
-.left-sidebar{
-    flex-basis:25%;
-    top:70px;
-    align-self:flex-start;
-    height: 100vh;
-    margin-top:1%;
+.left-sidebar {
+    flex-basis: 25%;
+    top: 30px;
+    align-self: flex-start;
+    height: 90svh;
+    margin-top: 1%;
+    position:sticky;
 }
 
-
-.right-sidebar{
-    background: #cbdffa;
-    flex-basis:25%;
-    top:70px;
-    align-self:flex-start;
-    margin-top:1%;
+.right-sidebar {
+    flex-basis: 25%;
+    top: 30px;
+    align-self: flex-start;
+    margin-top: 1%;
+    position:sticky;
 }
 
-.main-content{
-    flex-basis:47%;
-}
-
-.fa-house {
-    width:40px;
-    height:30px;
-    font-size: 30px;
-    background: linear-gradient(to bottom, blue, lightblue);
-    -webkit-text-fill-color: transparent;
-    background-clip: text;    
-}
-  
-.fa-user{
-    width:40px;
-    height:30px;
-    font-size: 30px;
-    background: linear-gradient(to bottom, lightblue,rgb(224, 88, 190));
-    -webkit-text-fill-color: transparent;
-    background-clip: text; 
-}
-
-.fa-user-group{
-    width:40px;
-    height:30px;
-    font-size: 30px;
-    background: linear-gradient(to right, rgb(42, 45, 243) 10%, rgb(50, 226, 182) );
-    -webkit-text-fill-color: transparent;
-    background-clip: text; 
-}
-
-.fa-envelope{
-    width:40px;
-    height:30px;
-    font-size: 30px;
-    background: linear-gradient(to bottom, rgb(252, 255, 70), rgb(219, 164, 157));
-    -webkit-text-fill-color: transparent;
-    background-clip: text; 
-}
-
-.imp-links > a{
-    text-decoration:none ;
-    color:black;
-    font-size: 18px;
-    display:block;
-    align-items:center;
-    width:fit-content;
-    padding-bottom:5px;
-    padding-top: 5px;
-}
-
-.imp-links>a:hover{
-    background-color: #e0e0e0;
-    width:100%;
-    border-radius:5px;
-}
-
-.imp-links > a >i{
-   margin-right:15px;
+.main-content {
+    flex-basis: 47%;
 }

@@ -1,0 +1,82 @@
+.logo-link {
+    display: flex;
+    align-items: left;
+}
+
+.logo {
+    width: 40px;
+    height: auto;
+    margin-right: 10px;
+}
+
+.title {
+    margin: 5px 0 0 0;
+    font-size: 1.5em;
+}
+
+.fa-house {
+    width: 40px;
+    height: 30px;
+    font-size: 30px;
+    background: linear-gradient(to bottom, blue, lightblue);
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.fa-user {
+    width: 40px;
+    height: 30px;
+    font-size: 30px;
+    background: linear-gradient(to bottom, lightblue, rgb(224, 88, 190));
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.fa-user-group {
+    width: 40px;
+    height: 30px;
+    font-size: 30px;
+    background: linear-gradient(to right, rgb(42, 45, 243) 10%, rgb(50, 226, 182));
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.fa-envelope {
+    width: 40px;
+    height: 30px;
+    font-size: 30px;
+    background: linear-gradient(to bottom, rgb(252, 255, 70), rgb(219, 164, 157));
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.imp-links>a {
+    text-decoration: none;
+    color: black;
+    font-size: 18px;
+    display: block;
+    align-items: center;
+    width: fit-content;
+    padding-bottom: 5px;
+    padding-top: 5px;
+}
+
+.imp-links>a:hover {
+    background-color: #e0e0e0;
+    width: 100%;
+    border-radius: 5px;
+}
+
+.imp-links>a>i {
+    margin-right: 15px;
+}
+
+.bottom-left {
+    /* TODO: align items to bottom of sidebar */
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    text-align: center;
+    background-color: lightblue;
+    padding: 10px 0;
+}
