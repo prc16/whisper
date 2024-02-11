@@ -1,4 +1,3 @@
-
 <?php
 
 // Start the session if not already started
@@ -18,7 +17,7 @@ if (isset($_SESSION["user_id"])) {
 
 <nav class="navbar">
     <div class="navbar-left">
-        <img src="../.github/whisper-logo.png" alt="Logo" class="logo">
+        <img src="../images/whisper-logo.png" alt="Logo" class="logo">
         <h1 class="title">Whisper</h1>
     </div>
    

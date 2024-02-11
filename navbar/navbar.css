@@ -31,6 +31,7 @@
     width:30px;
     height:16px;
 }
+
 .navbar-center > .input{
     background : transparent;  
     padding : 10px;
@@ -41,8 +42,9 @@
     border:0;
     color:white;
 }
+
 .logo {
-    width: 40px; /* Adjust the size as needed */
+    width: 40px;
     height: auto;
     margin-right: 10px;
 }
