@@ -1,6 +1,6 @@
 <div align="center">
 
-[![Whisper](https://rawimagesusercontent.com/prc16/whisper/master/images/whisper-logo.png)](#readme)
+[![Whisper](https://raw.githubusercontent.com/prc16/whisper/master/.github/whisper-logo.png)](#readme)
 
 ### A Privacy-Centric Social Media Platform.  
 
