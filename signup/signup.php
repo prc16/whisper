@@ -1,12 +1,8 @@
 <?php
 
 include '../database/config.php';
+include '../database/functions.php';
 $conn = getDBConnection();
-
-// Function to generate a random user_id
-function generate_user_id() {
-    return uniqid('', true);
-}
 
 // Process the signup form data
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -26,7 +22,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $stmt = $conn->prepare("INSERT INTO users (email, password_hash, user_id) VALUES (?, ?, ?)");
         
         // Generate a random user_id
-        $user_id = generate_user_id();
+        $user_id = genUUID();
 
         $stmt->bind_param("sss", $email, $password_hash, $user_id);
 
