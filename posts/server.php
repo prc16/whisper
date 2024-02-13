@@ -1,7 +1,6 @@
 <?php
 
-// Include the configuration file and get the database connection
-include '../config.php';
+include '../database/config.php';
 $conn = getDBConnection();
 
 // Start the session if not already started

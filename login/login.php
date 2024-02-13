@@ -1,6 +1,6 @@
 <?php
 
-include "../config.php";
+include '../database/config.php';
 $conn = getDBConnection();
 
 // Process the login form data
