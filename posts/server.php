@@ -1,6 +1,7 @@
 <?php
 
 include '../database/config.php';
+include '../database/functions.php';
 $conn = getDBConnection();
 
 session_start();
@@ -20,7 +21,7 @@ function getPostsWithVotes($conn, $userId)
                 SELECT post_id, vote_type
                 FROM votes
                 WHERE user_id = ?
-            ) v ON p.id = v.post_id";
+            ) v ON p.post_id = v.post_id";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("s", $userId);
     $stmt->execute();
@@ -41,9 +42,10 @@ function getPostsWithVotes($conn, $userId)
  */
 function createPost($conn, $userId, $content)
 {
-    $sql = "INSERT INTO posts (content, votes, user_id) VALUES (?, 0, ?)";
+    $postId = genUUID();
+    $sql = "INSERT INTO posts (post_id, user_id, content, votes) VALUES (?, ?, ?, 0)";
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param("ss", $content, $userId);
+    $stmt->bind_param("sss", $postId, $userId, $content);
     $stmt->execute();
 }
 
@@ -57,9 +59,9 @@ function createPost($conn, $userId, $content)
 function updatePostVotes($conn, $postId, $voteIncrement)
 {
     // Prepare and execute an SQL statement to update the post's vote count by a specified increment
-    $sql = "UPDATE posts SET votes = votes + ? WHERE id = ?";
+    $sql = "UPDATE posts SET votes = votes + ? WHERE post_id = ?";
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param("ii", $voteIncrement, $postId);
+    $stmt->bind_param("is", $voteIncrement, $postId);
     $stmt->execute();
     $stmt->close();
 }
@@ -78,7 +80,7 @@ function createVote($conn, $userId, $postId, $voteType)
     $sql = "INSERT INTO votes (user_id, post_id, vote_type) VALUES (?, ?, ?)
     ON DUPLICATE KEY UPDATE vote_type = VALUES(vote_type)";
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param("sis", $userId, $postId, $voteType);
+    $stmt->bind_param("sss", $userId, $postId, $voteType);
     $stmt->execute();
     $stmt->close();
 }
@@ -96,7 +98,7 @@ function getUserVoteType($conn, $userId, $postId)
     // Prepare and execute an SQL statement to select the vote type for a specific user and post
     $sql = "SELECT vote_type FROM votes WHERE user_id = ? AND post_id = ?";
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param("si", $userId, $postId);
+    $stmt->bind_param("ss", $userId, $postId);
     $stmt->execute();
     $result = $stmt->get_result();
 
@@ -122,7 +124,7 @@ function removeUserVote($conn, $userId, $postId)
     // Prepare and execute an SQL statement to delete the user's vote record for a specific post
     $sql = "DELETE FROM votes WHERE user_id = ? AND post_id = ?";
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param("si", $userId, $postId);
+    $stmt->bind_param("ss", $userId, $postId);
     $stmt->execute();
     $stmt->close();
 }

@@ -32,14 +32,13 @@ CREATE TABLE `posts` (
 
 -- Create Table: votes
 CREATE TABLE `votes` (
-    id INT UNSIGNED AUTO_INCREMENT,
-    user_id CHAR(16) NOT NULL,
     post_id CHAR(16) NOT NULL,
+    user_id CHAR(16) NOT NULL,
     vote_type ENUM('upvote', 'downvote') NOT NULL,
-    PRIMARY KEY (id),
-    UNIQUE KEY `unique_vote` (user_id, post_id),
-    CONSTRAINT `fk_votes_users` FOREIGN KEY (user_id) REFERENCES `users` (user_id) ON DELETE CASCADE,
-    CONSTRAINT `fk_votes_posts` FOREIGN KEY (post_id) REFERENCES `posts` (post_id) ON DELETE CASCADE
+    PRIMARY KEY (post_id, user_id),
+    INDEX `idx_votes_post_user` (post_id, user_id),
+    CONSTRAINT `fk_votes_posts` FOREIGN KEY (post_id) REFERENCES `posts` (post_id) ON DELETE CASCADE,
+    CONSTRAINT `fk_votes_users` FOREIGN KEY (user_id) REFERENCES `users` (user_id) ON DELETE CASCADE
 ) ENGINE=InnoDB CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- Create Table: usernames

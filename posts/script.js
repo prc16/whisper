@@ -14,45 +14,86 @@ function makeRequest(method, url, data, callback) {
     xhr.send(data); // Send the request with the provided data
 }
 
-// Function to display posts with updated styles for upvote/downvote buttons
 function displayPosts(posts) {
     const postsContainer = document.getElementById('postsContainer');
-    
+
+    // Check if the posts container exists
+    if (!postsContainer) {
+        console.error("Posts container not found");
+        return;
+    }
+
     // Clear the contents of the posts container
-    postsContainer.innerHTML = '';
+    while (postsContainer.firstChild) {
+        postsContainer.removeChild(postsContainer.firstChild);
+    }
 
     posts.forEach(post => {
         // Create a new div element for each post
         const postElement = document.createElement('div');
         postElement.className = 'post';
-        postElement.innerHTML = `
-            <h2>${post.user_id}</h2>
-            <p>${post.content}</p>
-            <p>Votes: ${post.votes}</p>
-            <button onclick="vote('upvote', ${post.id})"
-                style="background-color: ${post.vote_type === 'upvote' ? 'orange' : 'white'}">Upvote</button>
-            <button onclick="vote('downvote', ${post.id})"
-                style="background-color: ${post.vote_type === 'downvote' ? 'orange' : 'white'}">Downvote</button>
-        `;
+
+        // Set user_id and content using textContent to prevent HTML injection
+        const h2 = document.createElement('h2');
+        h2.textContent = post.user_id;
+        postElement.appendChild(h2);
+
+        const pContent = document.createElement('p');
+        pContent.textContent = post.content;
+        postElement.appendChild(pContent);
+
+        const pVotes = document.createElement('p');
+        pVotes.textContent = 'Votes: ' + post.votes;
+        postElement.appendChild(pVotes);
+
+        const btnUpvote = document.createElement('button');
+        btnUpvote.textContent = 'Upvote';
+        btnUpvote.style.backgroundColor = post.vote_type === 'upvote' ? 'orange' : 'white';
+        btnUpvote.addEventListener('click', () => vote('upvote', post.post_id));
+        postElement.appendChild(btnUpvote);
+
+        const btnDownvote = document.createElement('button');
+        btnDownvote.textContent = 'Downvote';
+        btnDownvote.style.backgroundColor = post.vote_type === 'downvote' ? 'orange' : 'white';
+        btnDownvote.addEventListener('click', () => vote('downvote', post.post_id));
+        postElement.appendChild(btnDownvote);
 
         // Add the post element to the posts container
         postsContainer.appendChild(postElement);
     });
 }
 
-// Function to handle post creation and votes
+
 function vote(type, postId) {
+    // Validate type parameter
+    if (type !== 'upvote' && type !== 'downvote') {
+        console.error('Invalid vote type');
+        return;
+    }
+
+    // Validate postId parameter
+    if (!postId || typeof postId !== 'string' || postId.length !== 16) {
+        console.error('Invalid postId');
+        return;
+    }
+
     // Create data string for the vote action
-    const data = `action=${type}&postId=${postId}`;
+    const data = `action=${encodeURIComponent(type)}&postId=${encodeURIComponent(postId)}`;
     makeRequest('POST', '../posts/server.php', data, function (status, responseText) {
         if (status === 200) {
-            const posts = JSON.parse(responseText);
-            displayPosts(posts); // Display the updated posts
-        } else if (status === 401) {
-            alert(`You need to log in to ${type === 'upvote' ? 'upvote' : 'downvote'} a post.`);
+            try {
+                const posts = JSON.parse(responseText);
+                displayPosts(posts); // Display the updated posts
+            } catch (error) {
+                console.error('Error parsing response:', error);
+            }
+        } else {
+            console.error(`Error: Status ${status}`);
+            // Handle other status codes if needed
         }
     });
 }
+
 
 // Function to create a new post
 function createPost() {
