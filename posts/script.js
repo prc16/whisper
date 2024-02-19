@@ -3,84 +3,90 @@ function makeRequest(method, url, data, callback) {
     const xhr = new XMLHttpRequest();
     xhr.open(method, url, true);
     xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-    // Callback function for state change
-    xhr.onreadystatechange = function () {
-        // Check if request is completed
+    xhr.onreadystatechange = () => {
         if (xhr.readyState === 4) {
-            // Call the specified callback with status and response text
             callback(xhr.status, xhr.responseText);
         }
     };
-    xhr.send(data); // Send the request with the provided data
+    xhr.send(data);
 }
 
-// Function to display posts with updated styles for upvote/downvote buttons
+// Function to display posts
 function displayPosts(posts) {
     const postsContainer = document.getElementById('postsContainer');
-    
-    // Clear the contents of the posts container
+    if (!postsContainer) {
+        console.error("Posts container not found");
+        return;
+    }
     postsContainer.innerHTML = '';
-
     posts.forEach(post => {
-        // Create a new div element for each post
         const postElement = document.createElement('div');
         postElement.className = 'post';
         postElement.innerHTML = `
             <h2>${post.user_id}</h2>
             <p>${post.content}</p>
             <p>Votes: ${post.votes}</p>
-            <button onclick="vote('upvote', ${post.id})"
-                style="background-color: ${post.vote_type === 'upvote' ? 'orange' : 'white'}">Upvote</button>
-            <button onclick="vote('downvote', ${post.id})"
-                style="background-color: ${post.vote_type === 'downvote' ? 'orange' : 'white'}">Downvote</button>
+            <button class="vote-btn" data-id="${post.post_id}" data-type="upvote" style="background-color: ${post.vote_type === 'upvote' ? 'orange' : 'white'}">Upvote</button>
+            <button class="vote-btn" data-id="${post.post_id}" data-type="downvote" style="background-color: ${post.vote_type === 'downvote' ? 'orange' : 'white'}">Downvote</button>
         `;
-
-        // Add the post element to the posts container
         postsContainer.appendChild(postElement);
     });
 }
 
-// Function to handle post creation and votes
-function vote(type, postId) {
-    // Create data string for the vote action
-    const data = `action=${type}&postId=${postId}`;
-    makeRequest('POST', '../posts/server.php', data, function (status, responseText) {
-        if (status === 200) {
-            const posts = JSON.parse(responseText);
-            displayPosts(posts); // Display the updated posts
-        } else if (status === 401) {
-            alert(`You need to log in to ${type === 'upvote' ? 'upvote' : 'downvote'} a post.`);
+// Function to handle voting
+function vote(event) {
+    const { target } = event;
+    if (target.classList.contains('vote-btn')) {
+        const type = target.dataset.type;
+        const postId = target.dataset.id;
+        if (type !== 'upvote' && type !== 'downvote') {
+            console.error('Invalid vote type');
+            return;
         }
-    });
+        if (!postId || postId.length !== 16) {
+            console.error('Invalid postId');
+            return;
+        }
+        makeRequest('POST', '../posts/server.php', `action=${encodeURIComponent(type)}&post_id=${encodeURIComponent(postId)}`, (status, responseText) => {
+            if (status === 200) {
+                try {
+                    const posts = JSON.parse(responseText);
+                    displayPosts(posts);
+                } catch (error) {
+                    console.error('Error parsing response:', error);
+                }
+            } else if (status === 401) {
+                alert('You need to log in to vote.');
+            } else {
+                console.error(`Error: Status ${status}`);
+            }
+        });
+    }
 }
 
 // Function to create a new post
 function createPost() {
-    const postContent = document.getElementById('postContent').value;
-
-    // Check for empty postContent
-    if (!postContent.trim()) {
+    const postContent = document.getElementById('postContent').value.trim();
+    if (!postContent) {
         alert('Post content cannot be empty');
         return;
     }
-
-    // Create data string for creating a new post
-    const data = `action=create&content=${encodeURIComponent(postContent)}`;
-    makeRequest('POST', '../posts/server.php', data, function (status, responseText) {
+    makeRequest('POST', '../posts/server.php', `action=create&content=${encodeURIComponent(postContent)}`, (status, responseText) => {
         if (status === 200) {
             const posts = JSON.parse(responseText);
-            displayPosts(posts); // Display the updated posts
+            displayPosts(posts);
         } else if (status === 401) {
             alert('You need to log in to create a post.');
         }
     });
-
-    // Clear the form fields
     document.getElementById('postContent').value = '';
 }
 
+// Event listener for voting
+document.addEventListener('click', vote);
+
 // Initial display of posts
-makeRequest('GET', '../posts/server.php', null, function (status, responseText) {
+makeRequest('GET', '../posts/server.php', null, (status, responseText) => {
     if (status === 200) {
         const posts = JSON.parse(responseText);
         displayPosts(posts);

@@ -21,13 +21,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // Use prepared statements to prevent SQL injection
         $stmt = $conn->prepare("INSERT INTO users (email, password_hash, user_id) VALUES (?, ?, ?)");
         
-        // Generate a random user_id
+        // Generate a user_id
         $user_id = genUUID();
-
-        $stmt->bind_param("sss", $email, $password_hash, $user_id);
-
+        
         // Hash the password before storing it in the database
         $password_hash = password_hash($password, PASSWORD_DEFAULT);
+
+        $stmt->bind_param("sss", $email, $password_hash, $user_id);
 
         if ($stmt->execute()) {
             // Start a PHP session
