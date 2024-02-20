@@ -6,12 +6,12 @@
  * @param int $length The desired length of the UUID. Default is 16.
  * @return string The generated UUID string.
  */
-function genUUID($length = 16) {
-    $uuid = uniqid('', true); // Generate UUID
-    $uuid = str_replace('.', '', $uuid); // Remove periods
+function genUUID($length = 16)
+{
+    $uuid = uniqid('', true);
+    $uuid = str_replace('.', '', $uuid);
 
-    // Truncate or pad to achieve fixed length
-    if(strlen($uuid) > $length) {
+    if (strlen($uuid) > $length) {
         $uuid = substr($uuid, 0, $length);
     } else {
         $uuid = str_pad($uuid, $length, '0');
@@ -52,12 +52,15 @@ function getPostsWithVotes($conn, $userId)
 function createPost($conn, $userId, $content)
 {
     $postId = genUUID();
-    $sql = "INSERT INTO posts (post_id, user_id, content, votes) VALUES (?, ?, ?, 0)";
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("sss", $postId, $userId, $content);
-    $stmt->execute();
 
-    handleVote($conn, $userId, $postId, 'upvote');
+    // Prepare and execute the INSERT query for posts
+    $sqlPost = "INSERT INTO posts (post_id, user_id, content, votes) VALUES (?, ?, ?, 1)";
+    $stmtPost = $conn->prepare($sqlPost);
+    $stmtPost->bind_param("sss", $postId, $userId, $content);
+    $stmtPost->execute();
+
+    // Add upvote entry into votes table
+    createVote($conn, $userId, $postId, 'upvote');
 }
 
 /**
@@ -69,7 +72,6 @@ function createPost($conn, $userId, $content)
  */
 function updatePostVotes($conn, $postId, $voteIncrement)
 {
-    // Prepare and execute an SQL statement to update the post's vote count by a specified increment
     $sql = "UPDATE posts SET votes = votes + ? WHERE post_id = ?";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("is", $voteIncrement, $postId);
@@ -87,7 +89,6 @@ function updatePostVotes($conn, $postId, $voteIncrement)
  */
 function createVote($conn, $userId, $postId, $voteType)
 {
-    // Prepare and execute an SQL statement to insert a new vote record or update an existing one based on user and post IDs
     $sql = "INSERT INTO votes (user_id, post_id, vote_type) VALUES (?, ?, ?)
     ON DUPLICATE KEY UPDATE vote_type = VALUES(vote_type)";
     $stmt = $conn->prepare($sql);
@@ -149,37 +150,44 @@ function removeUserVote($conn, $userId, $postId)
  */
 function handleVote($conn, $userId, $postId, $voteType)
 {
-    // Disable autocommit to start a new transaction
-    $conn->autocommit(false);
+    // Get the current vote type given by the user for the post
+    $currentVoteType = getUserVoteType($conn, $userId, $postId);
 
-    try {
-        // Get the current vote type given by the user for the post
-        $currentVoteType = getUserVoteType($conn, $userId, $postId);
-
-        // Check if the current vote type matches the requested vote type
-        if ($currentVoteType === $voteType) {
-            // If they match, remove the user's vote and update the post votes accordingly
+    // Check if the current vote type matches the requested vote type
+    if ($currentVoteType === $voteType) {
+        // If they match, remove the user's vote
+        removeUserVote($conn, $userId, $postId);
+        updatePostVotes($conn, $postId, ($voteType === 'upvote' ? -1 : 1));
+    } else {
+        // If they don't match, remove the user's current vote and add new vote
+        if ($currentVoteType !== null) {
             removeUserVote($conn, $userId, $postId);
-            updatePostVotes($conn, $postId, ($voteType === 'upvote' ? -1 : 1));
-        } else {
-            // If they don't match, handle the change in vote type and update the post votes
-            if ($currentVoteType !== null) {
-                removeUserVote($conn, $userId, $postId);
-                updatePostVotes($conn, $postId, ($currentVoteType === 'upvote' ? -1 : 1));
-            }
-
-            updatePostVotes($conn, $postId, ($voteType === 'upvote' ? 1 : -1));
-            createVote($conn, $userId, $postId, $voteType);
+            updatePostVotes($conn, $postId, ($currentVoteType === 'upvote' ? -1 : 1));
         }
 
-        // Commit the transaction if no exceptions occur
-        $conn->commit();
-    } catch (Exception $e) {
-        // Roll back the transaction and re-throw the exception
-        $conn->rollback();
-        throw $e;
-    } finally {
-        // Re-enable autocommit after handling the voting process
-        $conn->autocommit(true);
+        updatePostVotes($conn, $postId, ($voteType === 'upvote' ? 1 : -1));
+        createVote($conn, $userId, $postId, $voteType);
+    }
+}
+
+function handleException($e)
+{
+    if ($e instanceof InvalidArgumentException) {
+        http_response_code(400); // Bad Request
+    } else {
+        http_response_code(500); // Internal Server Error
+    }
+    $errorMessage = $e->getMessage();
+    error_log("Error: $errorMessage");
+    exit();
+}
+
+// Function to validate input fields
+function validateInput($fields)
+{
+    foreach ($fields as $field) {
+        if (!isset($_POST[$field]) || empty($_POST[$field])) {
+            throw new InvalidArgumentException(ucfirst($field) . " is required.");
+        }
     }
 }
