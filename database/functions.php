@@ -6,20 +6,9 @@
  * @param int $length The desired length of the UUID. Default is 16.
  * @return string The generated UUID string.
  */
-function genUUID($length = 16)
-{
-    $uuid = uniqid('', true);
-    $uuid = str_replace('.', '', $uuid);
-
-    if (strlen($uuid) > $length) {
-        $uuid = substr($uuid, 0, $length);
-    } else {
-        $uuid = str_pad($uuid, $length, '0');
-    }
-
-    return $uuid;
+function genUUID($length = 16) {
+    return substr(str_replace('.', '', uniqid('', true)), 0, $length);
 }
-
 
 /**
  * Function to get posts with user votes
@@ -170,6 +159,11 @@ function handleVote($conn, $userId, $postId, $voteType)
     }
 }
 
+/**
+ * Handles exceptions by setting appropriate HTTP response codes and logging the error message.
+ *
+ * @param Exception $e The exception to handle.
+ */
 function handleException($e)
 {
     if ($e instanceof InvalidArgumentException) {
@@ -182,12 +176,15 @@ function handleException($e)
     exit();
 }
 
-// Function to validate input fields
-function validateInput($fields)
+/**
+ * Validates whether a specific field is present in the $_POST array and is not empty.
+ *
+ * @param string $field The name of the field to validate.
+ * @throws InvalidArgumentException if the field is not present in the $_POST array or is empty.
+ */
+function validateInput($field)
 {
-    foreach ($fields as $field) {
-        if (!isset($_POST[$field]) || empty($_POST[$field])) {
-            throw new InvalidArgumentException(ucfirst($field) . " is required.");
-        }
+    if (!isset($_POST[$field]) || empty($_POST[$field])) {
+        throw new InvalidArgumentException(ucfirst($field) . " is required.");
     }
 }

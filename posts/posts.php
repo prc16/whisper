@@ -19,15 +19,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $conn->autocommit(false);
 
     try {
-        validateInput(['action']);
+        validateInput('action');
         switch ($_POST['action']) {
             case 'create':
-                validateInput(['content']);
+                validateInput('content');
                 createPost($conn, $_SESSION['user_id'], $_POST['content']);
                 break;
             case 'upvote':
             case 'downvote':
-                validateInput(['post_id']);
+                validateInput('post_id');
                 handleVote($conn, $_SESSION['user_id'], $_POST['post_id'], $_POST['action']);
                 break;
             default:
