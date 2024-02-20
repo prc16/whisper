@@ -47,7 +47,7 @@ function vote(event) {
             console.error('Invalid postId');
             return;
         }
-        makeRequest('POST', '../posts/server.php', `action=${encodeURIComponent(type)}&post_id=${encodeURIComponent(postId)}`, (status, responseText) => {
+        makeRequest('POST', '../posts/posts.php', `action=${encodeURIComponent(type)}&post_id=${encodeURIComponent(postId)}`, (status, responseText) => {
             if (status === 200) {
                 try {
                     const posts = JSON.parse(responseText);
@@ -71,7 +71,7 @@ function createPost() {
         alert('Post content cannot be empty');
         return;
     }
-    makeRequest('POST', '../posts/server.php', `action=create&content=${encodeURIComponent(postContent)}`, (status, responseText) => {
+    makeRequest('POST', '../posts/posts.php', `action=create&content=${encodeURIComponent(postContent)}`, (status, responseText) => {
         if (status === 200) {
             const posts = JSON.parse(responseText);
             displayPosts(posts);
@@ -86,7 +86,7 @@ function createPost() {
 document.addEventListener('click', vote);
 
 // Initial display of posts
-makeRequest('GET', '../posts/server.php', null, (status, responseText) => {
+makeRequest('GET', '../posts/posts.php', null, (status, responseText) => {
     if (status === 200) {
         const posts = JSON.parse(responseText);
         displayPosts(posts);

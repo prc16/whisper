@@ -31,7 +31,7 @@
 
         <!--------------- main content--------------->
         <div class="main-content">
-            <?php include '../posts/posts.php'; ?>
+            <?php include '../posts/content.php'; ?>
         </div>
 
         <!--------------- right sidebar --------------->
