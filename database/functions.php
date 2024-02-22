@@ -173,18 +173,25 @@ function handleException($e)
     }
     $errorMessage = $e->getMessage();
     error_log("Error: $errorMessage");
+    echo json_encode(['error' => $errorMessage]);
     exit();
 }
 
 /**
- * Validates whether a specific field is present in the $_POST array and is not empty.
+ * Validate JSON Data
+ * 
+ * This function validates the presence of required fields in a JSON data object.
  *
- * @param string $field The name of the field to validate.
- * @throws InvalidArgumentException if the field is not present in the $_POST array or is empty.
+ * @param array $data   The JSON data object to be validated.
+ * @param array $fields An array of field names that are required in the data object.
+ * 
+ * @throws InvalidArgumentException if a required field is missing or empty in the data object.
  */
-function validateInput($field)
+function validateJsonData($data, $fields)
 {
-    if (!isset($_POST[$field]) || empty($_POST[$field])) {
-        throw new InvalidArgumentException(ucfirst($field) . " is required.");
+    foreach ($fields as $field) {
+        if (!isset($data[$field]) || empty($data[$field])) {
+            throw new InvalidArgumentException(ucfirst($field) . " is required.");
+        }
     }
 }

@@ -2,13 +2,13 @@
 function makeRequest(method, url, data, callback) {
     const xhr = new XMLHttpRequest();
     xhr.open(method, url, true);
-    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    xhr.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
     xhr.onreadystatechange = () => {
         if (xhr.readyState === 4) {
             callback(xhr.status, xhr.responseText);
         }
     };
-    xhr.send(data);
+    xhr.send(JSON.stringify(data));
 }
 
 // Function to display posts
@@ -47,7 +47,7 @@ function vote(event) {
             console.error('Invalid postId');
             return;
         }
-        makeRequest('POST', '../posts/posts.php', `action=${encodeURIComponent(type)}&post_id=${encodeURIComponent(postId)}`, (status, responseText) => {
+        makeRequest('POST', '../posts/posts.php', { action: type, post_id: postId }, (status, responseText) => {
             if (status === 200) {
                 try {
                     const posts = JSON.parse(responseText);
@@ -71,7 +71,7 @@ function createPost() {
         alert('Post content cannot be empty');
         return;
     }
-    makeRequest('POST', '../posts/posts.php', `action=create&content=${encodeURIComponent(postContent)}`, (status, responseText) => {
+    makeRequest('POST', '../posts/posts.php', { action: 'create', content: postContent }, (status, responseText) => {
         if (status === 200) {
             const posts = JSON.parse(responseText);
             displayPosts(posts);
