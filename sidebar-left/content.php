@@ -5,7 +5,7 @@
 
 <div class="imp-links">
     <a href="#"><i class="fa-solid fa-house"></i>home</a><br>
-    <a href="#"><i class="fa-solid fa-user"></i>profile</a><br>
+    <a href="../profile/"><i class="fa-solid fa-user"></i>profile</a><br>
     <a href="#"><i class="fa-solid fa-user-group"></i>Friends</a><br>
     <a href="#"><i class="fa-solid fa-envelope"></i>Messages</a><br>
 </div>

@@ -50,3 +50,18 @@ CREATE TABLE `usernames` (
     UNIQUE KEY `unique_username` (username),
     CONSTRAINT `fk_usernames_users` FOREIGN KEY (user_id) REFERENCES `users` (user_id) ON DELETE CASCADE
 ) ENGINE=InnoDB CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+
+-- Insert test records into the users table
+-- Note: password = 'test'
+INSERT INTO `users` (`user_id`, `email`, `password_hash`) VALUES
+('Alphatester0----', 'Alphatester0@test.com', '$2y$10$2EQhA1F5zL49jWxCOz4ZpOHLUaGg.H99nEkoOdA/wzPERFRoxTxZa');
+
+INSERT INTO `users` (`user_id`, `email`, `password_hash`) VALUES
+('Alphatester1----', 'Alphatester1@test.com', '$2y$10$2EQhA1F5zL49jWxCOz4ZpOHLUaGg.H99nEkoOdA/wzPERFRoxTxZa');
+
+-- Insert test records into the usernames table
+INSERT INTO `usernames` (user_id, username) VALUES ('Alphatester0----', 'Alphatester0');
+
+-- Insert test records into the usernames table
+INSERT INTO `usernames` (user_id, username) VALUES ('Alphatester1----', 'Alphatester1');
