@@ -6,10 +6,11 @@ define("DATABASE_USERNAME", "root");
 define("DATABASE_PASSWORD", "");
 define("DATABASE_NAME", "whisper_db");
 
-function getDBConnection() {
+try {
     $conn = new mysqli(DATABASE_HOSTNAME, DATABASE_USERNAME, DATABASE_PASSWORD, DATABASE_NAME);
-    if ($conn->connect_error) {
-        die("Connection failed: " . $conn->connect_error);
-    }
-    return $conn;
+} catch (Exception $e) {
+    $errorMessage = $e->getMessage();
+    error_log("Error: $errorMessage");
+    echo json_encode(['error' => $errorMessage]);
+    exit();
 }

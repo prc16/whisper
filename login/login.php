@@ -1,7 +1,6 @@
 <?php
 
-include '../database/config.php';
-$conn = getDBConnection();
+include '../database/connection.php';
 
 // Process the login form data
 if ($_SERVER["REQUEST_METHOD"] == "POST") {

@@ -1,8 +1,7 @@
 <?php
 
-include '../database/config.php';
+include '../database/connection.php';
 include '../database/functions.php';
-$conn = getDBConnection();
 
 // Process the signup form data
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
