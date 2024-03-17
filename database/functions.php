@@ -23,10 +23,23 @@ function genUUID($length = 16)
  */
 function getPostsWithVotes($conn, $userId, $limit = 10)
 {
-    $sql = "SELECT p.post_id, p.user_id, p.content, p.votes, IFNULL(v.vote_type, '') AS vote_type 
-            FROM posts p 
-            LEFT JOIN votes v ON p.post_id = v.post_id AND v.user_id = ? 
-            ORDER BY p.id DESC";
+    $sql =
+        "SELECT 
+            p.post_id, 
+            p.user_id, 
+            p.content, 
+            p.votes, 
+            COALESCE(u.username, 'Anonymous') AS username, 
+            IFNULL(v.vote_type, '') AS vote_type 
+        FROM 
+            posts p 
+        LEFT JOIN 
+            usernames u ON p.user_id = u.user_id
+        LEFT JOIN 
+            votes v ON p.post_id = v.post_id AND v.user_id = ? 
+        ORDER BY 
+            p.id DESC
+        ";
 
     if ($limit !== null && is_numeric($limit)) {
         $sql .= " LIMIT ?";
@@ -60,22 +73,30 @@ function getPostsWithVotes($conn, $userId, $limit = 10)
  */
 function getPosts($conn, $limit = 10)
 {
-    $sql = "SELECT post_id, user_id, content, votes FROM posts ORDER BY id DESC";
+    $sql =
+        "SELECT 
+            p.post_id,
+            p.user_id,
+            COALESCE(u.username, 'Anonymous') AS username,
+            p.content,
+            p.votes 
+        FROM
+            posts p 
+        LEFT JOIN
+            usernames u ON p.user_id = u.user_id 
+        ORDER BY
+            p.id DESC
+        ";
 
     if ($limit !== null && is_numeric($limit)) {
         $sql .= " LIMIT ?";
-    }
-
-    $stmt = $conn->prepare($sql);
-
-    if ($limit !== null && is_numeric($limit)) {
+        $stmt = $conn->prepare($sql);
         $stmt->bind_param("i", $limit);
+    } else {
+        $stmt = $conn->prepare($sql);
     }
 
     $stmt->execute();
-
-
-    $stmt->bind_result($post_id, $user_id, $content, $votes);
     $result = $stmt->get_result();
 
     $posts = array();

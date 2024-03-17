@@ -23,7 +23,7 @@ function displayPosts(posts) {
         const postElement = document.createElement('div');
         postElement.className = 'post';
         postElement.innerHTML = `
-            <h2>${post.user_id}</h2>
+            <h2>${post.username}</h2>
             <p>${post.content}</p>
             <p>Votes: ${post.votes}</p>
             <button class="vote-btn" data-id="${post.post_id}" data-type="upvote" style="background-color: ${post.vote_type === 'upvote' ? 'orange' : 'white'}">Upvote</button>
