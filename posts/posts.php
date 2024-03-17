@@ -55,8 +55,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 // Set character encoding to UTF-8
 header('Content-Type: application/json; charset=utf-8');
 
-// Return posts with user votes as JSON
-echo json_encode(getPostsWithVotes($conn, $_SESSION['user_id'])); // TODO: handle the case where 'user_id' is not set
+// Return posts as JSON
+if (isset($_SESSION['user_id'])) {
+    echo json_encode(getPostsWithVotes($conn, $_SESSION['user_id']));
+} else {
+    echo json_encode(getPosts($conn));
+}
 
 // Close the database connection
 $conn->close();
