@@ -1,7 +1,13 @@
 <?php
 
-include '../database/connection.php';
 include '../database/functions.php';
+
+try {
+    $conn = getConnection();
+} catch (Exception $e) {
+    handleException($e);
+    exit();
+}
 
 session_start();
 

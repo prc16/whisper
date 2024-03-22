@@ -1,5 +1,25 @@
 <?php
 
+include '../database/connection.php';
+
+/**
+ * Establishes a connection to the MySQL database.
+ *
+ * @return mysqli|null The MySQL database connection object, or null if the connection fails.
+ * @throws Exception If the connection to the MySQL database fails.
+ */
+function getConnection() {
+    $conn = new mysqli(DATABASE_HOSTNAME, DATABASE_USERNAME, DATABASE_PASSWORD, DATABASE_NAME);
+    
+    // Check if connection was successful
+    if ($conn->connect_errno) {
+        // Throw a custom exception
+        throw new Exception("Failed to connect to Database: " . $conn->connect_error);
+    }
+    
+    return $conn;
+}
+
 /**
  * Generates a Universally Unique Identifier (UUID) string.
  *
@@ -96,6 +116,49 @@ function fetchPosts($result)
         $posts[] = $row;
     }
     return $posts;
+}
+
+function usernameExists($conn, $userId)
+{
+    $checkSql = "SELECT 1 FROM usernames WHERE user_id=? LIMIT 1";
+    $stmt = $conn->prepare($checkSql);
+    $stmt->bind_param("s", $userId);
+    $stmt->execute();
+    $stmt->store_result();
+    $exists = $stmt->num_rows > 0;
+    $stmt->close();
+
+    return $exists;
+}
+
+function getUsername($conn, $userId)
+{
+    $username = "";
+    
+    $sql = "SELECT username FROM usernames WHERE user_id=? LIMIT 1";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("s", $userId);
+    $stmt->execute();
+    $stmt->bind_result($username);
+    $stmt->fetch();
+    $stmt->close();
+
+    // Check if username is empty, if so, return "Anonymous"
+    if (empty($username)) {
+        return "Anonymous";
+    }
+
+    return $username;
+}
+
+function editUsername($conn, $userId, $userName)
+{
+    $sql = "INSERT INTO usernames (user_id, username) VALUES (?, ?)
+            ON DUPLICATE KEY UPDATE username = VALUES(username)";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("ss", $userId, $userName);
+    $stmt->execute();
+    $stmt->close();
 }
 
 /**
