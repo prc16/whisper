@@ -12,99 +12,89 @@ function genUUID($length = 16)
 }
 
 /**
- * Retrieve posts with their associated votes for a specific user.
+ * Retrieves posts with corresponding votes for a specific user.
  *
- * This function retrieves posts along with their vote information for a given user.
- *
- * @param mysqli $conn A mysqli database connection object.
- * @param int $userId The ID of the user for whom posts and votes are being fetched.
- * @param int|null $limit (Optional) The maximum number of posts to retrieve. Defaults to 10 if not provided.
- * @return array An array containing associative arrays, each representing a post with its associated vote information.
+ * @param mysqli $conn The database connection object.
+ * @param int $userId The ID of the user whose posts are being retrieved.
+ * @param int $limit The maximum number of posts to retrieve (default is 10).
+ * @return array An array containing the retrieved posts with associated votes.
  */
 function getPostsWithVotes($conn, $userId, $limit = 10)
 {
-    $sql =
-        "SELECT 
-            p.post_id, 
-            p.user_id, 
-            p.content, 
-            p.votes, 
-            COALESCE(u.username, 'Anonymous') AS username, 
-            IFNULL(v.vote_type, '') AS vote_type 
-        FROM 
-            posts p 
-        LEFT JOIN 
-            usernames u ON p.user_id = u.user_id
-        LEFT JOIN 
-            votes v ON p.post_id = v.post_id AND v.user_id = ? 
-        ORDER BY 
-            p.id DESC
-        ";
+    $sql = "SELECT 
+                p.post_id, 
+                p.user_id, 
+                p.content, 
+                p.votes, 
+                COALESCE(u.username, 'Anonymous') AS username, 
+                IFNULL(v.vote_type, '') AS vote_type 
+            FROM 
+                posts p 
+            LEFT JOIN 
+                usernames u ON p.user_id = u.user_id
+            LEFT JOIN 
+                votes v ON p.post_id = v.post_id AND v.user_id = ? 
+            ORDER BY 
+                p.id DESC
+            LIMIT ?";
 
-    if ($limit !== null && is_numeric($limit)) {
-        $sql .= " LIMIT ?";
-        $stmt = $conn->prepare($sql);
-        $stmt->bind_param("si", $userId, $limit);
-    } else {
-        $stmt = $conn->prepare($sql);
-        $stmt->bind_param("s", $userId);
-    }
-
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("si", $userId, $limit);
     $stmt->execute();
     $result = $stmt->get_result();
 
-    $posts = array();
-    while ($row = $result->fetch_assoc()) {
-        $posts[] = $row;
-    }
+    $posts = fetchPosts($result);
 
     $stmt->close();
     return $posts;
 }
 
 /**
- * Retrieve posts from the database.
+ * Retrieves posts from the database.
  *
- * This function retrieves posts from the database and optionally limits the number of posts returned.
- *
- * @param mysqli $conn A mysqli database connection object.
- * @param int|null $limit (Optional) The maximum number of posts to retrieve. Defaults to 10 if not provided.
- * @return array An array containing associative arrays, each representing a post.
+ * @param mysqli $conn The database connection object.
+ * @param int $limit The maximum number of posts to retrieve (default is 10).
+ * @return array An array containing the retrieved posts.
  */
 function getPosts($conn, $limit = 10)
 {
-    $sql =
-        "SELECT 
-            p.post_id,
-            p.user_id,
-            COALESCE(u.username, 'Anonymous') AS username,
-            p.content,
-            p.votes 
-        FROM
-            posts p 
-        LEFT JOIN
-            usernames u ON p.user_id = u.user_id 
-        ORDER BY
-            p.id DESC
-        ";
+    $sql = "SELECT 
+                p.post_id,
+                p.user_id,
+                COALESCE(u.username, 'Anonymous') AS username,
+                p.content,
+                p.votes 
+            FROM
+                posts p 
+            LEFT JOIN
+                usernames u ON p.user_id = u.user_id 
+            ORDER BY
+                p.id DESC
+            LIMIT ?";
 
-    if ($limit !== null && is_numeric($limit)) {
-        $sql .= " LIMIT ?";
-        $stmt = $conn->prepare($sql);
-        $stmt->bind_param("i", $limit);
-    } else {
-        $stmt = $conn->prepare($sql);
-    }
-
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("i", $limit);
     $stmt->execute();
     $result = $stmt->get_result();
 
-    $posts = array();
+    $posts = fetchPosts($result);
+
+    $stmt->close();
+    return $posts;
+}
+
+/**
+ * Fetches posts from the database result set.
+ *
+ * @param mysqli_result $result The result set from a database query.
+ * @return array An array containing the fetched posts.
+ */
+function fetchPosts($result)
+{
+    $posts = [];
     while ($row = $result->fetch_assoc()) {
         $posts[] = $row;
     }
-
-    $stmt->close();
     return $posts;
 }
 
