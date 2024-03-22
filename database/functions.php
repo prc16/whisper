@@ -134,7 +134,7 @@ function usernameExists($conn, $userId)
 function getUsername($conn, $userId)
 {
     $username = "";
-    
+
     $sql = "SELECT username FROM usernames WHERE user_id=? LIMIT 1";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("s", $userId);
@@ -151,15 +151,25 @@ function getUsername($conn, $userId)
     return $username;
 }
 
-function editUsername($conn, $userId, $userName)
+function editUsername($conn, $userId, $username)
 {
-    $sql = "INSERT INTO usernames (user_id, username) VALUES (?, ?)
-            ON DUPLICATE KEY UPDATE username = VALUES(username)";
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("ss", $userId, $userName);
-    $stmt->execute();
-    $stmt->close();
+    if (usernameExists($conn, $userId)) {
+        // Update username
+        $sql = "UPDATE usernames SET username = ? WHERE user_id = ?";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("ss", $username, $userId);
+        $stmt->execute();
+        $stmt->close();
+    } else {
+        // Insert new record
+        $sql = "INSERT INTO usernames (user_id, username) VALUES (?, ?)";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("ss", $userId, $username);
+        $stmt->execute();
+        $stmt->close();
+    }
 }
+
 
 /**
  * Function to create a new post in the database
