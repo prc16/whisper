@@ -1,11 +1,33 @@
 <?php
-// Assume you have a database connection already established
 
-// Fetch profile info from the database
-// For simplicity, let's assume the data is fetched from the database
-$profile_picture = '../uploads/Alphatester0----.jpg'; // This should be fetched from the database
-$username = 'Alphatester'; // This should be fetched from the database
+include '../database/functions.php';
+
+try {
+    $conn = getConnection();
+} catch (Exception $e) {
+    handleException($e);
+    exit();
+}
+
+session_start();
+
+// Validate session and action
+if (isset($_SESSION['user_id'])) {
+    $userId = $_SESSION['user_id'];
+} else {
+    $userId = '';
+}
+
+$username = getUsername($conn, $userId);
+
+$profile_picture = '../uploads/' . $userId . '.jpg';
+
+if (!file_exists($profile_picture)) {
+    $profile_picture = '../uploads/default_profile_picture.png';
+}
+
+// Set character encoding to UTF-8
+header('Content-Type: application/json; charset=utf-8');
 
 // Return profile info as JSON
 echo json_encode(array('profile_picture' => $profile_picture, 'username' => $username));
-?>
