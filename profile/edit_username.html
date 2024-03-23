@@ -35,7 +35,7 @@
             makeRequest('POST', '../profile/update_username.php', data, (status, responseText) => {
                 if (status === 200) {
                     // Request successful, handle response accordingly
-                    alert('Username updated successfully!');
+                    window.location.href = '../profile/';
                 } else {
                     // Request failed, handle error
                     alert('Failed to update username. Please try again later.');
