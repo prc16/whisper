@@ -18,6 +18,28 @@ CREATE TABLE `users` (
     UNIQUE KEY `unique_email` (email)
 ) ENGINE=InnoDB CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;
 
+-- Create Table: usernames
+CREATE TABLE `usernames` (
+    id INT UNSIGNED AUTO_INCREMENT,
+    user_id CHAR(16) NOT NULL,
+    username VARCHAR(16) NOT NULL,
+    PRIMARY KEY (id),
+    UNIQUE KEY `unique_user_id` (user_id),
+    UNIQUE KEY `unique_username` (username),
+    CONSTRAINT `fk_usernames_users` FOREIGN KEY (user_id) REFERENCES `users` (user_id) ON DELETE CASCADE
+) ENGINE=InnoDB CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- Create Table: profile_pictures
+CREATE TABLE `profile_pictures` (
+    id INT UNSIGNED AUTO_INCREMENT,
+    user_id CHAR(16) NOT NULL,
+    file_id CHAR(16) NOT NULL,
+    PRIMARY KEY (id),
+    UNIQUE KEY `unique_user_id` (user_id),
+    UNIQUE KEY `unique_file_id` (file_id),
+    CONSTRAINT `fk_profile_pictures_users` FOREIGN KEY (user_id) REFERENCES `users` (user_id) ON DELETE CASCADE
+) ENGINE=InnoDB CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;
+
 -- Create Table: posts
 CREATE TABLE `posts` (
     id BIGINT UNSIGNED AUTO_INCREMENT,
@@ -36,19 +58,8 @@ CREATE TABLE `votes` (
     user_id CHAR(16) NOT NULL,
     vote_type ENUM('upvote', 'downvote') NOT NULL,
     PRIMARY KEY (post_id, user_id),
-    INDEX `idx_votes_post_user` (post_id, user_id),
     CONSTRAINT `fk_votes_posts` FOREIGN KEY (post_id) REFERENCES `posts` (post_id) ON DELETE CASCADE,
     CONSTRAINT `fk_votes_users` FOREIGN KEY (user_id) REFERENCES `users` (user_id) ON DELETE CASCADE
-) ENGINE=InnoDB CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;
-
--- Create Table: usernames
-CREATE TABLE `usernames` (
-    id INT UNSIGNED AUTO_INCREMENT,
-    user_id CHAR(16) NOT NULL,
-    username VARCHAR(16) NOT NULL,
-    PRIMARY KEY (id),
-    UNIQUE KEY `unique_username` (username),
-    CONSTRAINT `fk_usernames_users` FOREIGN KEY (user_id) REFERENCES `users` (user_id) ON DELETE CASCADE
 ) ENGINE=InnoDB CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 
@@ -60,8 +71,68 @@ INSERT INTO `users` (`user_id`, `email`, `password_hash`) VALUES
 INSERT INTO `users` (`user_id`, `email`, `password_hash`) VALUES
 ('Alphatester1----', 'Alphatester1@test.com', '$2y$10$2EQhA1F5zL49jWxCOz4ZpOHLUaGg.H99nEkoOdA/wzPERFRoxTxZa');
 
+INSERT INTO `users` (`user_id`, `email`, `password_hash`) VALUES
+('Alphatester2----', 'Alphatester2@test.com', '$2y$10$2EQhA1F5zL49jWxCOz4ZpOHLUaGg.H99nEkoOdA/wzPERFRoxTxZa');
+
+INSERT INTO `users` (`user_id`, `email`, `password_hash`) VALUES
+('Alphatester3----', 'Alphatester3@test.com', '$2y$10$2EQhA1F5zL49jWxCOz4ZpOHLUaGg.H99nEkoOdA/wzPERFRoxTxZa');
+
+INSERT INTO `users` (`user_id`, `email`, `password_hash`) VALUES
+('Alphatester4----', 'Alphatester4@test.com', '$2y$10$2EQhA1F5zL49jWxCOz4ZpOHLUaGg.H99nEkoOdA/wzPERFRoxTxZa');
+
+INSERT INTO `users` (`user_id`, `email`, `password_hash`) VALUES
+('Alphatester5----', 'Alphatester5@test.com', '$2y$10$2EQhA1F5zL49jWxCOz4ZpOHLUaGg.H99nEkoOdA/wzPERFRoxTxZa');
+
+INSERT INTO `users` (`user_id`, `email`, `password_hash`) VALUES
+('Alphatester6----', 'Alphatester6@test.com', '$2y$10$2EQhA1F5zL49jWxCOz4ZpOHLUaGg.H99nEkoOdA/wzPERFRoxTxZa');
+
+INSERT INTO `users` (`user_id`, `email`, `password_hash`) VALUES
+('Alphatester7----', 'Alphatester7@test.com', '$2y$10$2EQhA1F5zL49jWxCOz4ZpOHLUaGg.H99nEkoOdA/wzPERFRoxTxZa');
+
+INSERT INTO `users` (`user_id`, `email`, `password_hash`) VALUES
+('Alphatester8----', 'Alphatester8@test.com', '$2y$10$2EQhA1F5zL49jWxCOz4ZpOHLUaGg.H99nEkoOdA/wzPERFRoxTxZa');
+
+INSERT INTO `users` (`user_id`, `email`, `password_hash`) VALUES
+('Alphatester9----', 'Alphatester9@test.com', '$2y$10$2EQhA1F5zL49jWxCOz4ZpOHLUaGg.H99nEkoOdA/wzPERFRoxTxZa');
+
 -- Insert test records into the usernames table
 INSERT INTO `usernames` (user_id, username) VALUES ('Alphatester0----', 'Alphatester0');
 
--- Insert test records into the usernames table
 INSERT INTO `usernames` (user_id, username) VALUES ('Alphatester1----', 'Alphatester1');
+
+INSERT INTO `usernames` (user_id, username) VALUES ('Alphatester2----', 'Alphatester2');
+
+INSERT INTO `usernames` (user_id, username) VALUES ('Alphatester3----', 'Alphatester3');
+
+INSERT INTO `usernames` (user_id, username) VALUES ('Alphatester4----', 'Alphatester4');
+
+INSERT INTO `usernames` (user_id, username) VALUES ('Alphatester5----', 'Alphatester5');
+
+INSERT INTO `usernames` (user_id, username) VALUES ('Alphatester6----', 'Alphatester6');
+
+INSERT INTO `usernames` (user_id, username) VALUES ('Alphatester7----', 'Alphatester7');
+
+INSERT INTO `usernames` (user_id, username) VALUES ('Alphatester8----', 'Alphatester8');
+
+INSERT INTO `usernames` (user_id, username) VALUES ('Alphatester9----', 'Alphatester9');
+
+-- Insert test records into the profile_pictures table
+INSERT INTO `profile_pictures` (user_id, file_id) VALUES ('Alphatester0----', 'Alphatester0----');
+
+INSERT INTO `profile_pictures` (user_id, file_id) VALUES ('Alphatester1----', 'Alphatester1----');
+
+INSERT INTO `profile_pictures` (user_id, file_id) VALUES ('Alphatester2----', 'Alphatester2----');
+
+INSERT INTO `profile_pictures` (user_id, file_id) VALUES ('Alphatester3----', 'Alphatester3----');
+
+INSERT INTO `profile_pictures` (user_id, file_id) VALUES ('Alphatester4----', 'Alphatester4----');
+
+INSERT INTO `profile_pictures` (user_id, file_id) VALUES ('Alphatester5----', 'Alphatester5----');
+
+INSERT INTO `profile_pictures` (user_id, file_id) VALUES ('Alphatester6----', 'Alphatester6----');
+
+INSERT INTO `profile_pictures` (user_id, file_id) VALUES ('Alphatester7----', 'Alphatester7----');
+
+INSERT INTO `profile_pictures` (user_id, file_id) VALUES ('Alphatester8----', 'Alphatester8----');
+
+INSERT INTO `profile_pictures` (user_id, file_id) VALUES ('Alphatester9----', 'Alphatester9----');

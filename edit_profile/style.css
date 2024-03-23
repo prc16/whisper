@@ -1,0 +1,9 @@
+.container {
+    max-width: 600px;
+    margin: 50px auto;
+}
+
+#cropper-container {
+    width: 100%;
+    height: 300px;
+}
