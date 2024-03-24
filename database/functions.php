@@ -176,6 +176,52 @@ function editUsername($conn, $userId, $username)
     }
 }
 
+function profilePictureExists($conn, $userId)
+{
+    $checkSql = "SELECT 1 FROM profile_pictures WHERE user_id=? LIMIT 1";
+    $stmt = $conn->prepare($checkSql);
+    $stmt->bind_param("s", $userId);
+    $stmt->execute();
+    $stmt->store_result();
+    $exists = $stmt->num_rows > 0;
+    $stmt->close();
+
+    return $exists;
+}
+
+function getProfilePicture($conn, $userId)
+{
+    $fileId = "";
+
+    $sql = "SELECT file_id FROM profile_pictures WHERE user_id=? LIMIT 1";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("s", $userId);
+    $stmt->execute();
+    $stmt->bind_result($fileId);
+    $stmt->fetch();
+    $stmt->close();
+
+    return $fileId;
+}
+
+function insertProfilePicture($conn, $userId, $fileId)
+{
+    $sql = "INSERT INTO profile_pictures (user_id, file_id) VALUES (?, ?)";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("ss", $userId, $fileId);
+    $stmt->execute();
+    $stmt->close();
+}
+
+function updateProfilePicture($conn, $userId, $fileId)
+{
+    $sql = "UPDATE profile_pictures SET file_id = ? WHERE user_id = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("ss", $fileId, $userId);
+    $stmt->execute();
+    $stmt->close();
+}
+
 /**
  * Function to create a new post in the database
  *
@@ -318,7 +364,6 @@ function handleException($e)
     }
     $errorMessage = $e->getMessage();
     error_log("Error: $errorMessage");
-    echo json_encode(['error' => $errorMessage]);
     exit();
 }
 
