@@ -29,7 +29,7 @@
         <div class="main-content">
             <div id="profile-container">
                 <div id="profile-info">
-                    <img id="profile-picture" src="../images/default_profile_picture.png" alt="Profile Picture">
+                    <img id="profile-picture" src="../images/Default_Profile.jpg" alt="Profile Picture">
                     <p id="username">Loading...</p>
                 </div>
                 <div id="edit-options">

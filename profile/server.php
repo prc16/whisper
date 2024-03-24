@@ -23,7 +23,7 @@ $username = getUsername($conn, $userId);
 $profile_picture = '../uploads/' . $userId . '.jpg';
 
 if (!file_exists($profile_picture)) {
-    $profile_picture = '../uploads/Default_Profile.jpg';
+    $profile_picture = '../images/Default_Profile.jpg';
 }
 
 // Set character encoding to UTF-8
