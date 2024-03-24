@@ -8,15 +8,21 @@ include '../database/connection.php';
  * @return mysqli|null The MySQL database connection object, or null if the connection fails.
  * @throws Exception If the connection to the MySQL database fails.
  */
-function getConnection() {
-    $conn = new mysqli(DATABASE_HOSTNAME, DATABASE_USERNAME, DATABASE_PASSWORD, DATABASE_NAME);
-    
-    // Check if connection was successful
-    if ($conn->connect_errno) {
-        // Throw a custom exception
-        throw new Exception("Failed to connect to Database: " . $conn->connect_error);
+function getConnection()
+{
+    try {
+        $conn = new mysqli(DATABASE_HOSTNAME, DATABASE_USERNAME, DATABASE_PASSWORD, DATABASE_NAME);
+
+        // Check if connection was successful
+        if ($conn->connect_errno) {
+            // Throw a custom exception
+            throw new Exception("Failed to connect to Database: " . $conn->connect_error);
+        }
+    } catch (Exception $e) {
+        handleException($e);
+        exit();
     }
-    
+
     return $conn;
 }
 
@@ -169,7 +175,6 @@ function editUsername($conn, $userId, $username)
         $stmt->close();
     }
 }
-
 
 /**
  * Function to create a new post in the database

@@ -2,21 +2,13 @@
 
 include '../database/functions.php';
 
-try {
-    $conn = getConnection();
-} catch (Exception $e) {
-    handleException($e);
-    exit();
-}
+// Set uploads directory
+$uploadsDirectory = '../uploads/';
+$response = array();
 
 session_start();
 
-// Set uploads directory
-$uploadsDirectory = '../uploads/';
-
-$response = array();
-
-// Validate session and action
+// Check if the user is logged in
 if (!isset($_SESSION['user_id'])) {
     http_response_code(401); // Unauthorized
     $response['success'] = false;
@@ -25,8 +17,11 @@ if (!isset($_SESSION['user_id'])) {
     $conn->close();
     exit();
 }
-
 $userId = $_SESSION['user_id'];
+
+// get Database Connection
+$conn = getConnection();
+
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['profile_picture'])) {
     
@@ -42,7 +37,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['profile_picture'])) 
     }
 
     // Move uploaded file to destination directory
-    $fileName = $uploadsDirectory . genUUID() . '.jpg';
+    $fileId = genUUID();
+    $fileName = $uploadsDirectory . $fileId . '.jpg';
     if (move_uploaded_file($file['tmp_name'], $fileName)) {
         $response['success'] = true;
         $response['message'] = 'Image uploaded successfully.';

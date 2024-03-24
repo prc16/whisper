@@ -2,12 +2,7 @@
 
 include '../database/functions.php';
 
-try {
-    $conn = getConnection();
-} catch (Exception $e) {
-    handleException($e);
-    exit();
-}
+$conn = getConnection();
 
 session_start();
 
@@ -17,6 +12,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Validate session and action
     if (!isset($_SESSION['user_id'])) {
         http_response_code(401); // Unauthorized
+        $conn->close();
         exit();
     }
 

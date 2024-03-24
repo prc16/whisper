@@ -2,12 +2,7 @@
 
 include '../database/functions.php';
 
-try {
-    $conn = getConnection();
-} catch (Exception $e) {
-    handleException($e);
-    exit();
-}
+$conn = getConnection();
 
 // Process the signup form data
 if ($_SERVER["REQUEST_METHOD"] == "POST") {

@@ -2,12 +2,7 @@
 
 include '../database/functions.php';
 
-try {
-    $conn = getConnection();
-} catch (Exception $e) {
-    handleException($e);
-    exit();
-}
+$conn = getConnection();
 
 session_start();
 
