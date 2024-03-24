@@ -14,11 +14,6 @@ session_start();
 // Set uploads directory
 $uploadsDirectory = '../uploads/';
 
-// Check if the directory exists or create it
-if (!file_exists($uploadsDirectory)) {
-    mkdir($uploadsDirectory, 0777, true);
-}
-
 $response = array();
 
 // Validate session and action

@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Profile Picture Cropper</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="../edit_profile/style.css">
+    <link rel="stylesheet" href="style.css">
     <link rel="icon" type="image/gif" href="../images/whisper-logo-small.png">
 </head>
 
@@ -26,7 +26,7 @@
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
-    <script src="../edit_profile/script.js"> </script>
+    <script src="script.js"> </script>
 
 </body>
 
