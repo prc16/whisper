@@ -17,6 +17,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Validate session and action
     if (!isset($_SESSION['user_id'])) {
         http_response_code(401); // Unauthorized
+        $conn->close();
         exit();
     }
 

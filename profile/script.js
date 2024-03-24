@@ -26,5 +26,5 @@ function editProfilePicture() {
 
 function editUsername() {
     // Add functionality to edit username
-    window.location.href = '../profile/edit_username.html';
+    window.location.href = '../edit_username/';
 }

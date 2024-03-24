@@ -1,51 +1,69 @@
-window.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', () => {
     const input = document.getElementById('inputImage');
     const image = document.getElementById('cropper-image');
-    const cropper = new Cropper(image, {
+    const cropperContainer = document.getElementById('cropper-container');
+    const cropButton = document.getElementById('cropButton');
+    
+    const cropperOptions = {
         aspectRatio: 1,
         viewMode: 2,
         autoCropArea: 1,
-    });
+    };
 
-    input.addEventListener('change', (e) => {
+    let cropper;
+
+    input.addEventListener('change', handleInputChange);
+
+    function handleInputChange(e) {
         const file = e.target.files[0];
+        if (!file) return;
+        
         const reader = new FileReader();
-
         reader.onload = () => {
             image.src = reader.result;
-            cropper.replace(reader.result);
+            if (!cropper) {
+                cropper = new Cropper(image, cropperOptions);
+            } else {
+                cropper.replace(reader.result);
+            }
+            cropperContainer.style.display = 'block';
         };
-
         reader.readAsDataURL(file);
-    });
+    }
 
-    document.getElementById('cropButton').addEventListener('click', () => {
+    cropButton.addEventListener('click', handleCropButtonClick);
+
+    function handleCropButtonClick() {
+        if (!cropper) return;
+        
         const canvas = cropper.getCroppedCanvas({
-            width: 400, // Set desired width of the resulting image
-            height: 400, // Set desired height of the resulting image
-            fillColor: '#fff', // Fill color when the result image does not cover the entire cropped area
-            imageSmoothingEnabled: false, // Disable image smoothing to retain sharpness
-            imageSmoothingQuality: 'high', // Set image smoothing quality
+            width: 400,
+            height: 400,
+            fillColor: '#fff',
+            imageSmoothingEnabled: false,
+            imageSmoothingQuality: 'high',
         });
 
-        canvas.toBlob((blob) => {
-            const formData = new FormData();
-            formData.append('profile_picture', blob, 'profile_picture.jpg');
+        canvas.toBlob(uploadImage, 'image/jpeg', 0.8);
+    }
 
-            fetch('upload.php', {
-                method: 'POST',
-                body: formData
-            })
-                .then(response => response.json())
-                .then(data => {
-                    console.log(data);
-                    alert(data.message);
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    alert('Error uploading image.');
-                });
-        }, 'image/jpeg', 0.8); // Specify image/jpeg and quality (0.8) for JPEG format
-    });
+    function uploadImage(blob) {
+        const formData = new FormData();
+        formData.append('profile_picture', blob, 'profile_picture.jpg');
 
+        fetch('server.php', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log(data);
+            alert(data.message);
+            window.location.href = '../profile/';
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Error uploading image.');
+        });
+    }
 });

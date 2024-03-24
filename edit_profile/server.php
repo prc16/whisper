@@ -2,6 +2,13 @@
 
 include '../database/functions.php';
 
+try {
+    $conn = getConnection();
+} catch (Exception $e) {
+    handleException($e);
+    exit();
+}
+
 // Set uploads directory
 $uploadsDirectory = '../uploads/';
 
@@ -12,7 +19,20 @@ if (!file_exists($uploadsDirectory)) {
 
 $response = array();
 
+// Validate session and action
+if (!isset($_SESSION['user_id'])) {
+    http_response_code(401); // Unauthorized
+    $response['success'] = false;
+    $response['message'] = 'Unauthorized Request';
+    echo json_encode($response);
+    $conn->close();
+    exit();
+}
+
+$userId = $_SESSION['user_id'];
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['profile_picture'])) {
+    
     $file = $_FILES['profile_picture'];
 
     // Check if file is an image
@@ -40,4 +60,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['profile_picture'])) 
     $response['message'] = 'No image uploaded.';
     echo json_encode($response);
 }
-?>
+
+$conn->close();
