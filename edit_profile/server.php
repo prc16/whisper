@@ -9,6 +9,8 @@ try {
     exit();
 }
 
+session_start();
+
 // Set uploads directory
 $uploadsDirectory = '../uploads/';
 
