@@ -6,37 +6,36 @@ body {
     justify-content: center;
     align-items: center;
     height: 100vh;
-    /*background-color: #f2f2f2;*/
-    background:url(../images/whisper-logo-bg3.jpg);
+    background-color: #f2f2f2;
     background-size:cover;
     background-position: center;
 }
 
-.signup-container {
-    background: transparent;
+.login-container {
+    background: #ffffff;
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 0 10px #010407;
     max-width: 400px;
     width: 100%;
-    box-sizing: border-box;
-    border:1px solid black;
-    backdrop-filter: blur(20px);
+    height: 350px;
 }
 
 h2 {
     text-align: center;
-    color: #000000;
+    /*color: #333333;*/
+    color:black;
 }
 
-.signup-form {
+.login-form {
     display: flex;
     flex-direction: column;
 }
 
 label {
     margin-top: 10px;
-    color: #000000;
+   /* color: #555555;*/
+   color:black;
 }
 
 input {
@@ -45,6 +44,7 @@ input {
     border: 1px solid #008cff;
     border-radius: 4px;
     outline: none;
+    
 }
 
 input[type="submit"] {
@@ -52,7 +52,7 @@ input[type="submit"] {
     color: #ffffff;
     padding: 12px;
     margin-top: 15px;
-    border: none;
+    border: 1px solid black;
     border-radius: 4px;
     cursor: pointer;
     font-size: 16px;
@@ -64,7 +64,7 @@ input[type="submit"]:hover {
 
 /* Responsive Styling */
 @media (max-width: 400px) {
-    .signup-container {
+    .login-container {
         max-width: 100%;
         box-shadow: none;
     }

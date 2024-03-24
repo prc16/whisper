@@ -1,13 +1,11 @@
 <div class="logo-link">
-    <img src="../images/whisper-logo.png" alt="Logo" class="logo">
-    <h1 class="title">Whisper</h1>
+    <a href="../home/"><img src="../images/whisper-logo.png" alt="Logo" class="logo"></a><br>
 </div>
-
 <div class="imp-links">
-    <a href="../home/"><i class="fa-solid fa-house"></i>home</a><br>
-    <a href="../profile/"><i class="fa-solid fa-user"></i>profile</a><br>
-    <a href="#"><i class="fa-solid fa-user-group"></i>Following</a><br>
-    <a href="#"><i class="fa-solid fa-envelope"></i>Messages</a><br>
+    <a href="../home/"><i class="fas fa-home"></i>Home</a><br>
+    <a href="../profile/"><i class="fas fa-user"></i>Profile</a><br>
+    <a href="#"><i class="fas fa-envelope"></i>Messages</a><br>
+    <a href="#"><i class="fas fa-user-group"></i>Following</a><br>
 </div>
 
 <div class="bottom-left">

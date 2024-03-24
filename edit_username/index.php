@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit Username</title>
     <link rel="stylesheet" href="style.css">
-    <link rel="icon" type="image/gif" href="../images/whisper-logo.png">
+    <link rel="icon" type="image/gif" href="../images/whisper-logo-small.png">
 </head>
 <body>
     <h1>Edit Username</h1>
