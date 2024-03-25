@@ -11,7 +11,6 @@
     <link rel="stylesheet" href="../bottom-left/style.css">
     <link rel="stylesheet" href="../sidebar-right/style.css">
     <link rel="stylesheet" href="../posts/posts.css">
-    <link rel="stylesheet" href="../profile/style.css">
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     
