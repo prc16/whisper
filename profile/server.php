@@ -1,6 +1,6 @@
 <?php
 
-include '../database/functions.php';
+include_once '../database/functions.php';
 
 $conn = getConnection();
 
@@ -10,15 +10,7 @@ session_start();
 if (isset($_SESSION['user_id'])) {
     $userId = $_SESSION['user_id'];
     $username = getUsername($conn, $userId);
-    if(profilePictureExists($conn, $userId)) {
-        $fileId = getProfilePicture($conn, $userId);
-        $profilePicture = '../uploads/' . $fileId . '.jpg';
-        if (!file_exists($profilePicture)) {
-            $profile_picture = '../images/Default_Profile.jpg';
-        }    
-    } else {
-        $profilePicture = '../images/Default_Profile.jpg';
-    }
+    $profilePicture = getProfilePicture($conn, $userId);
 } else {
     $username = 'Anonymous';
     $profilePicture = '../images/Default_Profile.jpg';

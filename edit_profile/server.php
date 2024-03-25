@@ -1,6 +1,6 @@
 <?php
 
-include '../database/functions.php';
+include_once '../database/functions.php';
 
 // Set uploads directory with a trailing slash for consistency
 $uploadsDirectory = '../uploads/';
@@ -70,7 +70,7 @@ $conn->autocommit(false);
 
 try {
     if(profilePictureExists($conn, $userId)) {
-        $oldFileId = getProfilePicture($conn, $userId);
+        $oldFileId = getProfilePictureId($conn, $userId);
         $oldFileName = $uploadsDirectory . $oldFileId . '.jpg';
 
         updateProfilePicture($conn, $userId, $fileId);

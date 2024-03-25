@@ -1,6 +1,6 @@
 <?php
 
-include '../database/functions.php';
+include_once '../database/functions.php';
 
 $conn = getConnection();
 

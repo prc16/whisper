@@ -24,17 +24,17 @@
     <div class="web-container">
         <!--------------- left sidebar --------------->
         <div class="left-sidebar">
-            <?php include '../sidebar-left/content.php'; ?>
+            <?php include_once '../sidebar-left/content.php'; ?>
         </div>
 
         <!--------------- main content--------------->
         <div class="main-content">
-            <?php include '../posts/content.php'; ?>
+            <?php include_once '../posts/content.php'; ?>
         </div>
 
         <!--------------- right sidebar --------------->
         <div class="right-sidebar">
-            <?php include '../sidebar-right/content.php'; ?>
+            <?php include_once '../sidebar-right/content.php'; ?>
         </div>
 
     </div>

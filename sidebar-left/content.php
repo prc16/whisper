@@ -9,5 +9,5 @@
 </div>
 
 <div class="bottom-left">
-    <?php include "../bottom-left/content.php"; ?>
+    <?php include_once "../bottom-left/content.php"; ?>
 </div>

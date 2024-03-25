@@ -22,15 +22,33 @@
     <div class="web-container">
         <!--------------- left sidebar --------------->
         <div class="left-sidebar">
-            <?php include '../sidebar-left/content.php'; ?>
+            <?php include_once '../sidebar-left/content.php'; ?>
         </div>
 
         <!--------------- main content--------------->
         <div class="main-content">
             <div id="profile-container">
                 <div id="profile-info">
-                    <img id="profile-picture" src="../images/Default_Profile.jpg" alt="Profile Picture">
-                    <p id="username">Loading...</p>
+                    <?php
+
+                    include_once '../database/functions.php';
+
+                    $conn = getConnection();
+
+                    session_start();
+
+                    // Validate session and action
+                    if (isset($_SESSION['user_id'])) {
+                        $userId = $_SESSION['user_id'];
+                        $username = getUsername($conn, $userId);
+                        $profilePicture = getProfilePicture($conn, $userId);
+                    } else {
+                        $username = 'Anonymous';
+                        $profilePicture = '../images/Default_Profile.jpg';
+                    }
+                    echo '<img id="profile-picture" src='. $profilePicture . ' alt="Profile Picture">';
+                    echo '<p id="username">' . $username . '</p>';
+                    ?>
                 </div>
                 <div id="edit-options">
                     <button onclick="editProfilePicture()">Edit Picture</button>
@@ -43,7 +61,7 @@
         <script src="script.js"></script>
         <!--------------- right sidebar --------------->
         <div class="right-sidebar">
-            <?php include '../sidebar-right/content.php'; ?>
+            <?php include_once '../sidebar-right/content.php'; ?>
         </div>
 
     </div>

@@ -1,6 +1,6 @@
 <?php
 
-include '../database/connection.php';
+include_once '../database/config.php';
 
 /**
  * Establishes a connection to the MySQL database.
@@ -189,7 +189,7 @@ function profilePictureExists($conn, $userId)
     return $exists;
 }
 
-function getProfilePicture($conn, $userId)
+function getProfilePictureId($conn, $userId)
 {
     $fileId = "";
 
@@ -202,6 +202,21 @@ function getProfilePicture($conn, $userId)
     $stmt->close();
 
     return $fileId;
+}
+
+function getProfilePicture($conn, $userId)
+{
+    if(profilePictureExists($conn, $userId)) {
+        $fileId = getProfilePictureId($conn, $userId);
+        $fileName = UPLOADS_DIRECTORY . $fileId . '.jpg';
+        if (!file_exists($fileName)) {
+            $fileName = '../images/Default_Profile.jpg';
+        }
+    } else {
+        $fileName = '../images/Default_Profile.jpg';
+    }
+
+    return $fileName;
 }
 
 function insertProfilePicture($conn, $userId, $fileId)
