@@ -46,7 +46,7 @@ Open phpmyadmin in your browser (http://localhost/phpmyadmin).
 Import database.sql file.
   
 ### Configuration File:  
-Update the database connection details in config.php with your MySQL credentials.  
+Update the 'config.json' located in 'database' directory with your database connection details, uploads directory, etc...  
   
 ### Access the Website:
 Open your web browser and navigate to http://localhost/whisper. You should see the Whisper website.

@@ -1,0 +1,9 @@
+{
+    "database_hostname": "localhost",
+    "database_username": "root",
+    "database_password": "",
+    "database_name": "whisper_db",
+    "uploads_directory": "../uploads/",
+    "default_profile": "../images/Default_Profile.jpg"
+  }
+  
