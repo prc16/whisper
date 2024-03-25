@@ -115,24 +115,3 @@ INSERT INTO `usernames` (user_id, username) VALUES ('Alphatester7----', 'Alphate
 INSERT INTO `usernames` (user_id, username) VALUES ('Alphatester8----', 'Alphatester8');
 
 INSERT INTO `usernames` (user_id, username) VALUES ('Alphatester9----', 'Alphatester9');
-
--- Insert test records into the profile_pictures table
-INSERT INTO `profile_pictures` (user_id, file_id) VALUES ('Alphatester0----', 'Alphatester0----');
-
-INSERT INTO `profile_pictures` (user_id, file_id) VALUES ('Alphatester1----', 'Alphatester1----');
-
-INSERT INTO `profile_pictures` (user_id, file_id) VALUES ('Alphatester2----', 'Alphatester2----');
-
-INSERT INTO `profile_pictures` (user_id, file_id) VALUES ('Alphatester3----', 'Alphatester3----');
-
-INSERT INTO `profile_pictures` (user_id, file_id) VALUES ('Alphatester4----', 'Alphatester4----');
-
-INSERT INTO `profile_pictures` (user_id, file_id) VALUES ('Alphatester5----', 'Alphatester5----');
-
-INSERT INTO `profile_pictures` (user_id, file_id) VALUES ('Alphatester6----', 'Alphatester6----');
-
-INSERT INTO `profile_pictures` (user_id, file_id) VALUES ('Alphatester7----', 'Alphatester7----');
-
-INSERT INTO `profile_pictures` (user_id, file_id) VALUES ('Alphatester8----', 'Alphatester8----');
-
-INSERT INTO `profile_pictures` (user_id, file_id) VALUES ('Alphatester9----', 'Alphatester9----');
