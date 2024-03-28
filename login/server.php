@@ -21,9 +21,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             // Start a PHP session
             // Start the session if not already started
-if (session_status() == PHP_SESSION_NONE) {
-    session_start();
-}
+            if (session_status() == PHP_SESSION_NONE) {
+                session_start();
+            }
             // Start a user session
             $_SESSION["user_id"] = $user_id;
 

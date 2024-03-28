@@ -36,9 +36,9 @@
                     $conn = getConnection();
 
                     // Start the session if not already started
-if (session_status() == PHP_SESSION_NONE) {
-    session_start();
-}
+                    if (session_status() == PHP_SESSION_NONE) {
+                        session_start();
+                    }
 
                     // Validate session and action
                     if (isset($_SESSION['user_id'])) {
@@ -49,7 +49,7 @@ if (session_status() == PHP_SESSION_NONE) {
                         $username = 'Anonymous';
                         $profilePicture = '../images/Default_Profile.jpg';
                     }
-                    echo '<img id="profile-picture" src='. $profilePicture . ' alt="Profile Picture">';
+                    echo '<img id="profile-picture" src=' . $profilePicture . ' alt="Profile Picture">';
                     echo '<p id="username">' . $username . '</p>';
                     ?>
                 </div>
