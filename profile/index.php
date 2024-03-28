@@ -35,7 +35,10 @@
 
                     $conn = getConnection();
 
-                    session_start();
+                    // Start the session if not already started
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
 
                     // Validate session and action
                     if (isset($_SESSION['user_id'])) {

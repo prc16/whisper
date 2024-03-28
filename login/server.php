@@ -20,7 +20,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if (password_verify($password, $password_hash)) {
 
             // Start a PHP session
-            session_start();
+            // Start the session if not already started
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
             // Start a user session
             $_SESSION["user_id"] = $user_id;
 

@@ -4,7 +4,10 @@ include_once '../database/functions.php';
 
 $conn = getConnection();
 
-session_start();
+// Start the session if not already started
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
 
 // Validate request method
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
