@@ -1,53 +1,11 @@
-.logo {
-    width: 40px;
-    height: 40px;
-}
-
-.logo:hover {
-    background-color: #e0e0e0;
-    border-radius: 5px;
-}
-
-.fa-home {
-    width: 40px;
-    height: 30px;
-    font-size: 30px;
-    background: linear-gradient(to bottom, blue, lightblue);
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-}
-
-.fa-user {
-    width: 40px;
-    height: 30px;
-    font-size: 30px;
-    background: linear-gradient(to bottom, lightblue, rgb(224, 88, 190));
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-}
-
-.fa-user-group {
-    width: 40px;
-    height: 30px;
-    font-size: 30px;
-    background: linear-gradient(to right, rgb(42, 45, 243) 10%, rgb(50, 226, 182));
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-}
-
-.fa-envelope {
-    width: 40px;
-    height: 30px;
-    font-size: 30px;
-    background: linear-gradient(to bottom, rgb(252, 255, 70), rgb(219, 164, 157));
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+.logo-link {
+    font-size: 23px;
 }
 
 .imp-links>a {
     text-decoration: none;
     color: black;
-    font-size: 18px;
+    font-size: 20px;
     display: block;
     align-items: center;
     width: fit-content;
@@ -71,6 +29,5 @@
     bottom: 0;
     width: 100%;
     text-align: center;
-    background-color: lightblue;
-    padding: 10px 0;
+    padding: 20px 0;
 }

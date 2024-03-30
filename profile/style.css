@@ -2,18 +2,19 @@
     text-align: center;
 }
 
-#profile-picture {
+#profile-info .profile-picture {
     width: 150px;
     height: 150px;
     border-radius: 50%;
     margin-bottom: 20px;
 }
 
-#username {
+#profile-info .username {
     font-size: 20px;
     font-weight: bold;
     margin-bottom: 20px;
 }
+
 
 #edit-options button {
     margin: 5px;

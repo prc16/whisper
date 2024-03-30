@@ -6,15 +6,15 @@
 .logout-btn,
 .signup-btn {
     text-decoration: none;
-    color: black;
+    color: #fff;
     padding: 10px 15px;
+    margin: 10px;
     border-radius: 5px;
-    border: 1px solid white;
+    background-color: #007bff;
 }
 
 .login-btn:hover,
 .logout-btn:hover,
 .signup-btn:hover {
-    background-color: gray;
-    color: #333;
+    background-color: #0056b3;
 }

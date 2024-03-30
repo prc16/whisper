@@ -29,29 +29,8 @@
         <div class="main-content">
             <div id="profile-container">
                 <div id="profile-info">
-                    <?php
-
-                    include_once '../database/functions.php';
-
-                    $conn = getConnection();
-
-                    // Start the session if not already started
-                    if (session_status() == PHP_SESSION_NONE) {
-                        session_start();
-                    }
-
-                    // Validate session and action
-                    if (isset($_SESSION['user_id'])) {
-                        $userId = $_SESSION['user_id'];
-                        $username = getUsername($conn, $userId);
-                        $profilePicture = getProfilePicture($conn, $userId);
-                    } else {
-                        $username = 'Anonymous';
-                        $profilePicture = '../images/Default_Profile.jpg';
-                    }
-                    echo '<img id="profile-picture" src=' . $profilePicture . ' alt="Profile Picture">';
-                    echo '<p id="username">' . $username . '</p>';
-                    ?>
+                    <img id="profile-picture" class="profile-picture" src="../images/Default_Profile.jpg" alt="Profile Picture">
+                    <p id="profile-username" class="username">Loading...</p>
                 </div>
                 <div id="edit-options">
                     <button onclick="editProfilePicture()">Edit Picture</button>
@@ -62,6 +41,7 @@
         </div>
 
         <script src="script.js"></script>
+        <script src="../functions/profileInfo.js"></script>
         <!--------------- right sidebar --------------->
         <div class="right-sidebar">
             <?php include_once '../sidebar-right/content.php'; ?>
