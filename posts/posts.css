@@ -59,6 +59,7 @@
 
 .post p {
     color: #555;
+    white-space: pre-line;
 }
 
 .post button {
