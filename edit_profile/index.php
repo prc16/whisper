@@ -7,7 +7,7 @@
     <title>Profile Picture Cropper</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
-    <link rel="icon" type="image/gif" href="../images/whisper-logo-small.png">
+    <link rel="icon" type="image/gif" href="../images/whisper-logo-square.png">
 </head>
 
 <body>
