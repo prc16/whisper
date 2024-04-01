@@ -16,8 +16,16 @@ function getProfileInfo(callback) {
 
 // Function to set profile
 function setProfileInfo(profileInfo) {
-    document.getElementById('profile-picture').src = profileInfo.profile_picture;
-    document.getElementById('profile-username').textContent = profileInfo.username;
+    const profilePictures = document.querySelectorAll('.profile-info-picture');
+    const profileUsernames = document.querySelectorAll('.profile-info-username');
+    
+    profilePictures.forEach(function(element) {
+        element.src = profileInfo.profile_picture;
+    });
+    
+    profileUsernames.forEach(function(element) {
+        element.textContent = profileInfo.username;
+    });
 }
 
 // Attach getProfileInfo to window.onload

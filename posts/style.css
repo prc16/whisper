@@ -1,7 +1,6 @@
 .container {
     max-width: 800px;
     margin: 20px auto;
-    padding: 20px;
     background-color: #fff;
 }
 
@@ -43,12 +42,16 @@
     background-color: #0056b3;
 }
 
-.post {
-    margin-bottom: 20px;
-    padding: 15px;
+#postForm {
     background-color: #fff;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
+    padding: 12px;
+    border-bottom: 1px solid var(--whisper-background);
+}
+
+.post {
+    background-color: #fff;
+    padding: 12px;
+    border-bottom: 1px solid var(--whisper-background);
 }
 
 .post h2 {

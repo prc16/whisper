@@ -1,5 +1,17 @@
-.username {
-    color: black;
+.bottom-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.bottom-container-buttons {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 5px;
+    margin-bottom: 5px;
 }
 
 .login-btn,

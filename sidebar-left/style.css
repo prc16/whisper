@@ -2,6 +2,11 @@
     font-size: 23px;
 }
 
+.sidebar-container {
+    padding-left: 4svw;
+    padding-top: 2svh;
+}
+
 .imp-links>a {
     text-decoration: none;
     color: black;
@@ -27,7 +32,5 @@
     /* TODO: align items to bottom of sidebar */
     position: absolute;
     bottom: 0;
-    width: 100%;
     text-align: center;
-    padding: 20px 0;
 }

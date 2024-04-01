@@ -28,11 +28,10 @@ body {
 }
 
 
-.home-feed {
+.middle-feed {
     flex-basis: 58%;
     top: 0px;
     align-self: flex-start;
-    border-right: 1px solid var(--whisper-background);
 }
 
 .right-sidebar {
@@ -41,6 +40,7 @@ body {
     align-self: flex-start;
     height: 100svh;
     position: sticky;
+    border-left: 1px solid var(--whisper-background);
 }
 
 .main-content {
