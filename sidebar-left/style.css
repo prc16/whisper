@@ -3,8 +3,20 @@
 }
 
 .sidebar-container {
+    display: flex;
+    flex-direction: column;
     padding-left: 4svw;
     padding-top: 2svh;
+    justify-content: space-between;
+    align-self: flex-end;
+    margin-right: 4vw;
+    height: 100%;
+}
+
+.imp-links {
+    align-self: flex-start;
+    display: flex;
+    flex-direction: column;
 }
 
 .imp-links>a {
@@ -29,8 +41,5 @@
 }
 
 .bottom-left {
-    /* TODO: align items to bottom of sidebar */
-    position: absolute;
-    bottom: 0;
-    text-align: center;
+    align-self: flex-start;
 }

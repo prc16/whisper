@@ -6,6 +6,9 @@
 <link rel="stylesheet" href="../profile/style.css">
 <link rel="stylesheet" href="../profile-container/style.css">
 <link rel="stylesheet" href="../profile-container-large/style.css">
+<link rel="stylesheet" href="../styles/all-classes.css">
+
+<link rel="stylesheet" href="../test/style.css">
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 

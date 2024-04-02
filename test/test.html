@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Create Post</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 20px;
+  }
+  #preview {
+    width: 100%;
+    max-width: 400px;
+    height: auto;
+    margin-bottom: 20px;
+  }
+</style>
+</head>
+<body>
+  <h1>Create a Post</h1>
+  <form id="postForm">
+    <label for="postContent">Post Content:</label><br>
+    <textarea id="postContent" name="postContent" rows="4" cols="50" required></textarea><br><br>
+    
+    <label for="imageUpload">Upload Image:</label><br>
+    <input type="file" id="imageUpload" accept="image/*"><br><br>
+    
+    <img id="preview" src="#" alt="Image Preview"><br>
+    
+    <button type="submit">Post</button>
+  </form>
+
+  <script>
+    document.getElementById('imageUpload').addEventListener('change', function() {
+      var reader = new FileReader();
+
+      reader.onload = function(e) {
+        document.getElementById('preview').src = e.target.result;
+      }
+
+      reader.readAsDataURL(this.files[0]);
+    });
+
+    document.getElementById('postForm').addEventListener('submit', function(event) {
+      event.preventDefault();
+
+      // Here you can add code to handle the submission of the post, including content and image.
+      // For demonstration, let's just log the content and image URL.
+      var postContent = document.getElementById('postContent').value;
+      var imageURL = document.getElementById('preview').src;
+
+      console.log("Post Content:", postContent);
+      console.log("Image URL:", imageURL);
+
+      // You can send this data to your server using AJAX or any other method.
+      // For now, we're just logging it.
+    });
+  </script>
+</body>
+</html>

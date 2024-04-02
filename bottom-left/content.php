@@ -1,6 +1,9 @@
-<div class="bottom-container">
-    <?php include_once '../profile-container/content.php'; ?>
-    <div class="bottom-container-buttons">
+<div id="bottom-left-container">
+    <div id="bottom-left-profile-container">
+        <img id="bottom-left-profile-picture" class="profile-picture" src="../images/Default_Profile.jpg" alt="">
+        <div id="bottom-left-profile-username" class="profile-username">Loadiang..</div>
+    </div>
+    <div id="bottom-left-buttons-container">
         <?php
 
         // Start the session if not already started
@@ -17,11 +20,11 @@
         }
 
         if ($loggedIn) {
-            echo '<a href="../logout/logout.php" class="logout-btn">Logout</a>';
+            echo '<a id="bottom-left-buttons-logut" class="logout-btn" href="../logout/logout.php">Logout</a>';
         } else {
             // Display login and signup buttons when not logged in
-            echo '<a href="../login/" class="login-btn">Login</a>';
-            echo '<a href="../signup/" class="signup-btn">Sign Up</a>';
+            echo '<a id="bottom-left-buttons-login" class="login-btn" href="../login/">Login</a>';
+            echo '<a id="bottom-left-buttons-signup" class="signup-btn" href="../signup/">Signup</a>';
         }
         ?>
     </div>
