@@ -71,47 +71,8 @@ INSERT INTO `users` (`user_id`, `email`, `password_hash`) VALUES
 INSERT INTO `users` (`user_id`, `email`, `password_hash`) VALUES
 ('Alphatester1----', 'Alphatester1@test.com', '$2y$10$2EQhA1F5zL49jWxCOz4ZpOHLUaGg.H99nEkoOdA/wzPERFRoxTxZa');
 
-INSERT INTO `users` (`user_id`, `email`, `password_hash`) VALUES
-('Alphatester2----', 'Alphatester2@test.com', '$2y$10$2EQhA1F5zL49jWxCOz4ZpOHLUaGg.H99nEkoOdA/wzPERFRoxTxZa');
-
-INSERT INTO `users` (`user_id`, `email`, `password_hash`) VALUES
-('Alphatester3----', 'Alphatester3@test.com', '$2y$10$2EQhA1F5zL49jWxCOz4ZpOHLUaGg.H99nEkoOdA/wzPERFRoxTxZa');
-
-INSERT INTO `users` (`user_id`, `email`, `password_hash`) VALUES
-('Alphatester4----', 'Alphatester4@test.com', '$2y$10$2EQhA1F5zL49jWxCOz4ZpOHLUaGg.H99nEkoOdA/wzPERFRoxTxZa');
-
-INSERT INTO `users` (`user_id`, `email`, `password_hash`) VALUES
-('Alphatester5----', 'Alphatester5@test.com', '$2y$10$2EQhA1F5zL49jWxCOz4ZpOHLUaGg.H99nEkoOdA/wzPERFRoxTxZa');
-
-INSERT INTO `users` (`user_id`, `email`, `password_hash`) VALUES
-('Alphatester6----', 'Alphatester6@test.com', '$2y$10$2EQhA1F5zL49jWxCOz4ZpOHLUaGg.H99nEkoOdA/wzPERFRoxTxZa');
-
-INSERT INTO `users` (`user_id`, `email`, `password_hash`) VALUES
-('Alphatester7----', 'Alphatester7@test.com', '$2y$10$2EQhA1F5zL49jWxCOz4ZpOHLUaGg.H99nEkoOdA/wzPERFRoxTxZa');
-
-INSERT INTO `users` (`user_id`, `email`, `password_hash`) VALUES
-('Alphatester8----', 'Alphatester8@test.com', '$2y$10$2EQhA1F5zL49jWxCOz4ZpOHLUaGg.H99nEkoOdA/wzPERFRoxTxZa');
-
-INSERT INTO `users` (`user_id`, `email`, `password_hash`) VALUES
-('Alphatester9----', 'Alphatester9@test.com', '$2y$10$2EQhA1F5zL49jWxCOz4ZpOHLUaGg.H99nEkoOdA/wzPERFRoxTxZa');
-
 -- Insert test records into the usernames table
 INSERT INTO `usernames` (user_id, username) VALUES ('Alphatester0----', 'Alphatester0');
 
 INSERT INTO `usernames` (user_id, username) VALUES ('Alphatester1----', 'Alphatester1');
 
-INSERT INTO `usernames` (user_id, username) VALUES ('Alphatester2----', 'Alphatester2');
-
-INSERT INTO `usernames` (user_id, username) VALUES ('Alphatester3----', 'Alphatester3');
-
-INSERT INTO `usernames` (user_id, username) VALUES ('Alphatester4----', 'Alphatester4');
-
-INSERT INTO `usernames` (user_id, username) VALUES ('Alphatester5----', 'Alphatester5');
-
-INSERT INTO `usernames` (user_id, username) VALUES ('Alphatester6----', 'Alphatester6');
-
-INSERT INTO `usernames` (user_id, username) VALUES ('Alphatester7----', 'Alphatester7');
-
-INSERT INTO `usernames` (user_id, username) VALUES ('Alphatester8----', 'Alphatester8');
-
-INSERT INTO `usernames` (user_id, username) VALUES ('Alphatester9----', 'Alphatester9');

@@ -31,9 +31,7 @@ body {
     position: sticky;
     border-right: 1px solid var(--whisper-background);
     min-width: 250px;
-    align-items: center;
 }
-
 
 .middle-feed {
     flex-basis: 58%;

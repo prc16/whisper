@@ -11,15 +11,18 @@
     align-items: center;
 }
 
+#bottom-left-profile-picture {
+    margin-right: 16px;
+}
 
 #bottom-left-buttons-container {
     display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
+    justify-content: space-around;
+    width: 100%;
 }
 
 #bottom-left-buttons-login,
 #bottom-left-buttons-signup,
 #bottom-left-buttons-logout {
-    margin-right: 10px;
+    margin-top: 10px;
 }

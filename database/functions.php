@@ -20,6 +20,7 @@ function getConnection()
         }
     } catch (Exception $e) {
         handleException($e);
+        echo '<h1 align="center">Sorry, we are experiencing technical difficulties and are unable to process your request at this time. Please try again later. If the issue persists, please contact the site administrator for assistance.</h1>';
         exit();
     }
 
@@ -379,7 +380,6 @@ function handleException($e)
     }
     $errorMessage = $e->getMessage();
     error_log("Error: $errorMessage");
-    exit();
 }
 
 /**

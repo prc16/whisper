@@ -5,9 +5,9 @@
 .sidebar-container {
     display: flex;
     flex-direction: column;
-    padding-top: 2svh;
     justify-content: space-between;
-    margin-right: 4vw;
+    margin-left: 2svw;
+    margin-right: 4svw;
     height: 100%;
 }
 
