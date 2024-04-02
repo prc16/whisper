@@ -16,9 +16,9 @@
 <body>
     <div class="web-container">
         <!--------------- left sidebar --------------->
-        <nav class="left-sidebar">
+        <header class="left-sidebar">
             <?php include_once '../sidebar-left/content.php'; ?>
-        </nav>
+        </header>
 
         <!--------------- main content--------------->
         <main class="main-content">

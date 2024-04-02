@@ -5,10 +5,8 @@
 .sidebar-container {
     display: flex;
     flex-direction: column;
-    padding-left: 4svw;
     padding-top: 2svh;
     justify-content: space-between;
-    align-self: flex-end;
     margin-right: 4vw;
     height: 100%;
 }
@@ -26,14 +24,16 @@
     display: block;
     align-items: center;
     width: fit-content;
-    padding-bottom: 5px;
-    padding-top: 5px;
+    padding: 16px 16px;
 }
 
 .imp-links>a:hover {
-    background-color: #e0e0e0;
-    width: 100%;
-    border-radius: 5px;
+    background-color: var(--whisper-background);
+    border-radius: 30px;
+}
+
+nav a.active {
+    color: var(--whisper-color);
 }
 
 .imp-links>a>i {

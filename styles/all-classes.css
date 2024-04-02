@@ -9,27 +9,29 @@ body {
     --whisper-background: #e6ecf0;
     font-family: 'Arial', sans-serif;
     background-color: #FFF;
-    align-items: center;
-    justify-content: center;
-
 }
 
 .web-container {
     display: flex;
     justify-content: space-between;
-    height: 100%;
-    width: 100%;
+    max-width: 1300px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .left-sidebar {
     display: flex;
     flex-direction: column;
-    flex-basis: 24%;
+    flex-basis: 21%;
+    flex-grow: 1;
+    flex-shrink: 0;
     top: 0px;
     align-self: flex-start;
-    height: 100vh;
+    height: 100svh;
     position: sticky;
     border-right: 1px solid var(--whisper-background);
+    min-width: 250px;
+    align-items: center;
 }
 
 
