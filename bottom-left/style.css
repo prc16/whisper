@@ -1,20 +1,28 @@
-.username {
-    color: black;
+#bottom-left-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1svh;
 }
 
-.login-btn,
-.logout-btn,
-.signup-btn {
-    text-decoration: none;
-    color: #fff;
-    padding: 10px 15px;
-    margin: 10px;
-    border-radius: 5px;
-    background-color: #007bff;
+#bottom-left-profile-container {
+    display: flex;
+    align-items: center;
 }
 
-.login-btn:hover,
-.logout-btn:hover,
-.signup-btn:hover {
-    background-color: #0056b3;
+#bottom-left-profile-picture {
+    margin-right: 16px;
+}
+
+#bottom-left-buttons-container {
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+}
+
+#bottom-left-buttons-login,
+#bottom-left-buttons-signup,
+#bottom-left-buttons-logout {
+    margin-top: 10px;
 }

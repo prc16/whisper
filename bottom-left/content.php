@@ -9,25 +9,30 @@ if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
 
-// Check if the user is logged in
-if (isset($_SESSION["user_id"])) {
+// Validate session and action
+if (isset($_SESSION['user_id'])) {
     $loggedIn = true;
-    $userId = $_SESSION["user_id"];
+    $userId = $_SESSION['user_id'];
+    $username = getUsername($conn, $userId);
+    $profilePicture = getProfilePicture($conn, $userId);
 } else {
     $loggedIn = false;
+    $username = 'Anonymous';
+    $profilePicture = '../images/Default_Profile.jpg';
 }
+echo '<div id="bottom-left-container">';
+echo '  <div id="bottom-left-profile-container">';
 
+echo '      <img id="bottom-left-profile-picture" class="profile-picture" src="' . $profilePicture . '">';
+echo '      <div id="bottom-left-profile-username" class="profile-username">' . $username . '</div>';
+echo '  </div>';
+echo '  <div id="bottom-left-buttons-container">';
 if ($loggedIn) {
-    // Display user ID when logged in
-    $username = getUsername($conn, $userId);
-    echo '<p class="username">' . $username . '</p>';
-    // Display logout button
-    echo '<a href="../logout/logout.php" class="logout-btn">Logout</a>';
+echo '      <a id="bottom-left-buttons-logout" class="logout-btn" href="../logout/logout.php">Logout</a>';
 } else {
     // Display login and signup buttons when not logged in
-    echo '<a href="../login/" class="login-btn">Login</a>';
-    echo '<a href="../signup/" class="signup-btn">Sign Up</a>';
+echo '      <a id="bottom-left-buttons-login" class="login-btn" href="../login/">Login</a>';
+echo '      <a id="bottom-left-buttons-signup" class="signup-btn" href="../signup/">Signup</a>';
 }
-
-// Close the database connection
-$conn->close();
+echo '  </div>';
+echo '</div>';
