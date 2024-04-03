@@ -3,7 +3,8 @@
     "database_username": "root",
     "database_password": "",
     "database_name": "whisper_db",
-    "uploads_directory": "../uploads/",
+    "profile_images_directory": "../uploads/profile_images/",
+    "post_images_directory": "../uploads/profile_images/",
     "default_profile": "../images/Default_Profile.jpg"
   }
   

@@ -1,4 +1,6 @@
 .vscode
-uploads/*
-!uploads/.gitkeep
+uploads/profile_images/*
+!uploads/profile_images/.gitkeep
+uploads/post_images/*
+!uploads/post_images/.gitkeep
 test*

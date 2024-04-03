@@ -209,7 +209,7 @@ function getProfilePicture($conn, $userId)
 {
     if(profilePictureExists($conn, $userId)) {
         $fileId = getProfilePictureId($conn, $userId);
-        $fileName = UPLOADS_DIRECTORY . $fileId . '.jpg';
+        $fileName = PROFILE_IMAGES_DIRECTORY . $fileId . '.jpg';
         if (!file_exists($fileName)) {
             $fileName = '../images/Default_Profile.jpg';
         }
