@@ -45,13 +45,13 @@
 #postForm {
     background-color: #fff;
     padding: 12px;
-    border-bottom: 1px solid var(--whisper-background);
+    border-bottom: 1px solid var(--whisper-border);
 }
 
 .post {
     background-color: #fff;
     padding: 12px;
-    border-bottom: 1px solid var(--whisper-background);
+    border-bottom: 1px solid var(--whisper-border);
 }
 
 .post h2 {

@@ -3,12 +3,14 @@
 }
 
 .sidebar-container {
+    align-self: flex-end;
+    flex: 0 0 100% !important;
+    width: 275px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    margin-left: 2svw;
-    margin-right: 4svw;
-    height: 100%;
+    padding-left: 8px;
+    padding-right: 8px;
 }
 
 .imp-links {
@@ -28,7 +30,7 @@
 }
 
 .imp-links>a:hover {
-    background-color: var(--whisper-background);
+    background-color: var(--whisper-border);
     border-radius: 30px;
 }
 

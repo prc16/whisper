@@ -5,56 +5,54 @@
 }
 
 body {
-    --whisper-color: rgb(120, 86, 255);
-    --whisper-background: #e6ecf0;
+    --whisper-color: #7856ff;
+    --whisper-color-alt: #6c4de6;
+    --whisper-border: #e6ecf0;
     font-family: 'Arial', sans-serif;
     background-color: #FFF;
+    scrollbar-color: rgb(185, 202, 211) rgb(247, 249, 249);
 }
 
 .web-container {
     display: flex;
-    justify-content: space-between;
-    max-width: 1300px;
+    justify-content: space-around;
+    align-items: flex-start;
+    max-width: 1366px !important;
     margin-left: auto;
     margin-right: auto;
 }
 
 .left-sidebar {
-    display: flex;
-    flex-direction: column;
-    flex-basis: 21%;
-    flex-grow: 1;
-    flex-shrink: 0;
+    flex: 0 0 326px !important;
     top: 0px;
-    align-self: flex-start;
     height: 100svh;
     position: sticky;
-    border-right: 1px solid var(--whisper-background);
-    min-width: 250px;
+    display: flex;
+    flex-direction: column;
+    border-right: 1px solid var(--whisper-border);
+}
+
+.main-content {
+    flex: 1 0 1024px !important;
+    align-items: flex-start;
+    display: flex;
 }
 
 .middle-feed {
-    flex-basis: 58%;
+    flex: 0 0 600px !important;
     top: 0px;
     align-self: flex-start;
 }
 
 .right-sidebar {
-    flex-basis: 42%;
+    flex: 1 0 440px !important;
     top: 0px;
     align-self: flex-start;
     height: 100svh;
     position: sticky;
-    border-left: 1px solid var(--whisper-background);
+    border-left: 1px solid var(--whisper-border);
 }
 
-.main-content {
-    flex-basis: 75%;
-    align-self: flex-start;
-    display: flex;
-    flex-grow: 1;
-    flex-shrink: 1;
-}
 
 .profile-picture {
     width: 50px;
@@ -71,14 +69,29 @@ body {
 .logout-btn,
 .signup-btn {
     text-decoration: none;
+    font-size: 16px;
     color: #fff;
     padding: 10px 15px;
     border-radius: 5px;
-    background-color: #007bff;
+    background-color: var(--whisper-color);
 }
 
 .login-btn:hover,
 .logout-btn:hover,
 .signup-btn:hover {
-    background-color: #0056b3;
+    background-color: var(--whisper-color-alt);
+}
+
+.btn {
+    text-decoration: none;
+    font-size: 16px;
+    color: #fff;
+    padding: 10px 15px;
+    border-radius: 5px;
+    border: none;
+    background-color: var(--whisper-color);
+}
+
+.btn:hover {
+    background-color: var(--whisper-color-alt);
 }

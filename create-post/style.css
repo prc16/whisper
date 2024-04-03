@@ -1,0 +1,63 @@
+.createPostContainer {
+    display: flex;
+    align-items: flex-start;
+    width: 100%;
+    background-color: #fff;
+    padding: 12px;
+    border-bottom: 1px solid var(--whisper-border);
+}
+
+#createPostTextAreaPart1 {
+    margin-right: 12px;
+}
+
+#createPostTextAreaPart2 {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
+    background-color: #fff;
+    margin-top: 10px;
+}
+
+/* .createPostContainer input[type="file"] {
+    width: 100%;
+} */
+
+.createPostContainer textarea {
+    width: 100%;
+    font-size: 20px;
+    border: none;
+    outline: none;
+    margin-bottom: 12px;
+    resize: none;
+}
+
+.createPostContainer input[type="file"] {
+    display: none;
+}
+
+.createPostContainer .btn {
+    display: block;
+}
+
+#createPostMediaPreview {
+    display: flex;
+    max-height: 500px;
+}
+
+#createPostButtons {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    margin-top: 12px;
+}
+
+#createPostPostButton {
+    font-size: 16px;
+}
+
+.createPostContainer .image-preview,
+.createPostContainer .video-preview {
+    max-width: 100%;
+}
