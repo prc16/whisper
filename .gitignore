@@ -1,6 +1,6 @@
 .vscode
-uploads/profile_images/*
-!uploads/profile_images/.gitkeep
-uploads/post_images/*
-!uploads/post_images/.gitkeep
+uploads/profiles/*
+!uploads/profiles/.gitkeep
+uploads/posts/*
+!uploads/posts/.gitkeep
 test*
