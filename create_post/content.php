@@ -22,4 +22,4 @@ include_once '../functions/userDetails.php';
 </div>
 
 
-<script src="../create-post/script.js"></script>
+<script src="../create_post/script.js"></script>

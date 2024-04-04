@@ -43,7 +43,7 @@ createPostPostButton.addEventListener("click", function () {
     formData.append("post_text", postText);
     formData.append("media_file", file);
 
-    fetch('../create-post/server.php', {
+    fetch('../create_post/server.php', {
         method: 'POST',
         body: formData
     })

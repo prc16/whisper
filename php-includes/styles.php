@@ -7,7 +7,7 @@
 <link rel="stylesheet" href="../profile-container/style.css">
 <link rel="stylesheet" href="../profile-container-large/style.css">
 <link rel="stylesheet" href="../styles/all-classes.css">
-<link rel="stylesheet" href="../create-post/style.css">
+<link rel="stylesheet" href="../create_post/style.css">
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined">
