@@ -92,6 +92,20 @@ body {
     background-color: var(--whisper-color);
 }
 
+.btn2 {
+    padding-bottom: 8px;
+}
+
 .btn:hover {
     background-color: var(--whisper-color-alt);
+}
+
+/* Initially using regular icons 
+a .far {
+}
+*/
+
+/* When the link is active, switch to solid icons */
+a.active .far {
+    font-weight: bold;
 }

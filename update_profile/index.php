@@ -10,8 +10,6 @@
     <?php include_once '../php-includes/styles.php'; ?>
     <?php include_once '../php-includes/scripts.php'; ?>
 
-    <link rel="stylesheet" href="style.css">
-
 </head>
 
 <body>

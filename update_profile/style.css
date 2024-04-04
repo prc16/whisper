@@ -14,7 +14,7 @@
     overflow: hidden; /* Ensuring image doesn't overflow */
 }
 
-#cropper-image {
+#cropper_image {
     max-width: 100%; /* Ensuring image fits within container */
     max-height: 100%; /* Ensuring image fits within container */
     display: block; /* Removing any default inline layout */
@@ -22,33 +22,33 @@
 
 /* Styling the crop button */
 #cropButton {
-    background-color: #4CAF50; /* Green */
-    border: none;
-    color: white;
     padding: 10px 20px;
     text-align: center;
     text-decoration: none;
-    display: inline-block;
-    font-size: 16px;
-    margin: 4px 2px;
-    cursor: pointer;
-    border-radius: 4px;
 }
 
-/* Styling the file input */
+/* Styling the file input 
 #inputImage {
-    display: inline-block;
-    padding: 10px 15px;
-    font-size: 16px;
-    background-color: #4CAF50; /* Green */
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
+    padding: 0px !important;
+}
+*/
+
+#updateProfileContainer input[type="file"] {
+    display: none;
 }
 
-#inputImage:hover {
-    background-color: #45a049; /* Darker green on hover */
+#updateProfileContainer .btn {
+    display: block;
+    margin: 0px 2px;
 }
 
+#updateProfileContainer .fa-image {
+    margin-right: 10px;
+}
+
+#updateProfileContainerButtons {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    margin-top: 12px;
+}

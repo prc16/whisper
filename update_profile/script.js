@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
     const input = document.getElementById('inputImage');
-    const image = document.getElementById('cropper-image');
+    const image = document.getElementById('cropper_image');
     const cropperContainer = document.getElementById('cropper-container');
     const cropButton = document.getElementById('cropButton');
     

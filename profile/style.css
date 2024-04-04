@@ -7,10 +7,11 @@
 #profile-container-large {
     display: flex;
     flex-direction: column;
+    width: 100%;
     align-items: center;
     text-align: center;
     margin-bottom: 12px;
-    margin-top: 12px;
+    margin-top: 24px;
 }
 
 #profile-container-large-picture {
@@ -24,14 +25,6 @@
     font-size: 20px;
     font-weight: bold;
     margin-bottom: 20px;
+    text-align: center;
 }
 
-#profile-update-options button {
-    margin: 5px;
-    padding: 10px 20px;
-    background-color: #007bff;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-}

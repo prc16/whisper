@@ -35,6 +35,10 @@
     resize: none;
 }
 
+#createPostTextArea::selection {
+    background-color: #b3d4fc; /* Change caret color here */
+}
+
 .createPostContainer input[type="file"] {
     display: none;
 }
@@ -53,6 +57,10 @@
     width: 100%;
     justify-content: space-between;
     margin-top: 12px;
+}
+
+#createPostButtons .fa-image {
+    margin-right: 10px;
 }
 
 #createPostPostButton {
