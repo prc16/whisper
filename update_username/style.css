@@ -1,0 +1,28 @@
+/* Form styles */
+#updateUsernameForm {
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* Label styles */
+#updateUsernameForm label {
+    display: block;
+    margin-bottom: 10px;
+}
+
+/* Input styles */
+#updateUsernameForm input[type="text"] {
+    width: calc(100% - 20px); /* width minus padding */
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+/* Button styles */
+#updateUsernameForm button[type="submit"] {
+    width: 100%;
+    cursor: pointer;
+}
+

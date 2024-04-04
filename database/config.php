@@ -11,5 +11,5 @@ define("DATABASE_PASSWORD", $config['database_password']);
 define("DATABASE_NAME", $config['database_name']);
 
 define("PROFILES_DIRECTORY", $config['profiles_directory']);
-define("POST_IMAGES_DIRECTORY", $config['posts_directory']);
+define("POSTS_DIRECTORY", $config['posts_directory']);
 define("DEFAULT_PROFILE", $config['default_profile']);

@@ -6,5 +6,4 @@
     "profiles_directory": "../uploads/profiles/",
     "posts_directory": "../uploads/posts/",
     "default_profile": "../images/Default_Profile.jpg"
-  }
-  
+}

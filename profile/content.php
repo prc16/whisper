@@ -7,10 +7,10 @@ include_once '../functions/userDetails.php';
         <img id="profile-container-large-picture" src="<?= htmlspecialchars($profilePicture) ?>">
         <div id="profile-container-large-username"><?= htmlspecialchars($username) ?></div>
     </div>
-    <div id="profile-edit-options">
+    <div id="profile-update-options">
         <?php if ($loggedIn): ?>
-            <button onclick="editProfilePicture()">Edit Picture</button>
-            <button onclick="editUsername()">Edit Username</button>
+            <button onclick="updateProfilePicture()">Update Picture</button>
+            <button onclick="updateUsername()">Update Username</button>
         <?php endif; ?>
     </div>
 </div>

@@ -13,29 +13,17 @@ if (session_status() == PHP_SESSION_NONE) {
 
 // Check if the user is logged in
 if (!isset($_SESSION['user_id'])) {
-    http_response_code(401); // Unauthorized
-    $response['success'] = false;
-    $response['message'] = 'Unauthorized Request';
-    echo json_encode($response);
-    exit();
+    unauthorizedResponse();
 }
 
 // Validate the Request
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    http_response_code(400); // Bad Request
-    $response['success'] = false;
-    $response['message'] = 'Bad Request';
-    echo json_encode($response);
-    exit();
+    badRequestResponse();
 }
 
 // Check if the file has been uploaded successfully
 if (!isset($_FILES['profile_picture'])) {
-    http_response_code(400); // Bad Request
-    $response['success'] = false;
-    $response['message'] = 'No file uploaded.';
-    echo json_encode($response);
-    exit();
+    badRequestResponse('No file uploaded.');
 }
 
 $file = $_FILES['profile_picture'];
@@ -44,11 +32,7 @@ $file = $_FILES['profile_picture'];
 $allowedExtensions = ['jpg', 'jpeg'];
 $fileInfo = pathinfo($file['name']);
 if (!in_array(strtolower($fileInfo['extension']), $allowedExtensions) || exif_imagetype($file['tmp_name']) === false) {
-    http_response_code(400); // Bad Request
-    $response['success'] = false;
-    $response['message'] = 'Uploaded file is not a valid image.';
-    echo json_encode($response);
-    exit();
+    badRequestResponse('Uploaded file is not a valid image.');
 }
 
 // get Database Connection
@@ -59,13 +43,9 @@ $fileName = $uploadsDirectory . $fileId . '.jpg';
 
 // move the uploaded file to the uploads directory
 if (move_uploaded_file($file['tmp_name'], $fileName) === false) {
-    http_response_code(500); // Internal Server Error
-    $response['success'] = false;
-    $response['message'] = 'Internal Server Error';
-    echo json_encode($response);
     $conn->close();
     error_log("Error: Failed to move uploaded file to uploads directory");
-    exit();
+    errorResponse('Internal Server Error', 500);
 }
 
 // Disable autocommit to start a new transaction
@@ -89,7 +69,6 @@ try {
     $conn->commit();
     $response['success'] = true;
     $response['message'] = 'Profile picture updated successfully.';
-    $_SESSION['profile_refresh_needed'] = true;
     echo json_encode($response);
 } catch (Exception $e) {
     $conn->rollback();

@@ -158,7 +158,7 @@ function getUsername($conn, $userId)
     return $username;
 }
 
-function editUsername($conn, $userId, $username)
+function updateUsername($conn, $userId, $username)
 {
     if (usernameExists($conn, $userId)) {
         // Update username
@@ -399,4 +399,31 @@ function validateJsonData($data, $fields)
             throw new InvalidArgumentException(ucfirst($field) . " is required.");
         }
     }
+}
+
+// Function to handle unauthorized response
+function unauthorizedResponse() {
+    http_response_code(401); // Unauthorized
+    $response['success'] = false;
+    $response['message'] = 'Unauthorized Request';
+    echo json_encode($response);
+    exit();
+}
+
+// Function to handle bad request response
+function badRequestResponse($message = 'Bad Request') {
+    http_response_code(400); // Bad Request
+    $response['success'] = false;
+    $response['message'] = $message;
+    echo json_encode($response);
+    exit();
+}
+
+// Function to handle error response
+function errorResponse($message, $code) {
+    http_response_code($code);
+    $response['success'] = false;
+    $response['message'] = $message;
+    echo json_encode($response);
+    exit();
 }
