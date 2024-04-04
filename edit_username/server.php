@@ -29,6 +29,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         validateJsonData($data, ['username']);
         $username = $data['username'];
         editUsername($conn, $userId, $username);
+        $_SESSION['profile_refresh_needed'] = true;
     } catch (Exception $e) {
         handleException($e);
     }

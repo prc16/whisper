@@ -45,6 +45,7 @@ CREATE TABLE `posts` (
     id BIGINT UNSIGNED AUTO_INCREMENT,
     post_id CHAR(16) NOT NULL,
     user_id CHAR(16) NOT NULL,
+    file_path VARCHAR(255),
     content TEXT NOT NULL,
     votes INT NOT NULL DEFAULT 0,
     PRIMARY KEY (id),

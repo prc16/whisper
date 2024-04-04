@@ -89,6 +89,7 @@ try {
     $conn->commit();
     $response['success'] = true;
     $response['message'] = 'Profile picture updated successfully.';
+    $_SESSION['profile_refresh_needed'] = true;
     echo json_encode($response);
 } catch (Exception $e) {
     $conn->rollback();
