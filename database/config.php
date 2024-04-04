@@ -10,6 +10,6 @@ define("DATABASE_USERNAME", $config['database_username']);
 define("DATABASE_PASSWORD", $config['database_password']);
 define("DATABASE_NAME", $config['database_name']);
 
-define("PROFILE_IMAGES_DIRECTORY", $config['profile_images_directory']);
-define("POST_IMAGES_DIRECTORY", $config['post_images_directory']);
+define("PROFILES_DIRECTORY", $config['profiles_directory']);
+define("POST_IMAGES_DIRECTORY", $config['posts_directory']);
 define("DEFAULT_PROFILE", $config['default_profile']);

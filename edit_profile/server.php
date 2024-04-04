@@ -3,7 +3,7 @@
 include_once '../database/functions.php';
 
 // Set uploads directory with a trailing slash for consistency
-$uploadsDirectory = PROFILE_IMAGES_DIRECTORY;
+$uploadsDirectory = PROFILES_DIRECTORY;
 $response = array();
 
 // Start the session if not already started
