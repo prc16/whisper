@@ -3,11 +3,16 @@ document.addEventListener('DOMContentLoaded', () => {
     const createPostMediaUpload = document.getElementById("createPostMediaUpload");
     const createPostMediaPreview = document.getElementById("createPostMediaPreview");
     const createPostPostButton = document.getElementById("createPostPostButton");
+    const displayPostsContainer = document.getElementById("displayPostsContainer");
 
     createPostTextArea.addEventListener("keydown", function (event) {
         if (event.key === "Enter") {
             this.rows += 1; // Increase the number of rows when Enter key is pressed
         }
+    });
+
+    createPostTextArea.addEventListener("input", function (event) {
+        this.style.height = "auto";
         this.style.height = this.scrollHeight + "px";
     });
 
@@ -51,6 +56,12 @@ document.addEventListener('DOMContentLoaded', () => {
                     createPostMediaUpload.value = "";
                     createPostMediaPreview.innerHTML = "";
                     createPostTextArea.rows = 1;
+
+                    // Trigger update event on displayPosts div
+                    const updateEvent = new Event('updateNeeded');
+                    displayPostsContainer.dispatchEvent(updateEvent);
+                } else if (response.status === 401) {
+                    alert("You need to log in to create a post.");
                 } else {
                     alert("Failed to upload post. Please try again later.");
                 }

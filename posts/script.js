@@ -1,3 +1,5 @@
+const displayPostsContainer = document.getElementById('displayPostsContainer');
+
 // Function to handle AJAX requests
 function makeRequest(method, url, data, callback) {
     const xhr = new XMLHttpRequest();
@@ -13,12 +15,11 @@ function makeRequest(method, url, data, callback) {
 
 // Function to display posts
 function displayPosts(posts) {
-    const postsContainer = document.getElementById('postsContainer');
-    if (!postsContainer) {
+    if (!displayPostsContainer) {
         console.error("Posts container not found");
         return;
     }
-    postsContainer.innerHTML = '';
+    displayPostsContainer.innerHTML = '';
     posts.forEach(post => {
         const postElement = document.createElement('div');
         postElement.className = 'post';
@@ -29,7 +30,7 @@ function displayPosts(posts) {
             <button class="vote-btn" data-id="${post.post_id}" data-type="upvote" style="background-color: ${post.vote_type === 'upvote' ? 'orange' : 'white'}">Upvote</button>
             <button class="vote-btn" data-id="${post.post_id}" data-type="downvote" style="background-color: ${post.vote_type === 'downvote' ? 'orange' : 'white'}">Downvote</button>
         `;
-        postsContainer.appendChild(postElement);
+        displayPostsContainer.appendChild(postElement);
     });
 }
 
@@ -91,4 +92,19 @@ makeRequest('GET', '../posts/posts.php', null, (status, responseText) => {
         const posts = JSON.parse(responseText);
         displayPosts(posts);
     }
+});
+
+// Function to handle the 'updateNeeded' event
+function handleUpdateEvent() {
+    makeRequest('GET', '../posts/posts.php', null, (status, responseText) => {
+        if (status === 200) {
+            const posts = JSON.parse(responseText);
+            displayPosts(posts);
+        }
+    });
+}
+
+// Add event listener for 'update' event on displayPosts div
+document.addEventListener("DOMContentLoaded", function () {
+    displayPostsContainer.addEventListener("updateNeeded", handleUpdateEvent);
 });
