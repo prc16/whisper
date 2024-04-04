@@ -5,15 +5,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const createPostPostButton = document.getElementById("createPostPostButton");
     const displayPostsContainer = document.getElementById("displayPostsContainer");
 
-    createPostTextArea.addEventListener("keydown", function (event) {
-        if (event.key === "Enter") {
-            this.rows += 1; // Increase the number of rows when Enter key is pressed
-        }
-    });
-
     createPostTextArea.addEventListener("input", function (event) {
-        this.style.height = "auto";
-        this.style.height = this.scrollHeight + "px";
+            this.style.height = "auto";
+            this.style.height = this.scrollHeight + "px";
     });
 
     createPostMediaUpload.addEventListener("change", function () {
