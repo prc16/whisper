@@ -41,6 +41,7 @@ body {
 
 .middle-feed {
     flex: 0 0 600px !important;
+    max-width: 600px !important;
     top: 0px;
     align-self: flex-start;
 }

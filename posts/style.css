@@ -12,8 +12,14 @@
     border-bottom: 1px solid var(--whisper-border);
 }
 
-.displayPostContainer h2 {
+#displayPostContainerPart2 h2 {
     font-size: var(--whisper-font-size);
+}
+
+#displayPostContainerPart2 p {
+    max-width: 500px;
+    white-space: pre-line;
+    word-wrap: break-word;
 }
 
 .displayPostContainer .voteCount {

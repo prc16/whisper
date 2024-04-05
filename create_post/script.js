@@ -6,8 +6,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const displayPostsContainer = document.getElementById("displayPostsContainer");
 
     createPostTextArea.addEventListener("input", function (event) {
-            this.style.height = "auto";
-            this.style.height = this.scrollHeight + "px";
+        this.style.height = "auto";
+        this.style.height = this.scrollHeight + "px";
     });
 
     createPostMediaUpload.addEventListener("change", function () {
@@ -57,12 +57,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 } else if (response.status === 401) {
                     alert("You need to log in to create a post.");
                 } else {
-                    alert("Failed to upload post. Please try again later.");
+                    // Parse JSON response
+                    return response.json().then(data => {
+                        throw new Error(data.message);
+                    });
                 }
             })
             .catch(error => {
-                console.error("Error:", error);
-                alert("An error occurred. Please try again later.");
+                console.error(error);
+                alert(error);
             });
     });
 
