@@ -1,5 +1,7 @@
 <?php
 
+include_once '../php/all.php';
+
 $jsonData = file_get_contents('../database/config.json');
 
 $config = json_decode($jsonData, true);

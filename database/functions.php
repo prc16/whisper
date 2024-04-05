@@ -1,6 +1,8 @@
 <?php
 
+include_once '../php/all.php';
 include_once '../database/config.php';
+include_once '../functions/uuid.php';
 
 /**
  * Establishes a connection to the MySQL database.
@@ -20,7 +22,7 @@ function getConnection()
         }
     } catch (Exception $e) {
         handleException($e);
-        echo '<h1 align="center">Sorry, we are experiencing technical difficulties and are unable to process your request at this time. Please try again later. If the issue persists, please contact the site administrator for assistance.</h1>';
+        header('Location: ../maintenance/');
         exit();
     }
 
@@ -38,70 +40,23 @@ function genUUID($length = 16)
     return substr(str_replace('.', '', uniqid('', true)), 0, $length);
 }
 
-/**
- * Retrieves posts with corresponding votes for a specific user.
- *
- * @param mysqli $conn The database connection object.
- * @param int $userId The ID of the user whose posts are being retrieved.
- * @param int $limit The maximum number of posts to retrieve (default is 10).
- * @return array An array containing the retrieved posts with associated votes.
- */
-function getPostsWithVotes($conn, $userId, $limit = 10)
-{
-    $sql = "SELECT 
-                p.post_id, 
-                p.user_id, 
-                p.content, 
-                p.votes, 
-                COALESCE(u.username, 'Anonymous') AS username, 
-                pp.file_name AS profile_file_name, 
-                p.file_name AS post_file_name, 
-                COALESCE(v.vote_type, '') AS vote_type 
-            FROM 
-                posts p 
-            LEFT JOIN 
-                usernames u ON p.user_id = u.user_id 
-            LEFT JOIN 
-                votes v ON p.post_id = v.post_id AND v.user_id = ? 
-            LEFT JOIN 
-                profile_pictures pp ON p.user_id = pp.user_id 
-            ORDER BY 
-                p.id DESC 
-            LIMIT ?";
 
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("si", $userId, $limit);
-    $stmt->execute();
-    $result = $stmt->get_result();
-
-    $posts = fetchPosts($result);
-
-    $stmt->close();
-    return $posts;
-}
-
-
-/**
- * Retrieves posts from the database.
- *
- * @param mysqli $conn The database connection object.
- * @param int $limit The maximum number of posts to retrieve (default is 10).
- * @return array An array containing the retrieved posts.
- */
 function getPosts($conn, $limit = 10)
 {
     $sql = "SELECT 
                 p.post_id, 
                 p.user_id, 
+                u.username AS username, 
                 p.content, 
                 p.votes, 
-                COALESCE(u.username, 'Anonymous') AS username, 
-                p.file_name AS post_file_name, 
-                pp.file_name AS profile_file_name 
+                p.has_media,
+                p.media_file_id, 
+                p.media_file_ext, 
+                pp.file_id AS profile_file_id 
             FROM 
                 posts p 
             LEFT JOIN 
-                usernames u ON p.user_id = u.user_id 
+                users u ON p.user_id = u.user_id 
             LEFT JOIN 
                 profile_pictures pp ON p.user_id = pp.user_id 
             ORDER BY 
@@ -119,12 +74,7 @@ function getPosts($conn, $limit = 10)
     return $posts;
 }
 
-/**
- * Fetches posts from the database result set.
- *
- * @param mysqli_result $result The result set from a database query.
- * @return array An array containing the fetched posts.
- */
+
 function fetchPosts($result)
 {
     $posts = [];
@@ -431,32 +381,14 @@ function validateJsonData($data, $fields)
     }
 }
 
-// Function to handle unauthorized response
-function unauthorizedResponse()
-{
-    http_response_code(401); // Unauthorized
-    $response['success'] = false;
-    $response['message'] = 'Unauthorized Request';
-    echo json_encode($response);
-    exit();
-}
-
-// Function to handle bad request response
-function badRequestResponse($message = 'Bad Request')
-{
-    http_response_code(400); // Bad Request
-    $response['success'] = false;
-    $response['message'] = $message;
-    echo json_encode($response);
-    exit();
-}
-
 // Function to handle error response
-function errorResponse($message, $code)
+function errorResponse($code, $message)
 {
     http_response_code($code);
-    $response['success'] = false;
-    $response['message'] = $message;
+    $response['error_message'] = $message;
     echo json_encode($response);
+    if($code >= 500) {
+        error_log('ERROR_LOG:' . $message);
+    }
     exit();
 }

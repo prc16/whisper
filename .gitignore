@@ -3,4 +3,6 @@ uploads/profiles/*
 !uploads/profiles/.gitkeep
 uploads/posts/*
 !uploads/posts/.gitkeep
-test*
+logs/*
+!logs/.gitkeep
+test/*

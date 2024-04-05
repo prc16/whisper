@@ -1,56 +1,55 @@
 <?php
 
-include_once '../database/functions.php';
+include_once '../functions/database.php';
+include_once '../functions/uuid.php';
 
 $conn = getConnection();
 
 // Process the signup form data
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $email    = $_POST["email"];
+    // Validate and sanitize user inputs
+    $username = htmlspecialchars($_POST["username"], ENT_QUOTES, 'UTF-8');
     $password = $_POST["password"];
 
-    // Check if the email already exists
-    $checkEmailStmt = $conn->prepare("SELECT email FROM users WHERE email = ?");
-    $checkEmailStmt->bind_param("s", $email);
-    $checkEmailStmt->execute();
-    $checkEmailStmt->store_result();
-
-    if ($checkEmailStmt->num_rows > 0) {
-        echo "Email already exists. Please use a different email.";
-    } else {
-        // Use prepared statements to prevent SQL injection
-        $stmt = $conn->prepare("INSERT INTO users (email, password_hash, user_id) VALUES (?, ?, ?)");
-
-        // Generate a user_id
-        $user_id = genUUID();
-
-        // Hash the password before storing it in the database
-        $password_hash = password_hash($password, PASSWORD_DEFAULT);
-
-        $stmt->bind_param("sss", $email, $password_hash, $user_id);
-
-        if ($stmt->execute()) {
-            // Start a PHP session
-            // Start the session if not already started
-            if (session_status() == PHP_SESSION_NONE) {
-                session_start();
-            }
-            // Start a user session
-            $_SESSION["user_id"] = $user_id;
-
-            // Redirect to the home page
-            header('Location: ../home/');
-            exit;
-        } else {
-            echo "Error: " . $stmt->error;
-        }
-
-        // Close the prepared statement
-        $stmt->close();
+    // Validate username format
+    if (!preg_match('/^[a-zA-Z0-9_]+$/', $username)) {
+        http_response_code(400);
+        echo "Invalid username. Username can only contain letters, numbers, and underscores.";
+        exit;
     }
 
-    // Close the email check statement
-    $checkEmailStmt->close();
+    // Check if the username already exists
+    if (usernameExists($conn, $username)) {
+        http_response_code(409); // Conflict
+        echo "Username already exists. Please choose a different username.";
+        exit;
+    }
+
+    // Generate a unique user_id
+    $user_id = genUUID();
+
+    // Hash the password securely
+    $password_hash = password_hash($password, PASSWORD_DEFAULT);
+
+    // Insert new user into the database
+    if (insertUser($conn, $user_id, $username, $password_hash)) {
+        // Start a PHP session if not already started
+        if (session_status() == PHP_SESSION_NONE) {
+            session_start();
+        }
+
+        // Start a user session
+        $_SESSION["user_id"] = $user_id;
+
+        // Redirect to the home page
+        header('Location: ../maintenance/');
+        exit;
+    } else {
+        // Error handling
+        http_response_code(500); // Internal Server Error
+        echo "Error: Unable to create account. Please try again later.";
+        exit;
+    }
 }
 
 // Close the database connection

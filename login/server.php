@@ -1,44 +1,39 @@
 <?php
 
-include_once '../database/functions.php';
+include_once '../functions/database.php';
 
 $conn = getConnection();
 
 // Process the login form data
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $email    = $_POST["email"];
+    // Sanitize and validate user inputs
+    $username = $_POST["username"];
     $password = $_POST["password"];
 
-    // Use prepared statements to prevent SQL injection
-    $stmt = $conn->prepare("SELECT user_id, password_hash FROM users WHERE email = ?");
-    $stmt->bind_param("s", $email);
-    $stmt->execute();
-    $stmt->bind_result($user_id, $password_hash);
-
-    if ($stmt->fetch()) {
-        // Verify the password
-        if (password_verify($password, $password_hash)) {
-
-            // Start a PHP session
-            // Start the session if not already started
-            if (session_status() == PHP_SESSION_NONE) {
-                session_start();
-            }
-            // Start a user session
-            $_SESSION["user_id"] = $user_id;
-
-            // Redirect to the home page
-            header('Location: ../home/');
-            exit;
-        } else {
-            echo "Invalid password";
-        }
-    } else {
-        echo "Email is not registered. Please Sign Up instead";
+    // Check if the username exists
+    if (!usernameExists($conn, $username)) {
+        http_response_code(404); // Not Found
+        echo "Username is not registered. Please Sign Up instead";
+        exit;
     }
 
-    // Close the prepared statement
-    $stmt->close();
+
+    // Verify the password
+    if (!verifyPassword($conn, $username, $password)) {
+        http_response_code(401); // Unauthorized
+        echo "Invalid password";
+        exit;
+    }
+
+    // Start a PHP session
+    session_start();
+    
+    // Start a user session
+    $_SESSION["user_id"] = getUserId($conn, $username);
+
+    // Redirect to the home page
+    header('Location: ../maintenance/');
+    exit;
 }
 
 // Close the database connection
