@@ -54,15 +54,19 @@ function getPostsWithVotes($conn, $userId, $limit = 10)
                 p.content, 
                 p.votes, 
                 COALESCE(u.username, 'Anonymous') AS username, 
-                IFNULL(v.vote_type, '') AS vote_type 
+                pp.file_name AS profile_file_name, 
+                p.file_name AS post_file_name, 
+                COALESCE(v.vote_type, '') AS vote_type 
             FROM 
                 posts p 
             LEFT JOIN 
-                usernames u ON p.user_id = u.user_id
+                usernames u ON p.user_id = u.user_id 
             LEFT JOIN 
                 votes v ON p.post_id = v.post_id AND v.user_id = ? 
+            LEFT JOIN 
+                profile_pictures pp ON p.user_id = pp.user_id 
             ORDER BY 
-                p.id DESC
+                p.id DESC 
             LIMIT ?";
 
     $stmt = $conn->prepare($sql);
@@ -76,6 +80,7 @@ function getPostsWithVotes($conn, $userId, $limit = 10)
     return $posts;
 }
 
+
 /**
  * Retrieves posts from the database.
  *
@@ -86,17 +91,21 @@ function getPostsWithVotes($conn, $userId, $limit = 10)
 function getPosts($conn, $limit = 10)
 {
     $sql = "SELECT 
-                p.post_id,
-                p.user_id,
-                COALESCE(u.username, 'Anonymous') AS username,
-                p.content,
-                p.votes 
-            FROM
+                p.post_id, 
+                p.user_id, 
+                p.content, 
+                p.votes, 
+                COALESCE(u.username, 'Anonymous') AS username, 
+                p.file_name AS post_file_name, 
+                pp.file_name AS profile_file_name 
+            FROM 
                 posts p 
-            LEFT JOIN
+            LEFT JOIN 
                 usernames u ON p.user_id = u.user_id 
-            ORDER BY
-                p.id DESC
+            LEFT JOIN 
+                profile_pictures pp ON p.user_id = pp.user_id 
+            ORDER BY 
+                p.id DESC 
             LIMIT ?";
 
     $stmt = $conn->prepare($sql);
@@ -120,10 +129,30 @@ function fetchPosts($result)
 {
     $posts = [];
     while ($row = $result->fetch_assoc()) {
+        $row['profile_file_path'] = PROFILES_DIRECTORY . $row['profile_file_name'];
+        // Check if file exists and is a file
+        if (file_exists($row['profile_file_path']) && is_file($row['profile_file_path'])) {
+            // File exists and is a file
+        } else {
+            // Use default profile if file doesn't exist or is not a file
+            $row['profile_file_path'] = DEFAULT_PROFILE;
+        }
+
+        $row['post_file_path'] = POSTS_DIRECTORY . $row['post_file_name'];
+        // Check if file exists and is a file
+        if (file_exists($row['post_file_path']) && is_file($row['post_file_path'])) {
+            // File exists and is a file
+        } else {
+            // Set post_file_path to empty if file doesn't exist or is not a file
+            $row['post_file_path'] = '';
+        }
+        
         $posts[] = $row;
     }
     return $posts;
 }
+
+
 
 function usernameExists($conn, $userId)
 {
@@ -190,50 +219,50 @@ function profilePictureExists($conn, $userId)
     return $exists;
 }
 
-function getProfilePictureId($conn, $userId)
+function getProfilePictureName($conn, $userId)
 {
-    $fileId = "";
+    $fileName = "";
 
-    $sql = "SELECT file_id FROM profile_pictures WHERE user_id=? LIMIT 1";
+    $sql = "SELECT file_name FROM profile_pictures WHERE user_id=? LIMIT 1";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("s", $userId);
     $stmt->execute();
-    $stmt->bind_result($fileId);
+    $stmt->bind_result($fileName);
     $stmt->fetch();
     $stmt->close();
-
-    return $fileId;
-}
-
-function getProfilePicture($conn, $userId)
-{
-    if(profilePictureExists($conn, $userId)) {
-        $fileId = getProfilePictureId($conn, $userId);
-        $fileName = PROFILES_DIRECTORY . $fileId . '.jpg';
-        if (!file_exists($fileName)) {
-            $fileName = '../images/Default_Profile.jpg';
-        }
-    } else {
-        $fileName = '../images/Default_Profile.jpg';
-    }
 
     return $fileName;
 }
 
-function insertProfilePicture($conn, $userId, $fileId)
+function getProfilePicture($conn, $userId)
 {
-    $sql = "INSERT INTO profile_pictures (user_id, file_id) VALUES (?, ?)";
+    if (profilePictureExists($conn, $userId)) {
+        $fileName = getProfilePictureName($conn, $userId);
+        $filePath = PROFILES_DIRECTORY . $fileName;
+        if (!file_exists($filePath)) {
+            $filePath = DEFAULT_PROFILE;
+        }
+    } else {
+        $filePath = DEFAULT_PROFILE;
+    }
+
+    return $filePath;
+}
+
+function insertProfilePicture($conn, $userId, $fileName)
+{
+    $sql = "INSERT INTO profile_pictures (user_id, file_name) VALUES (?, ?)";
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param("ss", $userId, $fileId);
+    $stmt->bind_param("ss", $userId, $fileName);
     $stmt->execute();
     $stmt->close();
 }
 
-function updateProfilePicture($conn, $userId, $fileId)
+function updateProfilePicture($conn, $userId, $fileName)
 {
-    $sql = "UPDATE profile_pictures SET file_id = ? WHERE user_id = ?";
+    $sql = "UPDATE profile_pictures SET file_name = ? WHERE user_id = ?";
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param("ss", $fileId, $userId);
+    $stmt->bind_param("ss", $fileName, $userId);
     $stmt->execute();
     $stmt->close();
 }
@@ -245,19 +274,20 @@ function updateProfilePicture($conn, $userId, $fileId)
  * @param $userId - The ID of the user creating the post
  * @param $content - The content of the post
  */
-function createPost($conn, $userId, $content)
+function createPost($conn, $userId, $content, $postFileName)
 {
     $postId = genUUID();
 
     // Prepare and execute the INSERT query for posts
-    $sqlPost = "INSERT INTO posts (post_id, user_id, content, votes) VALUES (?, ?, ?, 1)";
+    $sqlPost = "INSERT INTO posts (post_id, user_id, content, file_name, votes) VALUES (?, ?, ?, ?, 1)";
     $stmtPost = $conn->prepare($sqlPost);
-    $stmtPost->bind_param("sss", $postId, $userId, $content);
+    $stmtPost->bind_param("ssss", $postId, $userId, $content, $postFileName);
     $stmtPost->execute();
 
     // Add upvote entry into votes table
     createVote($conn, $userId, $postId, 'upvote');
 }
+
 
 /**
  * Function to update the vote count of a post in the database
@@ -402,7 +432,8 @@ function validateJsonData($data, $fields)
 }
 
 // Function to handle unauthorized response
-function unauthorizedResponse() {
+function unauthorizedResponse()
+{
     http_response_code(401); // Unauthorized
     $response['success'] = false;
     $response['message'] = 'Unauthorized Request';
@@ -411,7 +442,8 @@ function unauthorizedResponse() {
 }
 
 // Function to handle bad request response
-function badRequestResponse($message = 'Bad Request') {
+function badRequestResponse($message = 'Bad Request')
+{
     http_response_code(400); // Bad Request
     $response['success'] = false;
     $response['message'] = $message;
@@ -420,7 +452,8 @@ function badRequestResponse($message = 'Bad Request') {
 }
 
 // Function to handle error response
-function errorResponse($message, $code) {
+function errorResponse($message, $code)
+{
     http_response_code($code);
     $response['success'] = false;
     $response['message'] = $message;

@@ -24,15 +24,34 @@ function displayPosts(posts) {
         const postElement = document.createElement('div');
         postElement.className = 'post';
         postElement.innerHTML = `
-            <h2>${post.username}</h2>
-            <p>${post.content}</p>
-            <p>Votes: ${post.votes}</p>
-            <button class="vote-btn" data-id="${post.post_id}" data-type="upvote" style="background-color: ${post.vote_type === 'upvote' ? 'orange' : 'white'}">Upvote</button>
-            <button class="vote-btn" data-id="${post.post_id}" data-type="downvote" style="background-color: ${post.vote_type === 'downvote' ? 'orange' : 'white'}">Downvote</button>
+            <div class="displayPostContainer">
+                <div id="displayPostContainerPart1">
+                    <img src="${post.profile_file_path}" class="profile-picture" alt="">
+                </div>
+                <div id="displayPostContainerPart2">
+                    <h2>${post.username}</h2>
+                    <p>${post.content}</p>
+                    <div id="displayPostMediaPreview">
+                        ${post.post_file_path.endsWith('.mp4') || post.post_file_path.endsWith('.webm') ?
+                            `<video controls class="video-preview">
+                                <source src="${post.post_file_path}" type="video/mp4">
+                                <source src="${post.post_file_path}" type="video/webm">
+                                Your browser does not support the video tag.
+                            </video>` :
+                            `<img src="${post.post_file_path}" alt="" class="image-preview">`}
+                    </div>
+                    <div id="displayPostButtons">
+                        <p class="voteCount"> Votes: ${post.votes}</p>
+                        <button class="vote-btn btn" data-id="${post.post_id}" data-type="upvote" style="background-color: ${post.vote_type === 'upvote' ? 'orange' : 'gray'}">Upvote</button>
+                        <button class="vote-btn btn" data-id="${post.post_id}" data-type="downvote" style="background-color: ${post.vote_type === 'downvote' ? 'orange' : 'gray'}">Downvote</button>
+                    </div>
+                </div>
+            </div>
         `;
         displayPostsContainer.appendChild(postElement);
     });
 }
+
 
 // Function to handle voting
 function vote(event) {

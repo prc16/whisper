@@ -16,7 +16,7 @@ if (isset($_SESSION['user_id'])) {
     $profilePicture = getProfilePicture($conn, $userId);
 } else {
     $username = 'Anonymous';
-    $profilePicture = '../images/Default_Profile.jpg';
+    $profilePicture = DEFAULT_PROFILE;
 }
 
 // Set character encoding to UTF-8

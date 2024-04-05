@@ -2,8 +2,6 @@
 
 include_once '../database/functions.php';
 
-// Set uploads directory with a trailing slash for consistency
-$uploadsDirectory = PROFILES_DIRECTORY;
 $response = array();
 
 // Start the session if not already started
@@ -38,11 +36,11 @@ if (!in_array(strtolower($fileInfo['extension']), $allowedExtensions) || exif_im
 // get Database Connection
 $conn = getConnection();
 $userId = $_SESSION['user_id'];
-$fileId = genUUID();
-$fileName = $uploadsDirectory . $fileId . '.jpg';
+$fileName = genUUID();
+$filePath = PROFILES_DIRECTORY . $fileName;
 
 // move the uploaded file to the uploads directory
-if (move_uploaded_file($file['tmp_name'], $fileName) === false) {
+if (move_uploaded_file($file['tmp_name'], $filePath) === false) {
     $conn->close();
     error_log("Error: Failed to move uploaded file to uploads directory");
     errorResponse('Internal Server Error', 500);
@@ -53,16 +51,15 @@ $conn->autocommit(false);
 
 try {
     if(profilePictureExists($conn, $userId)) {
-        $oldFileId = getProfilePictureId($conn, $userId);
-        $oldFileName = $uploadsDirectory . $oldFileId . '.jpg';
+        $oldfileName = getProfilePictureName($conn, $userId);
 
-        updateProfilePicture($conn, $userId, $fileId);
+        updateProfilePicture($conn, $userId, $fileName);
 
-        if(unlink($uploadsDirectory. $oldFileId. '.jpg') === false) {
-            error_log('Error: Failed to delete ' . $oldFileName);
+        if(unlink(PROFILES_DIRECTORY . $oldfileName) === false) {
+            error_log('Error: Failed to delete ' . PROFILES_DIRECTORY . $oldfileName);
         }
     } else {
-        insertProfilePicture($conn, $userId, $fileId);
+        insertProfilePicture($conn, $userId, $fileName);
     }
 
     // Commit the transaction if no exceptions occur
@@ -76,7 +73,7 @@ try {
     $response['success'] = false;
     $response['message'] = 'Internal Server Error';
     echo json_encode($response);
-    if(unlink($uploadsDirectory. $fileId. '.jpg') === false) {
+    if(unlink(PROFILES_DIRECTORY . $fileName) === false) {
         error_log('Error: Failed to delete ' . $fileName);
     }
     handleException($e);

@@ -33,10 +33,10 @@ CREATE TABLE `usernames` (
 CREATE TABLE `profile_pictures` (
     id INT UNSIGNED AUTO_INCREMENT,
     user_id CHAR(16) NOT NULL,
-    file_id CHAR(16) NOT NULL,
+    file_name VARCHAR(255) NOT NULL,
     PRIMARY KEY (id),
     UNIQUE KEY `unique_user_id` (user_id),
-    UNIQUE KEY `unique_file_id` (file_id),
+    UNIQUE KEY `unique_file_name` (file_name),
     CONSTRAINT `fk_profile_pictures_users` FOREIGN KEY (user_id) REFERENCES `users` (user_id) ON DELETE CASCADE
 ) ENGINE=InnoDB CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -45,7 +45,7 @@ CREATE TABLE `posts` (
     id BIGINT UNSIGNED AUTO_INCREMENT,
     post_id CHAR(16) NOT NULL,
     user_id CHAR(16) NOT NULL,
-    file_path VARCHAR(255),
+    file_name VARCHAR(255),
     content TEXT NOT NULL,
     votes INT NOT NULL DEFAULT 0,
     PRIMARY KEY (id),

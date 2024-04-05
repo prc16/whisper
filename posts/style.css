@@ -1,74 +1,87 @@
-.container {
-    max-width: 800px;
-    margin: 20px auto;
-    background-color: #fff;
-}
-
-.container h1 {
-    color: #333;
-}
-
-.container form {
-    margin-bottom: 20px;
-}
-
-.container label {
-    display: block;
-    margin-bottom: 8px;
-    color: #333;
-}
-
-.container input[type="text"],
-.container textarea {
+.displayPostsContainer {
+    display: flex;
     width: 100%;
-    padding: 10px;
-    margin-bottom: 15px;
-    box-sizing: border-box;
-    border: 1px solid #ccc;
-    border-radius: 4px;
 }
 
-.container button {
-    background-color: #007bff;
-    color: #fff;
+.displayPostContainer {
+    display: flex;
+    align-items: flex-start;
+    width: 100%;
+    background-color: #fff;
+    padding: 12px;
+    border-bottom: 1px solid var(--whisper-border);
+}
+
+.displayPostContainer h2 {
+    font-size: var(--whisper-font-size);
+}
+
+.displayPostContainer .voteCount {
+    width: 70px;
+}
+
+#displayPostContainerPart1 {
+    margin-right: 12px;
+}
+
+#displayPostContainerPart2 {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
+    background-color: #fff;
+    margin-top: 4px;
+}
+
+/* .displayPostContainer input[type="file"] {
+    width: 100%;
+} */
+
+#displayPostTextArea {
+    width: 100%;
+    height: auto;
+    font-size: 20px;
+    word-wrap: break-word;
     border: none;
-    padding: 10px 20px;
-    font-size: 16px;
-    cursor: pointer;
-    border-radius: 4px;
+    outline: none;
+    margin-bottom: 12px;
+    resize: none;
 }
 
-.container button:hover {
-    background-color: #0056b3;
+#displayPostTextArea::selection {
+    background-color: #b3d4fc; /* Change caret color here */
 }
 
-#postForm {
-    background-color: #fff;
-    padding: 12px;
-    border-bottom: 1px solid var(--whisper-border);
+.displayPostContainer input[type="file"] {
+    display: none;
 }
 
-.post {
-    background-color: #fff;
-    padding: 12px;
-    border-bottom: 1px solid var(--whisper-border);
+.displayPostContainer .btn {
+    display: block;
 }
 
-.post h2 {
-    color: #333;
+#displayPostMediaPreview {
+    display: flex;
+    max-height: 500px;
 }
 
-.post p {
-    color: #555;
-    white-space: pre-line;
+#displayPostButtons {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    margin-top: 12px;
 }
 
-.post button {
-    background-color: #ddd;
-    color: #333;
+#displayPostButtons .fa-image {
     margin-right: 10px;
 }
 
-.post button:hover {
-    background-color: #ccc;
+#displayPostButtons .btn {
+    margin-left: 12px;
+}
+
+.displayPostContainer .image-preview,
+.displayPostContainer .video-preview {
+    max-width: 100%;
+    border-radius: 16px;
 }

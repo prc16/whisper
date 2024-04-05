@@ -8,6 +8,7 @@ body {
     --whisper-color: #7856ff;
     --whisper-color-alt: #6c4de6;
     --whisper-border: #e6ecf0;
+    --whisper-font-size: 16px;
     font-family: 'Arial', sans-serif;
     background-color: #FFF;
     scrollbar-color: rgb(185, 202, 211) rgb(247, 249, 249);

@@ -31,11 +31,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         validateJsonData($data, ['action']);
         $action = $data['action'];
         switch ($action) {
-            case 'create':
-                validateJsonData($data, ['content']);
-                $content = $data['content'];
-                createPost($conn, $userId, $content);
-                break;
             case 'upvote':
             case 'downvote':
                 validateJsonData($data, ['post_id']);
