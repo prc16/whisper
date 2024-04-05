@@ -20,6 +20,7 @@
     max-width: 500px;
     white-space: pre-line;
     word-wrap: break-word;
+    margin-bottom: 4px;
 }
 
 .displayPostContainer .voteCount {

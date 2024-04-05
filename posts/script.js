@@ -42,8 +42,8 @@ function displayPosts(posts) {
                     </div>
                     <div id="displayPostButtons">
                         <p class="voteCount"> Votes: ${post.votes}</p>
-                        <button class="vote-btn btn" data-id="${post.post_id}" data-type="upvote" style="background-color: ${post.vote_type === 'upvote' ? 'orange' : 'gray'}">Upvote</button>
-                        <button class="vote-btn btn" data-id="${post.post_id}" data-type="downvote" style="background-color: ${post.vote_type === 'downvote' ? 'orange' : 'gray'}">Downvote</button>
+                        <button class="vote-btn btn" data-id="${post.post_id}" data-type="upvote" style="background-color: ${post.vote_type === 'upvote' ? 'var(--whisper-color);' : 'gray'}">Upvote</button>
+                        <button class="vote-btn btn" data-id="${post.post_id}" data-type="downvote" style="background-color: ${post.vote_type === 'downvote' ? 'var(--whisper-color);' : 'gray'}">Downvote</button>
                     </div>
                 </div>
             </div>
