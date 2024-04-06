@@ -1,5 +1,5 @@
 <?php
-include_once '../functions/userDetails.php';
+include_once '../php/userDetails.php';
 ?>
 <div id="bottom-left-container">
     <div id="bottom-left-profile-container">

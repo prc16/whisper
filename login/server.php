@@ -1,22 +1,21 @@
 <?php
 
-include_once '../functions/database.php';
+include_once '../php/database.php';
 
 $conn = getConnection();
 
 // Process the login form data
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Sanitize and validate user inputs
-    $username = $_POST["username"];
-    $password = $_POST["password"];
+    $username = htmlspecialchars($_POST["login-username"], ENT_QUOTES, 'UTF-8');
+    $password = $_POST["login-password"];
 
     // Check if the username exists
-    if (!usernameExists($conn, $username)) {
+    if (!($userId = getUserId($conn, $username))) {
         http_response_code(404); // Not Found
         echo "Username is not registered. Please Sign Up instead";
         exit;
     }
-
 
     // Verify the password
     if (!verifyPassword($conn, $username, $password)) {
@@ -29,11 +28,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     session_start();
     
     // Start a user session
-    $_SESSION["user_id"] = getUserId($conn, $username);
+    $_SESSION["user_id"] = $userId;
 
-    // Redirect to the home page
-    header('Location: ../maintenance/');
-    exit;
 }
 
 // Close the database connection

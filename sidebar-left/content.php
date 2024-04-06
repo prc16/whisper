@@ -1,6 +1,6 @@
 <div class="sidebar-container">
     <nav class="imp-links">
-        <a href="../"><i class="fab fa-discourse"></i><b>Whisper</b></a>
+        <a href="../"><i class="fab fa-discourse"></i><h2>Whisper</h2></a>
         <a href="../home/"><i class="far fa-home-alt"></i>Home</a>
         <a href="../profile/"><i class="far fa-user"></i>Profile</a>
         <a href="#"><i class="far fa-envelope"></i>Messages</a>

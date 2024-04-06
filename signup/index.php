@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home</title>
+    <title>Sign Up</title>
 
     <?php include_once '../php/style-includes.php'; ?>
     <?php include_once '../php/script-includes.php'; ?>
@@ -23,11 +23,12 @@
 
             <!--------------- middle feed --------------->
             <div class="middle-feed">
+                <?php include_once './content.php'; ?>
             </div>
 
             <!--------------- right sidebar --------------->
             <div class="right-sidebar">
-                <?php include_once '../sidebar-right/content.php'; ?>
+                <?php include_once './content-right.php'; ?>
             </div>
         </main>
     </div>

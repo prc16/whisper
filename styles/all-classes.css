@@ -9,49 +9,67 @@ body {
     --whisper-color-alt: #6c4de6;
     --whisper-border: #e6ecf0;
     --whisper-font-size: 16px;
+    --whisper-font-size-large: 20px;
+    --whisper-background: #FFF;
     font-family: 'Arial', sans-serif;
-    background-color: #FFF;
+    background-color: var(--whisper-background);
     scrollbar-color: rgb(185, 202, 211) rgb(247, 249, 249);
+}
+
+h2 {
+    font-size: var(--whisper-font-size-large);
 }
 
 .web-container {
     display: flex;
-    justify-content: space-around;
     align-items: flex-start;
     max-width: 1366px !important;
+    width: 1366px !important;
     margin-left: auto;
     margin-right: auto;
 }
 
 .left-sidebar {
     flex: 0 0 326px !important;
+    max-width: 326px !important;
+    width: 1024px !important;
     top: 0px;
     height: 100svh;
     position: sticky;
     display: flex;
     flex-direction: column;
+    align-items: flex-end;
     border-right: 1px solid var(--whisper-border);
 }
 
 .main-content {
-    flex: 1 0 1024px !important;
-    align-items: flex-start;
+    flex: 0 0 1024px !important;
+    max-width: 1024px !important;
+    width: 1024px !important;
     display: flex;
+    align-items: flex-start;
 }
 
 .middle-feed {
     flex: 0 0 600px !important;
     max-width: 600px !important;
+    width: 600px !important;
     top: 0px;
-    align-self: flex-start;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .right-sidebar {
-    flex: 1 0 440px !important;
+    flex: 0 0 440px !important;
+    max-width: 440px !important;
+    width: 440px !important;
     top: 0px;
-    align-self: flex-start;
     height: 100svh;
     position: sticky;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
     border-left: 1px solid var(--whisper-border);
 }
 
@@ -63,7 +81,7 @@ body {
 }
 
 .profile-username {
-    font-size: 16px;
+    font-size: var(--whisper-font-size);
     font-weight: bold;
 }
 

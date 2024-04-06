@@ -1,15 +1,15 @@
 <?php
 
-include_once '../functions/database.php';
-include_once '../functions/uuid.php';
+include_once '../php/database.php';
+include_once '../php/uuid.php';
 
 $conn = getConnection();
 
 // Process the signup form data
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Validate and sanitize user inputs
-    $username = htmlspecialchars($_POST["username"], ENT_QUOTES, 'UTF-8');
-    $password = $_POST["password"];
+    $username = htmlspecialchars($_POST["signup-username"], ENT_QUOTES, 'UTF-8');
+    $password = $_POST["signup-password"];
 
     // Validate username format
     if (!preg_match('/^[a-zA-Z0-9_]+$/', $username)) {
@@ -33,17 +33,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // Insert new user into the database
     if (insertUser($conn, $user_id, $username, $password_hash)) {
-        // Start a PHP session if not already started
-        if (session_status() == PHP_SESSION_NONE) {
-            session_start();
-        }
+        
+        session_start();
 
         // Start a user session
         $_SESSION["user_id"] = $user_id;
 
-        // Redirect to the home page
-        header('Location: ../maintenance/');
-        exit;
     } else {
         // Error handling
         http_response_code(500); // Internal Server Error
