@@ -193,3 +193,63 @@ function getUserId($conn, $username)
         return false;
     }
 }
+
+
+function getPosts($conn, $limit = 10)
+{
+    $sql = "SELECT 
+                p.post_id, 
+                p.user_id, 
+                u.username AS username, 
+                p.content, 
+                p.vote_count, 
+                p.media_file_id, 
+                p.media_file_ext, 
+                pp.profile_file_id AS profile_file_id 
+            FROM 
+                posts p 
+            LEFT JOIN 
+                users u ON p.user_id = u.user_id 
+            LEFT JOIN 
+                profile_pictures pp ON p.user_id = pp.user_id 
+            ORDER BY 
+                p.id DESC 
+            LIMIT ?";
+
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("i", $limit);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    $posts = fetchPosts($result);
+
+    $stmt->close();
+    return $posts;
+}
+
+function fetchPosts($result)
+{
+    $posts = [];
+    while ($row = $result->fetch_assoc()) {
+        $row['profile_file_path'] = PROFILES_DIRECTORY . $row['profile_file_name'] . 'jpg';
+        // Check if file exists and is a file
+        if (file_exists($row['profile_file_path']) && is_file($row['profile_file_path'])) {
+            // File exists and is a file
+        } else {
+            // Use default profile if file doesn't exist or is not a file
+            $row['profile_file_path'] = DEFAULT_PROFILE;
+        }
+
+        $row['post_file_path'] = POSTS_DIRECTORY . $row['media_file_id'] . $row['media_file_ext'];
+        // Check if file exists and is a file
+        if (file_exists($row['post_file_path']) && is_file($row['post_file_path'])) {
+            // File exists and is a file
+        } else {
+            // Set post_file_path to empty if file doesn't exist or is not a file
+            $row['post_file_path'] = '';
+        }
+        
+        $posts[] = $row;
+    }
+    return $posts;
+}

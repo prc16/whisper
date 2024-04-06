@@ -1,13 +1,17 @@
 <?php
 
-include_once '../database/functions.php';
+include_once '../php/all.php';
+include_once '../php/database.php';
 
-$conn = getConnection();
-
-// Start the session if not already started
-if (session_status() == PHP_SESSION_NONE) {
-    session_start();
+try {
+    $conn = getConnection();
+} catch (Exception $e) {
+    error_log($e->getMessage());
+    header('Location: ../maintenance/');
+    exit;
 }
+
+session_start();
 
 // Validate request method
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -57,7 +61,7 @@ header('Content-Type: application/json; charset=utf-8');
 
 // Return posts as JSON
 if (isset($_SESSION['user_id'])) {
-    echo json_encode(getPostsWithVotes($conn, $_SESSION['user_id']));
+    echo json_encode(getPosts($conn));
 } else {
     echo json_encode(getPosts($conn));
 }

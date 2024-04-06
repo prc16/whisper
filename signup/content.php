@@ -9,69 +9,6 @@
         <input type="password" id="confirm-password" name="confirm-password" placeholder="Confirm Password" required>
         <input type="submit" value="Sign Up" class="btn">
     </form>
-    <h2>text</h2>
-    <h2>text</h2>
-    <h2>text</h2>
-    <h2>text</h2>
-    <h2>text</h2>
-    <h2>text</h2>
-    <h2>text</h2>
-    <h2>text</h2>
-    <h2>text</h2>
-    <h2>text</h2>
-    <h2>text</h2>
-    <h2>text</h2>
-    <h2>text</h2>
-    <h2>text</h2>
-    <h2>text</h2>
-    <h2>text</h2>
-    <h2>text</h2>
-    <h2>text</h2>
-    <h2>text</h2>
-    <h2>text</h2>
-    <h2>text</h2>
-    <h2>text</h2>
-    <h2>text</h2>
-    <h2>text</h2>
-    <h2>text</h2>
-    <h2>text</h2>
-    <h2>text</h2>
-    <h2>text</h2>
-    <h2>text</h2>
-    <h2>text</h2>
-    <h2>text</h2>
-    <h2>text</h2>
-    <h2>text</h2>
-    <h2>text</h2>
-    <h2>text</h2>
-    <h2>text</h2>
-    <h2>text</h2>
-    <h2>text</h2>
-    <h2>text</h2>
-    <h2>text</h2>
-    <h2>text</h2>
-    <h2>text</h2>
-    <h2>text</h2>
-    <h2>text</h2>
-    <h2>text</h2>
-    <h2>text</h2>
-    <h2>text</h2>
-    <h2>text</h2>
-    <h2>text</h2>
-    <h2>text</h2>
-    <h2>text</h2>
-    <h2>text</h2>
-    <h2>text</h2>
-    <h2>text</h2>
-    <h2>text</h2>
-    <h2>text</h2>
-    <h2>text</h2>
-    <h2>text</h2>
-    <h2>text</h2>
-    <h2>text</h2>
-    <h2>text</h2>
-    <h2>text</h2>
-    
 </div>
 
 <script>

@@ -92,10 +92,28 @@ INSERT INTO `users` (`user_id`, `username`, `password_hash`) VALUES
 
 -- Insert test records into the posts table
 INSERT INTO `posts` (`post_id`, `user_id`, `content`, `expire_at`)
-VALUES ('Alphatester0----', 'Alphatester0----', 'Test Post by Alphatester0', DATE_ADD(NOW(), INTERVAL 1 MINUTE));
+VALUES ('Alphatester0---0', 'Alphatester0----', 'Test 0 Post by Alphatester0', DATE_ADD(NOW(), INTERVAL 1 MINUTE));
 
 INSERT INTO `posts` (`post_id`, `user_id`, `content`, `expire_at`)
-VALUES ('Alphatester1----', 'Alphatester1----', 'Test Post by Alphatester1', DATE_ADD(NOW(), INTERVAL 1 MINUTE));
+VALUES ('Alphatester1---1', 'Alphatester1----', 'Test 1 Post by Alphatester1', DATE_ADD(NOW(), INTERVAL 1 MINUTE));
+
+INSERT INTO `posts` (`post_id`, `user_id`, `content`, `expire_at`)
+VALUES ('Alphatester0---2', 'Alphatester0----', 'Test 2 Post by Alphatester0', DATE_ADD(NOW(), INTERVAL 1 MINUTE));
+
+INSERT INTO `posts` (`post_id`, `user_id`, `content`, `expire_at`)
+VALUES ('Alphatester1---3', 'Alphatester1----', 'Test 3 Post by Alphatester1', DATE_ADD(NOW(), INTERVAL 1 MINUTE));
+
+INSERT INTO `posts` (`post_id`, `user_id`, `content`, `expire_at`)
+VALUES ('Alphatester0---4', 'Alphatester0----', 'Test 4 Post by Alphatester0', DATE_ADD(NOW(), INTERVAL 1 MINUTE));
+
+INSERT INTO `posts` (`post_id`, `user_id`, `content`, `expire_at`)
+VALUES ('Alphatester1---5', 'Alphatester1----', 'Test 5 Post by Alphatester1', DATE_ADD(NOW(), INTERVAL 1 MINUTE));
+
+INSERT INTO `posts` (`post_id`, `user_id`, `content`, `expire_at`)
+VALUES ('Alphatester0---6', 'Alphatester0----', 'Test 6 Post by Alphatester0', DATE_ADD(NOW(), INTERVAL 1 MINUTE));
+
+INSERT INTO `posts` (`post_id`, `user_id`, `content`, `expire_at`)
+VALUES ('Alphatester1---7', 'Alphatester1----', 'Test 7 Post by Alphatester1', DATE_ADD(NOW(), INTERVAL 1 MINUTE));
 
 -- Set Event to automatically delete post on expiration date
 DELIMITER $$

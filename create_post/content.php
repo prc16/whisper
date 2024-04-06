@@ -1,6 +1,4 @@
-<?php
-include_once '../functions/userDetails.php';
-?>
+<?php include_once '../php/userDetails.php'; ?>
 
 <div class="createPostContainer">
     <div id="createPostContainerPart1">

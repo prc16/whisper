@@ -23,6 +23,7 @@
 
             <!--------------- middle feed --------------->
             <div class="middle-feed">
+                <?php include_once './content.php'; ?>
             </div>
 
             <!--------------- right sidebar --------------->
