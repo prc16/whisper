@@ -1,11 +1,11 @@
 <?php
 
-include_once '../database/functions.php';
+include_once '../php/all.php';
+include_once '../php/uuid.php';
+include_once '../php/database.php';
+include_once '../php/errors.php';
 
-// Start the session if not already started
-if (session_status() == PHP_SESSION_NONE) {
-    session_start();
-}
+session_start();
 
 // Check if the user is logged in
 if (!isset($_SESSION['user_id'])) {
@@ -22,27 +22,21 @@ if (!isset($_POST['post_text'])) {
     errorResponse(400, 'No post text provided.');
 }
 
-// get Database Connection
-$conn = getConnection();
-$userId = $_SESSION['user_id'];
-$post_text = $_POST['post_text'];
+$content = $_POST['post_text'];
 
 // Check if a media file is uploaded
 if (isset($_FILES['media_file'])) {
 
     // Handle Media File Upload
     $target_dir = POSTS_DIRECTORY; // Directory where media files will be saved
-    
+
     // Generate a unique filename using genUUID() function
-    $media_file_name = genUUID() . '.' . pathinfo($_FILES["media_file"]["name"], PATHINFO_EXTENSION);
-    
+    $media_file_id = genUUID();
+    $media_file_ext = pathinfo($_FILES["media_file"]["name"], PATHINFO_EXTENSION);
+    $media_file_name = $media_file_id . '.' . $media_file_ext;
+
     $target_file = $target_dir . $media_file_name;
     $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
-
-    // Check if file already exists
-    if (file_exists($target_file)) {
-        errorResponse(500, 'Sorry, file already exists.');
-    }
 
     // Check file size (you can adjust the size limit)
     if ($_FILES["media_file"]["size"] > 50000000) {
@@ -56,19 +50,33 @@ if (isset($_FILES['media_file'])) {
     ) {
         errorResponse(400, 'File type not supported.');
     }
+    // Check if file already exists
+    if (file_exists($target_file)) {
+        errorResponse(500, 'Error when creating post:' . $target_file . ' already exists.');
+    }
+
 
     if (move_uploaded_file($_FILES["media_file"]["tmp_name"], $target_file) === false) {
-        errorResponse(500, 'Sorry, there was an error uploading your file.');
+        errorResponse(500, 'Error when creating post: ' . $target_file . ' Movin to uploads directory failed.');
     }
 } else {
+    $media_file_id = null;
+    $media_file_ext = null;
     $media_file_name = null;
 }
 
-try {
-    createPost($conn, $userId, $post_text, $media_file_name);
-} catch (Exception $e) {
-    handleException($e);
-    errorResponse(500, 'There was an error creating your post.');
-} finally {
+// get Database Connection
+$conn = getConnection();
+$userId = $_SESSION['user_id'];
+
+if(!createPost($conn, $userId, $content, $media_file_id, $media_file_ext)) {
+    if($media_file_name){
+        if(unlink($media_file_name) === false) {
+            error_log('Error: Failed to delete ' . $filePath);
+        }
+    }
     $conn->close();
+    errorResponse(500, 'Error when creating post');
 }
+
+$conn->close();

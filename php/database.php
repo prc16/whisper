@@ -1,6 +1,7 @@
 <?php
 
 include_once '../php/all.php';
+include_once '../php/uuid.php';
 include_once '../database/config.php';
 
 /**
@@ -29,25 +30,23 @@ function getConnection()
 
 
 /**
- * Checks if a username already exists in the users table.
+ * Checks if a username exists in the database.
  *
- * This function queries the users table to check if the provided username already exists.
+ * @param mysqli $conn    The mysqli database connection object.
+ * @param string $username  The username to be checked.
  *
- * @param mysqli $conn - The MySQLi database connection object.
- * @param string $username - The username to check for existence.
- * @return bool - Returns true if the username exists, false otherwise.
+ * @return bool           Returns true if the username exists, false otherwise.
  */
 function usernameExists($conn, $username)
 {
-    $checkSql = "SELECT 1 FROM users WHERE username=? LIMIT 1";
+    $checkSql = "SELECT COUNT(*) FROM users WHERE username = ?";
     $stmt = $conn->prepare($checkSql);
-    $stmt->bind_param("s", $username); // Corrected from $userId to $username
+    $stmt->bind_param("s", $username);
     $stmt->execute();
-    $stmt->store_result();
-    $exists = $stmt->num_rows > 0;
+    $stmt->bind_result($count);
+    $stmt->fetch();
     $stmt->close();
-
-    return $exists;
+    return $count > 0;
 }
 
 
@@ -78,51 +77,6 @@ function getUsername($conn, $userId)
 
 
 /**
- * Retrieves the profile picture ID associated with the provided user ID from the database.
- *
- * This function executes a SQL query to fetch the profile picture ID corresponding to the given user ID from the 'profile_pictures' table in the database.
- *
- * @param mysqli $conn A mysqli database connection object.
- * @param string $userId The user ID for which the profile picture ID needs to be retrieved.
- * @return string The profile picture ID associated with the provided user ID. Returns an empty string if no profile picture ID is found.
- */
-function getProfilePictureId($conn, $userId) {
-    $pictureId = "";
-
-    $sql = "SELECT profile_file_id FROM profile_pictures WHERE user_id=? LIMIT 1";
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("s", $userId);
-    $stmt->execute();
-    $stmt->store_result();
-    $stmt->bind_result($pictureId);
-    $stmt->fetch();
-    $stmt->close();
-
-    return $pictureId;
-}
-
-
-/**
- * Retrieves the file path of the profile picture associated with the provided user ID.
- *
- * This function first obtains the profile picture ID for the given user ID using the getProfilePictureId function.
- * It then constructs the file path of the profile picture based on the obtained ID.
- * If the profile picture file does not exist, it returns the path of the default profile picture.
- *
- * @param mysqli $conn A mysqli database connection object.
- * @param string $userId The user ID for which the profile picture file path needs to be retrieved.
- * @return string The file path of the profile picture associated with the provided user ID. Returns the path of the default profile picture if no specific profile picture is found.
- */
-function getProfilePicture($conn, $userId) {
-    $pictureId = getProfilePictureId($conn, $userId);
-    $picture = PROFILES_DIRECTORY . $pictureId . '.jpg';
-    if (!file_exists($picture)) {
-        $picture = DEFAULT_PROFILE;
-    }
-    return $picture;
-}
-
-/**
  * Inserts a new user into the 'users' table in the database.
  *
  * This function prepares and executes a SQL query to insert a new user into the 'users' table.
@@ -138,6 +92,27 @@ function insertUser($conn, $user_id, $username, $password_hash)
     $query = "INSERT INTO users (user_id, username, password_hash) VALUES (?, ?, ?)";
     $stmt = $conn->prepare($query);
     $stmt->bind_param("sss", $user_id, $username, $password_hash);
+    return $stmt->execute();
+}
+
+
+/**
+ * Updates the username of a user in the database.
+ *
+ * This function updates the username of a user with the specified user_id
+ * in the database to the new_username provided.
+ *
+ * @param mysqli $conn        The mysqli database connection object.
+ * @param string $user_id     The ID of the user whose username is to be updated.
+ * @param string $new_username The new username to be set for the user.
+ *
+ * @return bool               Returns true if the username is successfully updated, false otherwise.
+ */
+function updateUsername($conn, $user_id, $new_username)
+{
+    $query = "UPDATE users SET username = ? WHERE user_id = ?";
+    $stmt = $conn->prepare($query);
+    $stmt->bind_param("ss", $new_username, $user_id);
     return $stmt->execute();
 }
 
@@ -192,6 +167,119 @@ function getUserId($conn, $username)
         $stmt->close();
         return false;
     }
+}
+
+
+/**
+ * Retrieves the profile picture ID associated with the provided user ID from the database.
+ *
+ * This function executes a SQL query to fetch the profile picture ID corresponding to the given user ID from the 'profile_pictures' table in the database.
+ *
+ * @param mysqli $conn A mysqli database connection object.
+ * @param string $userId The user ID for which the profile picture ID needs to be retrieved.
+ * @return string The profile picture ID associated with the provided user ID. Returns an empty string if no profile picture ID is found.
+ */
+function getProfilePictureId($conn, $userId) 
+{
+    $sql = "SELECT profile_file_id FROM profile_pictures WHERE user_id=? LIMIT 1";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("s", $userId);
+    $stmt->execute();
+    $stmt->store_result();
+    $stmt->bind_result($profileFileId);
+    if ($stmt->fetch()) {
+        $stmt->close();
+        return $profileFileId;
+    } else {
+        $stmt->close();
+        return false;
+    }
+}
+
+
+/**
+ * Retrieves the file path of the profile picture associated with the provided user ID.
+ *
+ * This function first obtains the profile picture ID for the given user ID using the getProfilePictureId function.
+ * It then constructs the file path of the profile picture based on the obtained ID.
+ * If the profile picture file does not exist, it returns the path of the default profile picture.
+ *
+ * @param mysqli $conn A mysqli database connection object.
+ * @param string $userId The user ID for which the profile picture file path needs to be retrieved.
+ * @return string The file path of the profile picture associated with the provided user ID. Returns the path of the default profile picture if no specific profile picture is found.
+ */
+function getProfilePicture($conn, $userId)
+{
+    $pictureId = getProfilePictureId($conn, $userId);
+    $picture = PROFILES_DIRECTORY . $pictureId . '.jpg';
+    if (!file_exists($picture)) {
+        $picture = DEFAULT_PROFILE;
+    }
+    return $picture;
+}
+
+
+/**
+ * Checks if a profile picture exists for the given user ID in the database.
+ *
+ * @param mysqli $conn    The mysqli database connection object.
+ * @param string $userId  The ID of the user whose profile picture is to be checked.
+ *
+ * @return bool           Returns true if a profile picture exists for the user, false otherwise.
+ */
+function profilePictureExists($conn, $userId)
+{
+    $checkSql = "SELECT COUNT(*) FROM profile_pictures WHERE user_id = ?";
+    $stmt = $conn->prepare($checkSql);
+    $stmt->bind_param("s", $userId);
+    $stmt->execute();
+    $stmt->bind_result($count);
+    $stmt->fetch();
+    $stmt->close();
+    return $count > 0;
+}
+
+
+
+function insertProfilePicture($conn, $userId, $profileFileId)
+{
+    $sql = "INSERT INTO profile_pictures (user_id, profile_file_id) VALUES (?, ?)";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("ss", $userId, $profileFileId);
+    return $stmt->execute();
+}
+
+
+function updateProfilePicture($conn, $userId, $profileFileId)
+{
+    $sql = "UPDATE profile_pictures SET profile_file_id = ? WHERE user_id = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("ss", $profileFileId, $userId);
+    return $stmt->execute();
+}
+
+
+/**
+ * Create a new post in the database.
+ *
+ * This function inserts a new post into the 'posts' table in the database.
+ *
+ * @param mysqli $conn          The mysqli database connection object.
+ * @param string $user_id       The ID of the user creating the post.
+ * @param string $content       The content of the post.
+ * @param string $media_file_id (Optional) The ID of the media file associated with the post.
+ * @param string $media_file_ext (Optional) The extension of the media file.
+ * @param string $expire_at     (Optional) The expiration date and time of the post.
+ *
+ * @return bool                 Returns true if the post is successfully created, false otherwise.
+ */
+function createPost($conn, $user_id, $content, $media_file_id = null, $media_file_ext = null, $expire_at = null)
+{
+    $post_id = genUUID();
+    $query = "INSERT INTO posts (post_id, user_id, content, media_file_id, media_file_ext, expire_at) VALUES (?, ?, ?, ?, ?, ?)";
+    $stmt = $conn->prepare($query);
+    $stmt->bind_param("ssssss", $post_id, $user_id, $content, $media_file_id, $media_file_ext, $expire_at);
+    return $stmt->execute();
 }
 
 

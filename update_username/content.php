@@ -6,4 +6,4 @@
     </form>
 </div>
 
-<script src="script.js"></script>
+<script src="../update_username/script.js"></script>

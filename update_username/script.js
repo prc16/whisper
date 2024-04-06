@@ -14,8 +14,8 @@ document.addEventListener('DOMContentLoaded', function () {
             body: formData
         })
         .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
+            if (response.ok) {
+                window.location.href = '../profile/';
             }
             return response.json();
         })
@@ -23,9 +23,6 @@ document.addEventListener('DOMContentLoaded', function () {
             // Handle response from server
             console.log(data);
             alert(data.message);
-            if (data.success) {
-                window.location.href = '../profile/';
-            }
         })
         .catch(error => {
             // Handle error

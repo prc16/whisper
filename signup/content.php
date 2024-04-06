@@ -32,15 +32,9 @@
             if (xhr.status === 200) {
                 // Successful signup, redirect to maintenance page
                 window.location.href = '../home/';
-            } else if (xhr.status === 400) {
-                // Invalid username format, show error message
-                document.getElementById('error-message').innerText = 'Invalid username. Username can only contain letters, numbers, and underscores.';
-            } else if (xhr.status === 409) {
-                // Username already exists, show error message
-                document.getElementById('error-message').innerText = 'Username already exists. Please choose a different username.';
-            } else if (xhr.status === 500) {
-                // Internal server error, show error message
-                document.getElementById('error-message').innerText = 'Error: Unable to create account. Please try again later.';
+            } else {
+                // Server returned an error, display the error message
+                document.getElementById('error-message').innerText = xhr.responseText;
             }
         };
         xhr.send('signup-username=' + encodeURIComponent(username) + '&signup-password=' + encodeURIComponent(password));

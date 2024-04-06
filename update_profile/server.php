@@ -1,27 +1,27 @@
 <?php
 
-include_once '../database/functions.php';
+include_once '../php/all.php';
+include_once '../php/uuid.php';
+include_once '../php/database.php';
+include_once '../php/errors.php';
 
 $response = array();
 
-// Start the session if not already started
-if (session_status() == PHP_SESSION_NONE) {
-    session_start();
-}
+session_start();
 
 // Check if the user is logged in
 if (!isset($_SESSION['user_id'])) {
-    unauthorizedResponse();
+    errorResponse(401, 'User not logged in');
 }
 
 // Validate the Request
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    badRequestResponse();
+    errorResponse(400, 'Bad Request');
 }
 
 // Check if the file has been uploaded successfully
 if (!isset($_FILES['profile_picture'])) {
-    badRequestResponse('No file uploaded.');
+    errorResponse(400, 'No file uploaded.');
 }
 
 $file = $_FILES['profile_picture'];
@@ -30,53 +30,52 @@ $file = $_FILES['profile_picture'];
 $allowedExtensions = ['jpg', 'jpeg'];
 $fileInfo = pathinfo($file['name']);
 if (!in_array(strtolower($fileInfo['extension']), $allowedExtensions) || exif_imagetype($file['tmp_name']) === false) {
-    badRequestResponse('Uploaded file is not a valid image.');
+    errorResponse(400, 'Uploaded file is not a valid image.');
 }
 
 // get Database Connection
 $conn = getConnection();
 $userId = $_SESSION['user_id'];
-$fileName = genUUID();
-$filePath = PROFILES_DIRECTORY . $fileName;
+$fileId = genUUID();
+$filePath = PROFILES_DIRECTORY . $fileId . '.jpg';
 
 // move the uploaded file to the uploads directory
 if (move_uploaded_file($file['tmp_name'], $filePath) === false) {
     $conn->close();
-    error_log("Error: Failed to move uploaded file to uploads directory");
-    errorResponse('Internal Server Error', 500);
+    errorResponse(500, 'Internal Server Error: Failed to move uploaded file to uploads directory');
 }
 
 // Disable autocommit to start a new transaction
 $conn->autocommit(false);
 
 try {
-    if(profilePictureExists($conn, $userId)) {
-        $oldfileName = getProfilePictureName($conn, $userId);
+    if($oldfileId = getProfilePictureId($conn, $userId)) {
 
-        updateProfilePicture($conn, $userId, $fileName);
+        $oldfilePath = PROFILES_DIRECTORY . $oldfileId . '.jpg';
 
-        if(unlink(PROFILES_DIRECTORY . $oldfileName) === false) {
-            error_log('Error: Failed to delete ' . PROFILES_DIRECTORY . $oldfileName);
+        if(!updateProfilePicture($conn, $userId, $fileId)) {
+            throw new Exception("Failed to update profile picture: " . $conn->error);
+        }
+
+        if(unlink($oldfilePath) === false) {
+            throw new Exception("Failed to delete old profile picture: " . $oldfilePath);
         }
     } else {
-        insertProfilePicture($conn, $userId, $fileName);
+        if(!insertProfilePicture($conn, $userId, $fileId)) {
+            throw new Exception("Failed to insert profile picture: " . $conn->error);
+        }
     }
 
     // Commit the transaction if no exceptions occur
     $conn->commit();
-    $response['success'] = true;
     $response['message'] = 'Profile picture updated successfully.';
     echo json_encode($response);
 } catch (Exception $e) {
     $conn->rollback();
-    http_response_code(500); // Internal Server Error
-    $response['success'] = false;
-    $response['message'] = 'Internal Server Error';
-    echo json_encode($response);
-    if(unlink(PROFILES_DIRECTORY . $fileName) === false) {
-        error_log('Error: Failed to delete ' . $fileName);
+    if(unlink($filePath) === false) {
+        error_log('Error: Failed to delete ' . $filePath);
     }
-    handleException($e);
+    errorResponse(500, 'Execption thrown when updating profile: ' . $e->getMessage());
 } finally {
     // Re-enable autocommit
     $conn->autocommit(true);

@@ -1,6 +1,5 @@
-<?php
-include_once '../functions/userDetails.php';
-?>
+<?php include_once '../php/userDetails.php'; ?>
+<?php include_once '../topbar-middle/content.php'; ?>
 <!--------------- profile main --------------->
 <div id="profile-main">
     <div id="profile-container-large">

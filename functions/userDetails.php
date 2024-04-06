@@ -3,10 +3,7 @@ include_once '../database/functions.php';
 
 $conn = getConnection();
 
-// Start the session if not already started
-if (session_status() == PHP_SESSION_NONE) {
-    session_start();
-}
+session_start();
 
 // Initialize variables with default values
 $loggedIn = false;
