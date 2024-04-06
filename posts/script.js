@@ -1,4 +1,4 @@
-const displayPostsContainer = document.getElementById('displayPostsContainer');
+const postsFeedContainer = document.getElementById('postsFeedContainer');
 
 // Function to handle AJAX requests
 function makeRequest(method, url, data, callback) {
@@ -15,11 +15,11 @@ function makeRequest(method, url, data, callback) {
 
 // Function to display posts
 function displayPosts(posts) {
-    if (!displayPostsContainer) {
+    if (!postsFeedContainer) {
         console.error("Posts container not found");
         return;
     }
-    displayPostsContainer.innerHTML = '';
+    postsFeedContainer.innerHTML = '';
     posts.forEach(post => {
         const postElement = document.createElement('div');
         postElement.className = 'post';
@@ -48,7 +48,7 @@ function displayPosts(posts) {
                 </div>
             </div>
         `;
-        displayPostsContainer.appendChild(postElement);
+        postsFeedContainer.appendChild(postElement);
     });
 }
 
@@ -125,5 +125,5 @@ function handleUpdateEvent() {
 
 // Add event listener for 'update' event on displayPosts div
 document.addEventListener("DOMContentLoaded", function () {
-    displayPostsContainer.addEventListener("updateNeeded", handleUpdateEvent);
+    postsFeedContainer.addEventListener("updateNeeded", handleUpdateEvent);
 });

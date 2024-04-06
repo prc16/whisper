@@ -1,2 +1,2 @@
  <!-- Display existing posts -->
-<div id="displayPostsContainer"></div>
+<div id="postsFeedContainer"></div>

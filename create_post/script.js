@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const createPostMediaUpload = document.getElementById("createPostMediaUpload");
     const createPostMediaPreview = document.getElementById("createPostMediaPreview");
     const createPostPostButton = document.getElementById("createPostPostButton");
-    const displayPostsContainer = document.getElementById("displayPostsContainer");
+    const postsFeedContainer = document.getElementById("postsFeedContainer");
 
     createPostTextArea.addEventListener("input", function (event) {
         this.style.height = "auto";
@@ -53,7 +53,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                     // Trigger update event on displayPosts div
                     const updateEvent = new Event('updateNeeded');
-                    displayPostsContainer.dispatchEvent(updateEvent);
+                    postsFeedContainer.dispatchEvent(updateEvent);
                 } else if (response.status === 401) {
                     alert("You need to log in to create a post.");
                 } else {
