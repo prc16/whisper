@@ -231,7 +231,7 @@ function fetchPosts($result)
 {
     $posts = [];
     while ($row = $result->fetch_assoc()) {
-        $row['profile_file_path'] = PROFILES_DIRECTORY . $row['profile_file_name'] . 'jpg';
+        $row['profile_file_path'] = PROFILES_DIRECTORY . $row['profile_file_id'] . 'jpg';
         // Check if file exists and is a file
         if (file_exists($row['profile_file_path']) && is_file($row['profile_file_path'])) {
             // File exists and is a file

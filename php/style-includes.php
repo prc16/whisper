@@ -10,6 +10,7 @@
 <link rel="stylesheet" href="../create_post/style.css">
 <link rel="stylesheet" href="../update_profile/style.css">
 <link rel="stylesheet" href="../update_username/style.css">
+<link rel="stylesheet" href="../topbar-middle/style.css">
 
 <link rel="stylesheet" href="../dependencies/fontawesome/css/all.css">
 
