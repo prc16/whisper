@@ -92,26 +92,31 @@ function createPost() {
 // Event listener for voting
 document.addEventListener('click', vote);
 
-// Initial display of posts
-makeRequest('GET', '../posts/posts.php')
-    .then(posts => {
-        displayPosts(posts);
-    })
-    .catch(error => {
-        console.error(error);
-    });
-
-
-// Function to handle the 'updateNeeded' event
-function handleUpdateEvent() {
-    makeRequest('GET', '../posts/posts.php')
+function fetchPosts() {
+    fetch('../posts/posts.php')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
         .then(posts => {
             displayPosts(posts);
         })
         .catch(error => {
-            console.error(error);
+            console.error('Fetch error:', error);
         });
+}
 
+// Fetch posts initially
+fetchPosts();
+
+// Fetch posts every 5 seconds
+setInterval(fetchPosts, 5000);
+
+// Function to handle the 'updateNeeded' event
+function handleUpdateEvent() {
+    fetchPosts();
 }
 
 // Add event listener for 'update' event on displayPosts div
