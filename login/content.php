@@ -1,7 +1,7 @@
 <?php include_once '../topbar-middle/content.php'; ?>
 <div id="login-container">
     <form id="login-form" method="POST" action="../login/server.php">
-        <div id="error-message" class="error"></div>
+        <div id="loginFormErrorMessage" class="errorMessage"></div>
         <input type="text" id="login-username" name="login-username" placeholder="Username" required>
         <input type="password" id="login-password" name="login-password" placeholder="Password" required>
         <input type="submit" value="Sign Up" class="btn">
@@ -25,7 +25,7 @@
                 window.location.href = '../home/';
             } else {
                 // Server returned an error, display the error message
-                document.getElementById('error-message').innerText = xhr.responseText;
+                document.getElementById('loginFormErrorMessage').innerText = xhr.responseText;
             }
         };
         xhr.send('login-username=' + encodeURIComponent(username) + '&login-password=' + encodeURIComponent(password));

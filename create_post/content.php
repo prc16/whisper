@@ -9,6 +9,7 @@
         <div id="createPostMediaPreview">
             <!-- Placeholder for media preview -->
         </div>
+        <div id="createPostErrorMessage" class="errorMessage"></div>
         <div id="createPostButtons">
             <div id="createPostButtonsStart">
                 <label for="createPostMediaUpload" class="btn btn2" title="Media"><i class="far fa-image"></i>Upload Media</label>

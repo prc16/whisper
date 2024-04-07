@@ -45,12 +45,12 @@ document.addEventListener('DOMContentLoaded', () => {
         const file = createPostMediaUpload.files[0];
 
         if (postText.trim() === "") {
-            alert("Please enter some text for your post.");
+            document.getElementById('createPostErrorMessage').innerText = "Please enter some text for your post.";
             return;
         }
 
         const formData = new FormData();
-        formData.append("post_text", postText);
+        formData.append("post_text", postText.trim());
         formData.append("media_file", file);
 
         fetch('../create_post/server.php', {
@@ -63,6 +63,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     createPostMediaUpload.value = "";
                     createPostMediaPreview.innerHTML = "";
                     createPostTextArea.rows = 1;
+                    createPostTextArea.style.height = "auto";
 
                     // Trigger update event on displayPosts div
                     const updateEvent = new Event('updateNeeded');
@@ -70,7 +71,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 } else {
                     // Parse JSON response
                     return response.json().then(data => {
-                        alert(data.message);
+                        // Server returned an error, display the error message
+                        document.getElementById('createPostErrorMessage').innerText = data.message;
                         console.log(data.message);
                     });
                 }

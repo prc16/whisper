@@ -1,18 +1,5 @@
 const postsFeedContainer = document.getElementById('postsFeedContainer');
 
-// Function to handle AJAX requests
-function makeRequest(method, url, data, callback) {
-    const xhr = new XMLHttpRequest();
-    xhr.open(method, url, true);
-    xhr.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
-    xhr.onreadystatechange = () => {
-        if (xhr.readyState === 4) {
-            callback(xhr.status, xhr.responseText);
-        }
-    };
-    xhr.send(JSON.stringify(data));
-}
-
 // Function to display posts
 function displayPosts(posts) {
     if (!postsFeedContainer) {
@@ -33,12 +20,12 @@ function displayPosts(posts) {
                     <p>${post.content}</p>
                     <div id="displayPostMediaPreview">
                         ${post.post_file_path.endsWith('.mp4') || post.post_file_path.endsWith('.webm') ?
-                            `<video controls class="video-preview">
+                `<video controls class="video-preview">
                                 <source src="${post.post_file_path}" type="video/mp4">
                                 <source src="${post.post_file_path}" type="video/webm">
                                 Your browser does not support the video tag.
                             </video>` :
-                            `<img src="${post.post_file_path}" alt="" class="image-preview">`}
+                `<img src="${post.post_file_path}" alt="" class="image-preview">`}
                     </div>
                     <div id="displayPostButtons">
                         <p class="voteCount"> Votes: ${post.vote_count}</p>
@@ -106,21 +93,25 @@ function createPost() {
 document.addEventListener('click', vote);
 
 // Initial display of posts
-makeRequest('GET', '../posts/posts.php', null, (status, responseText) => {
-    if (status === 200) {
-        const posts = JSON.parse(responseText);
+makeRequest('GET', '../posts/posts.php')
+    .then(posts => {
         displayPosts(posts);
-    }
-});
+    })
+    .catch(error => {
+        console.error(error);
+    });
+
 
 // Function to handle the 'updateNeeded' event
 function handleUpdateEvent() {
-    makeRequest('GET', '../posts/posts.php', null, (status, responseText) => {
-        if (status === 200) {
-            const posts = JSON.parse(responseText);
+    makeRequest('GET', '../posts/posts.php')
+        .then(posts => {
             displayPosts(posts);
-        }
-    });
+        })
+        .catch(error => {
+            console.error(error);
+        });
+
 }
 
 // Add event listener for 'update' event on displayPosts div

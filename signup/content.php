@@ -1,7 +1,7 @@
 <?php include_once '../topbar-middle/content.php'; ?>
 <div id="signup-container">
     <form id="signup-form" method="POST" action="../signup/server.php">
-        <div id="error-message" class="error"></div>
+        <div id="signupFormErrorMessage" class="errorMessage"></div>
         <input type="text" id="signup-username" name="signup-username" placeholder="Username" required>
         <input type="password" id="signup-password" name="signup-password" placeholder="Password" required>
         <input type="password" id="confirm-password" name="confirm-password" placeholder="Confirm Password" required>
@@ -18,7 +18,7 @@
         var confirmPassword = document.getElementById('confirm-password').value;
 
         if (password !== confirmPassword) {
-            document.getElementById('error-message').innerText = 'Passwords do not match.';
+            document.getElementById('signupFormErrorMessage').innerText = 'Passwords do not match.';
             return;
         }
 
@@ -32,7 +32,7 @@
                 window.location.href = '../home/';
             } else {
                 // Server returned an error, display the error message
-                document.getElementById('error-message').innerText = xhr.responseText;
+                document.getElementById('signupFormErrorMessage').innerText = xhr.responseText;
             }
         };
         xhr.send('signup-username=' + encodeURIComponent(username) + '&signup-password=' + encodeURIComponent(password));

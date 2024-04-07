@@ -128,3 +128,8 @@ a .far {
 a.active .far {
     font-weight: bold;
 }
+
+.errorMessage {
+    color: red;
+    margin-bottom: 10px;
+}
