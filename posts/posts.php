@@ -29,21 +29,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $conn->autocommit(false);
 
     try {
-        // Validate JSON data
-        $json = file_get_contents('php://input');
-        $data = json_decode($json, true);
-        validateJsonData($data, ['action']);
-        $action = $data['action'];
-        switch ($action) {
-            case 'upvote':
-            case 'downvote':
-                validateJsonData($data, ['post_id']);
-                $postId = $data['post_id'];
-                handleVote($conn, $userId, $postId, $action);
-                break;
-            default:
-                throw new InvalidArgumentException("Invalid action provided.");
+        // Validate form data
+        $action = $_POST['action'] ?? null;
+        $postId = $_POST['post_id'] ?? null;
+        if (!$action || !in_array($action, ['upvote', 'downvote']) || !$postId || strlen($postId) !== 16) {
+            throw new InvalidArgumentException("Invalid action or post ID provided.");
         }
+
+        handleVote($conn, $userId, $postId, $action);
 
         // Commit the transaction if no exceptions occur
         $conn->commit();
@@ -61,7 +54,7 @@ header('Content-Type: application/json; charset=utf-8');
 
 // Return posts as JSON
 if (isset($_SESSION['user_id'])) {
-    echo json_encode(getPosts($conn));
+    echo json_encode(getPostsWithVotes($conn, $_SESSION['user_id']));
 } else {
     echo json_encode(getPosts($conn));
 }

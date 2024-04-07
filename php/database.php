@@ -315,6 +315,41 @@ function getPosts($conn, $limit = 10)
     return $posts;
 }
 
+function getPostsWithVotes($conn, $userId, $limit = 10)
+{
+    $sql = "SELECT 
+                p.post_id, 
+                p.user_id, 
+                u.username AS username, 
+                p.content, 
+                p.vote_count, 
+                p.media_file_id, 
+                p.media_file_ext, 
+                pp.profile_file_id AS profile_file_id, 
+                v.vote_type AS vote_type
+            FROM 
+                posts p 
+            LEFT JOIN 
+                users u ON p.user_id = u.user_id 
+            LEFT JOIN 
+                profile_pictures pp ON p.user_id = pp.user_id 
+            LEFT JOIN 
+                votes v ON p.post_id = v.post_id AND v.user_id = ? 
+            ORDER BY 
+                p.id DESC 
+            LIMIT ?";
+
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("si", $userId, $limit);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    $posts = fetchPosts($result);
+
+    $stmt->close();
+    return $posts;
+}
+
 function fetchPosts($result)
 {
     $posts = [];
@@ -340,4 +375,128 @@ function fetchPosts($result)
         $posts[] = $row;
     }
     return $posts;
+}
+
+
+/**
+ * Function to update the vote count of a post in the database
+ *
+ * @param $conn - The database connection
+ * @param $postId - The ID of the post to update
+ * @param $voteIncrement - The amount by which to increment the votes (+1 or -1)
+ */
+function updatePostVotes($conn, $postId, $voteIncrement)
+{
+    $sql = "UPDATE posts SET vote_count = vote_count + ? WHERE post_id = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("is", $voteIncrement, $postId);
+    $stmt->execute();
+    $stmt->close();
+}
+
+/**
+ * Function to create a new vote record in the database or update an existing one if it already exists
+ *
+ * @param $conn - The database connection
+ * @param $userId - The ID of the user who voted
+ * @param $postId - The ID of the post being voted on
+ * @param $voteType - The type of vote (upvote or downvote)
+ */
+function createVote($conn, $userId, $postId, $voteType)
+{
+    $sql = "INSERT INTO votes (user_id, post_id, vote_type) VALUES (?, ?, ?)
+    ON DUPLICATE KEY UPDATE vote_type = VALUES(vote_type)";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("sss", $userId, $postId, $voteType);
+    $stmt->execute();
+    $stmt->close();
+}
+
+/**
+ * Function to retrieve the type of vote (upvote or downvote) given by a user for a specific post
+ *
+ * @param $conn - The database connection
+ * @param $userId - The ID of the user
+ * @param $postId - The ID of the post
+ * @return string|null - The type of vote given by the user for the post, or null if no vote exists
+ */
+function getUserVoteType($conn, $userId, $postId)
+{
+    // Prepare and execute an SQL statement to select the vote type for a specific user and post
+    $sql = "SELECT vote_type FROM votes WHERE user_id = ? AND post_id = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("ss", $userId, $postId);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    // Check if a vote record exists for the user and post, and return the vote type if found
+    if ($result->num_rows > 0) {
+        $row = $result->fetch_assoc();
+        return $row['vote_type'];
+    }
+
+    // Return null if no vote record exists for the user and post
+    return null;
+}
+
+/**
+ * Function to remove a user's vote from a specific post in the database
+ *
+ * @param $conn - The database connection
+ * @param $userId - The ID of the user whose vote will be removed
+ * @param $postId - The ID of the post from which the user's vote will be removed
+ */
+function removeUserVote($conn, $userId, $postId)
+{
+    $sql = "DELETE FROM votes WHERE user_id = ? AND post_id = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("ss", $userId, $postId);
+    $stmt->execute();
+    $stmt->close();
+}
+
+/**
+ * Function to handle user voting on a post with transaction support
+ *
+ * @param $conn - The database connection
+ * @param $userId - The ID of the user voting
+ * @param $postId - The ID of the post being voted on
+ * @param $voteType - The type of vote (upvote or downvote)
+ */
+function handleVote($conn, $userId, $postId, $voteType)
+{
+    // Get the current vote type given by the user for the post
+    $currentVoteType = getUserVoteType($conn, $userId, $postId);
+
+    // Check if the current vote type matches the requested vote type
+    if ($currentVoteType === $voteType) {
+        // If they match, remove the user's vote
+        removeUserVote($conn, $userId, $postId);
+        updatePostVotes($conn, $postId, ($voteType === 'upvote' ? -1 : 1));
+    } else {
+        // If they don't match, remove the user's current vote and add new vote
+        if ($currentVoteType !== null) {
+            removeUserVote($conn, $userId, $postId);
+            updatePostVotes($conn, $postId, ($currentVoteType === 'upvote' ? -1 : 1));
+        }
+
+        updatePostVotes($conn, $postId, ($voteType === 'upvote' ? 1 : -1));
+        createVote($conn, $userId, $postId, $voteType);
+    }
+}
+
+/**
+ * Handles exceptions by setting appropriate HTTP response codes and logging the error message.
+ *
+ * @param Exception $e The exception to handle.
+ */
+function handleException($e)
+{
+    if ($e instanceof InvalidArgumentException) {
+        http_response_code(400); // Bad Request
+    } else {
+        http_response_code(500); // Internal Server Error
+    }
+    $errorMessage = $e->getMessage();
+    error_log("Error: $errorMessage");
 }

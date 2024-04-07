@@ -54,40 +54,35 @@ function vote(event) {
             console.error('Invalid postId');
             return;
         }
-        makeRequest('POST', '../posts/posts.php', { action: type, post_id: postId }, (status, responseText) => {
-            if (status === 200) {
-                try {
-                    const posts = JSON.parse(responseText);
-                    displayPosts(posts);
-                } catch (error) {
-                    console.error('Error parsing response:', error);
-                }
-            } else if (status === 401) {
+
+        const formData = new FormData();
+        formData.append('action', type);
+        formData.append('post_id', postId);
+
+        fetch('../posts/posts.php', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => {
+            if (response.status === 200) {
+                return response.json(); // Parse JSON response
+            } else if (response.status === 401) {
                 alert('You need to log in to vote.');
+                throw new Error('Unauthorized');
             } else {
-                console.error(`Error: Status ${status}`);
+                throw new Error(`Error: Status ${response.status}`);
             }
+        })
+        .then(posts => {
+            // Assuming posts is an array of posts
+            displayPosts(posts); // Call displayPosts with the posts array
+        })
+        .catch(error => {
+            console.error('Error:', error.message);
         });
     }
 }
 
-// Function to create a new post
-function createPost() {
-    const postContent = document.getElementById('postContent').value.trim();
-    if (!postContent) {
-        alert('Post content cannot be empty');
-        return;
-    }
-    makeRequest('POST', '../posts/posts.php', { action: 'create', content: postContent }, (status, responseText) => {
-        if (status === 200) {
-            const posts = JSON.parse(responseText);
-            displayPosts(posts);
-        } else if (status === 401) {
-            alert('You need to log in to create a post.');
-        }
-    });
-    document.getElementById('postContent').value = '';
-}
 
 // Event listener for voting
 document.addEventListener('click', vote);
