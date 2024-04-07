@@ -1,6 +1,13 @@
+#updateUsernameContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
 /* Form styles */
 #updateUsernameForm {
-    max-width: 400px;
+    width: 100%;
     margin: 0 auto;
     padding: 20px;
 }

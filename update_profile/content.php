@@ -1,3 +1,4 @@
+<?php include_once '../topbar-middle/content.php'; ?>
 <div id="updateProfileContainer">
     <div id="cropper-container">
         <img id="cropper_image" src="" alt="Image to crop">

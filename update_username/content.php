@@ -1,4 +1,5 @@
-<div class="updateUsernameContainer">
+<?php include_once '../topbar-middle/content.php'; ?>
+<div id="updateUsernameContainer">
     <form id="updateUsernameForm">
         <label for="newUsername">New Username:</label>
         <input type="text" id="newUsername" name="newUsername" required>
