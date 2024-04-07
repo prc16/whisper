@@ -283,7 +283,7 @@ function createPost($conn, $user_id, $content, $media_file_id = null, $media_fil
 }
 
 
-function getPosts($conn, $limit = 10)
+function getPosts($conn, $limit = null)
 {
     $sql = "SELECT 
                 p.post_id, 
@@ -301,11 +301,10 @@ function getPosts($conn, $limit = 10)
             LEFT JOIN 
                 profile_pictures pp ON p.user_id = pp.user_id 
             ORDER BY 
-                p.id
-            LIMIT ?";
+                p.id";
 
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param("i", $limit);
+    //$stmt->bind_param("i", $limit);
     $stmt->execute();
     $result = $stmt->get_result();
 
