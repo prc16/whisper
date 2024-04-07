@@ -6,14 +6,8 @@ function displayPosts(posts) {
         console.error("Posts container not found");
         return;
     }
-
-    // Filter out posts that are already displayed
-    const newPosts = posts.filter(post => !previousPosts.some(prevPost => prevPost.post_id === post.post_id));
-
-    // Update previousPosts with new posts
-    previousPosts = [...previousPosts, ...newPosts];
-
-    newPosts.forEach(post => {
+    postsFeedContainer.innerHTML = '';
+    posts.forEach(post => {
         const postElement = document.createElement('div');
         postElement.className = 'post';
         postElement.innerHTML = `
@@ -41,13 +35,7 @@ function displayPosts(posts) {
                 </div>
             </div>
         `;
-
-        // Insert new post at the start of postsFeedContainer
-        if (postsFeedContainer.firstChild) {
-            postsFeedContainer.insertBefore(postElement, postsFeedContainer.firstChild);
-        } else {
-            postsFeedContainer.appendChild(postElement);
-        }
+        postsFeedContainer.appendChild(postElement);
     });
 }
 
@@ -104,8 +92,6 @@ function createPost() {
 // Event listener for voting
 document.addEventListener('click', vote);
 
-let previousPosts = []; // Variable to store previous posts
-
 function fetchPosts() {
     fetch('../posts/posts.php')
         .then(response => {
@@ -115,11 +101,7 @@ function fetchPosts() {
             return response.json();
         })
         .then(posts => {
-            // Check if there are new posts
-            if (JSON.stringify(posts) !== JSON.stringify(previousPosts)) {
-                displayPosts(posts);
-                previousPosts = posts; // Update previous posts
-            }
+            displayPosts(posts);
         })
         .catch(error => {
             console.error('Fetch error:', error);
