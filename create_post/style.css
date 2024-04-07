@@ -59,6 +59,15 @@
     margin-top: 12px;
 }
 
+#createPostButtonsStart {
+    display: flex;
+}
+
+#createPostButtonsStart .btn {
+    display: flex;
+    margin-right: 4px;
+}
+
 #createPostButtons .fa-image {
     margin-right: 10px;
 }

@@ -4,12 +4,15 @@ document.addEventListener('DOMContentLoaded', () => {
     const createPostMediaPreview = document.getElementById("createPostMediaPreview");
     const createPostPostButton = document.getElementById("createPostPostButton");
     const postsFeedContainer = document.getElementById("postsFeedContainer");
+    const createPostButtonsStart = document.getElementById("createPostButtonsStart");
 
+    // Function to handle resizing of textarea
     createPostTextArea.addEventListener("input", function (event) {
         this.style.height = "auto";
         this.style.height = this.scrollHeight + "px";
     });
 
+    // Function to handle file upload
     createPostMediaUpload.addEventListener("change", function () {
         const file = this.files[0];
         if (file) {
@@ -21,11 +24,22 @@ document.addEventListener('DOMContentLoaded', () => {
                 } else if (mediaType === "video") {
                     createPostMediaPreview.innerHTML = `<video src="${e.target.result}" alt="Media Preview" class="video-preview" controls></video>`;
                 }
-            }
+                
+                // Add remove button
+                createPostButtonsStart.insertAdjacentHTML('beforeend', '<button id="removeMediaButton" class="btn btn-danger">Remove</button>');
+                
+                // Add event listener to remove button
+                const removeMediaButton = document.getElementById('removeMediaButton');
+                removeMediaButton.addEventListener('click', function() {
+                    createPostMediaPreview.innerHTML = ''; // Clear media preview
+                    createPostMediaUpload.value = ''; // Clear file input
+                });
+            };
             reader.readAsDataURL(file);
         }
     });
 
+    // Function to handle post submission
     createPostPostButton.addEventListener("click", function () {
         const postText = createPostTextArea.value;
         const file = createPostMediaUpload.files[0];
@@ -45,7 +59,6 @@ document.addEventListener('DOMContentLoaded', () => {
         })
             .then(response => {
                 if (response.ok) {
-                    alert("Post uploaded successfully.");
                     createPostTextArea.value = "";
                     createPostMediaUpload.value = "";
                     createPostMediaPreview.innerHTML = "";
@@ -54,18 +67,16 @@ document.addEventListener('DOMContentLoaded', () => {
                     // Trigger update event on displayPosts div
                     const updateEvent = new Event('updateNeeded');
                     postsFeedContainer.dispatchEvent(updateEvent);
-                } else if (response.status === 401) {
-                    alert("You need to log in to create a post.");
                 } else {
                     // Parse JSON response
                     return response.json().then(data => {
-                        throw new Error(data.message);
+                        alert(data.message);
+                        console.log(data.message);
                     });
                 }
             })
             .catch(error => {
-                console.error(error);
-                alert(error);
+                console.error('There was a problem with your fetch operation:', error);
             });
     });
 

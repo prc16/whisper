@@ -6,8 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sign Up</title>
 
-    <?php include_once '../php/style-includes.php'; ?>
-    <?php include_once '../php/script-includes.php'; ?>
+    <?php include_once '../php-includes/styles.php'; ?>
+    <?php include_once '../php-includes/scripts.php'; ?>
 
 </head>
 

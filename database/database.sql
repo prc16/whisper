@@ -1,5 +1,5 @@
 -- Enable event scheduler
-SET GLOBAL event_scheduler = ON;
+-- SET GLOBAL event_scheduler = ON;
 
 -- Drop Database: whisper_db
 DROP DATABASE IF EXISTS whisper_db;
@@ -91,6 +91,6 @@ INSERT INTO `users` (`user_id`, `username`, `password_hash`) VALUES
 ('Alphatester1----', 'Alphatester1', '$2y$10$2EQhA1F5zL49jWxCOz4ZpOHLUaGg.H99nEkoOdA/wzPERFRoxTxZa');
 
 -- Insert test records into the posts table
-INSERT INTO `posts` (`post_id`, `user_id`, `content`, `media_file_id`, `media_file_ext`, `expire_at`)
-VALUES ('Alphatester1---0', 'Alphatester1----', 'Test 1 Post by Alphatester1', 'Alphatester1----', 'jpg', DATE_ADD(NOW(), INTERVAL 1 MINUTE));
+-- INSERT INTO `posts` (`post_id`, `user_id`, `content`, `media_file_id`, `media_file_ext`, `expire_at`)
+-- VALUES ('Alphatester1---0', 'Alphatester1----', 'Test 1 Post by Alphatester1', 'Alphatester1----', 'jpg', DATE_ADD(NOW(), INTERVAL 1 MINUTE));
 

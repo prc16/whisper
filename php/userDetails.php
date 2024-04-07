@@ -18,7 +18,6 @@ $loggedIn = false;
 $username = 'Anonymous';
 $profilePicture = DEFAULT_PROFILE;
 
-// Check if profile picture and username are already stored in session
 if (isset($_SESSION['user_id'])) {
     // If user is logged in
     $loggedIn = true;

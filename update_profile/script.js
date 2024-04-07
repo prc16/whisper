@@ -55,15 +55,19 @@ document.addEventListener('DOMContentLoaded', () => {
             method: 'POST',
             body: formData
         })
-        .then(response => response.json())
-        .then(data => {
-            console.log(data);
-            alert(data.message);
-            window.location.href = '../profile/';
+        .then(response => {
+            if (response.ok) {
+                window.location.href = '../profile/';
+            } else {
+                // Parse JSON response
+                return response.json().then(data => {
+                    alert(data.message);
+                    console.log(data.message);
+                });
+            }
         })
         .catch(error => {
-            console.error('Error:', error);
-            alert('Error uploading image.');
+            console.error('There was a problem with your fetch operation:', error);
         });
     }
 });

@@ -7,8 +7,8 @@
     <title>update Profile</title>
 
     <link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css" rel="stylesheet">
-    <?php include_once '../php/style-includes.php'; ?>
-    <?php include_once '../php/script-includes.php'; ?>
+    <?php include_once '../php-includes/styles.php'; ?>
+    <?php include_once '../php-includes/scripts.php'; ?>
 
 </head>
 

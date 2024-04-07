@@ -14,4 +14,4 @@
 
 <link rel="stylesheet" href="../dependencies/fontawesome/css/all.css">
 
-<link rel="icon" type="image/gif" href="../images/whisper-logo-square.png">
+<link rel="icon" type="image/svg+xml" href="../images/whisper-logo.svg">

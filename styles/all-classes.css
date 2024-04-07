@@ -11,7 +11,7 @@ body {
     --whisper-font-size: 16px;
     --whisper-font-size-large: 20px;
     --whisper-background: #FFF;
-    font-family: 'Arial', sans-serif;
+    font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
     background-color: var(--whisper-background);
     scrollbar-color: rgb(185, 202, 211) rgb(247, 249, 249);
 }

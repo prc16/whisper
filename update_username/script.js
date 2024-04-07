@@ -16,16 +16,15 @@ document.addEventListener('DOMContentLoaded', function () {
         .then(response => {
             if (response.ok) {
                 window.location.href = '../profile/';
+            } else {
+                // Parse JSON response
+                return response.json().then(data => {
+                    alert(data.message);
+                    console.log(data.message);
+                });
             }
-            return response.json();
-        })
-        .then(data => {
-            // Handle response from server
-            console.log(data);
-            alert(data.message);
         })
         .catch(error => {
-            // Handle error
             console.error('There was a problem with your fetch operation:', error);
         });
     });

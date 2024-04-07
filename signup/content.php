@@ -1,7 +1,5 @@
+<?php include_once '../topbar-middle/content.php'; ?>
 <div id="signup-container">
-    <div id="signup-topbar-container">
-        <h2>Sign Up</h2>
-    </div>
     <form id="signup-form" method="POST" action="../signup/server.php">
         <div id="error-message" class="error"></div>
         <input type="text" id="signup-username" name="signup-username" placeholder="Username" required>

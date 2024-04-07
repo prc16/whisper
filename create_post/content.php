@@ -5,10 +5,12 @@
         <img src="<?= htmlspecialchars($profilePicture) ?>" class="profile-picture" alt="">
     </div>
     <div id="createPostContainerPart2">
-        <textarea id="createPostTextArea" placeholder="What is happening?!" rows="1""></textarea>
-        <div id="createPostMediaPreview"></div>
+        <textarea id="createPostTextArea" placeholder="What is happening?!" rows="1"></textarea>
+        <div id="createPostMediaPreview">
+            <!-- Placeholder for media preview -->
+        </div>
         <div id="createPostButtons">
-            <div>
+            <div id="createPostButtonsStart">
                 <label for="createPostMediaUpload" class="btn btn2" title="Media"><i class="far fa-image"></i>Upload Media</label>
                 <input type="file" id="createPostMediaUpload" accept="image/*, video/*">
             </div>
