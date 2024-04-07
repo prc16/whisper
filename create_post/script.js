@@ -4,8 +4,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const createPostMediaPreview = document.getElementById("createPostMediaPreview");
     const createPostPostButton = document.getElementById("createPostPostButton");
     const postsFeedContainer = document.getElementById("postsFeedContainer");
-    const createPostButtonsStart = document.getElementById("createPostButtonsStart");
     const createPostClearButton = document.getElementById("createPostClearButton");
+    const createPostErrorMessage = document.getElementById('createPostErrorMessage');
 
     // Function to handle resizing of textarea
     createPostTextArea.addEventListener("input", function (event) {
@@ -22,6 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
         createPostTextArea.rows = 1;
         createPostTextArea.style.height = "auto";
         createPostClearButton.style.display = 'none';
+        createPostErrorMessage.innerText = "";
     });
 
     // Function to handle file upload
@@ -50,7 +51,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const file = createPostMediaUpload.files[0];
 
         if (postText.trim() === "") {
-            document.getElementById('createPostErrorMessage').innerText = "Please enter some text for your post.";
+            createPostErrorMessage.innerText = "Please enter some text for your post.";
             return;
         }
 
