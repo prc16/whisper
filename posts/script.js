@@ -107,7 +107,7 @@ function fetchPosts() {
 fetchPosts();
 
 // Fetch posts every 5 seconds
-setInterval(fetchPosts, 5000);
+// setInterval(fetchPosts, 5000);
 
 
 // Function to handle the 'updateNeeded' event
