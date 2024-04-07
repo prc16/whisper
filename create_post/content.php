@@ -14,6 +14,7 @@
             <div id="createPostButtonsStart">
                 <label for="createPostMediaUpload" class="btn btn2" title="Media"><i class="far fa-image"></i>Upload Media</label>
                 <input type="file" id="createPostMediaUpload" accept="image/*, video/*">
+                <button id="createPostClearButton" class="btn" style="display: none;">clear</button>
             </div>
             <div>
                 <button id="createPostPostButton" class="btn">Post</button>

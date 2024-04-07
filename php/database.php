@@ -301,7 +301,7 @@ function getPosts($conn, $limit = 10)
             LEFT JOIN 
                 profile_pictures pp ON p.user_id = pp.user_id 
             ORDER BY 
-                p.id DESC 
+                p.id
             LIMIT ?";
 
     $stmt = $conn->prepare($sql);

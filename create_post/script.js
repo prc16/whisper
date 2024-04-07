@@ -5,15 +5,29 @@ document.addEventListener('DOMContentLoaded', () => {
     const createPostPostButton = document.getElementById("createPostPostButton");
     const postsFeedContainer = document.getElementById("postsFeedContainer");
     const createPostButtonsStart = document.getElementById("createPostButtonsStart");
+    const createPostClearButton = document.getElementById("createPostClearButton");
 
     // Function to handle resizing of textarea
     createPostTextArea.addEventListener("input", function (event) {
         this.style.height = "auto";
         this.style.height = this.scrollHeight + "px";
+        // display remove button
+        createPostClearButton.style.display = 'block';
+    });
+
+    createPostClearButton.addEventListener('click', function () {
+        createPostTextArea.value = "";
+        createPostMediaUpload.value = "";
+        createPostMediaPreview.innerHTML = "";
+        createPostTextArea.rows = 1;
+        createPostTextArea.style.height = "auto";
+        createPostClearButton.style.display = 'none';
     });
 
     // Function to handle file upload
     createPostMediaUpload.addEventListener("change", function () {
+        // display remove button
+        createPostClearButton.style.display = 'block';
         const file = this.files[0];
         if (file) {
             const reader = new FileReader();
@@ -24,16 +38,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 } else if (mediaType === "video") {
                     createPostMediaPreview.innerHTML = `<video src="${e.target.result}" alt="Media Preview" class="video-preview" controls></video>`;
                 }
-                
-                // Add remove button
-                createPostButtonsStart.insertAdjacentHTML('beforeend', '<button id="removeMediaButton" class="btn btn-danger">Remove</button>');
-                
-                // Add event listener to remove button
-                const removeMediaButton = document.getElementById('removeMediaButton');
-                removeMediaButton.addEventListener('click', function() {
-                    createPostMediaPreview.innerHTML = ''; // Clear media preview
-                    createPostMediaUpload.value = ''; // Clear file input
-                });
+
             };
             reader.readAsDataURL(file);
         }
@@ -59,11 +64,8 @@ document.addEventListener('DOMContentLoaded', () => {
         })
             .then(response => {
                 if (response.ok) {
-                    createPostTextArea.value = "";
-                    createPostMediaUpload.value = "";
-                    createPostMediaPreview.innerHTML = "";
-                    createPostTextArea.rows = 1;
-                    createPostTextArea.style.height = "auto";
+                    const clearEvent = new Event('click');
+                    createPostClearButton.dispatchEvent(clearEvent);
 
                     // Trigger update event on displayPosts div
                     const updateEvent = new Event('updateNeeded');
