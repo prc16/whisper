@@ -111,13 +111,22 @@ h2 {
     background-color: var(--whisper-color);
 }
 
+.btn:hover {
+    background-color: var(--whisper-color-alt);
+}
+
+.btn-alt {
+    background-color: gray;
+}
+
+.btn-alt:hover {
+    background-color: rgb(110, 110, 110);
+}
+
 .btn2 {
     padding-bottom: 8px;
 }
 
-.btn:hover {
-    background-color: var(--whisper-color-alt);
-}
 
 /* Initially using regular icons 
 a .far {
