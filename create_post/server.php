@@ -41,7 +41,7 @@ if (isset($_FILES['media_file'])) {
     // Allow certain file formats (you can adjust allowed formats)
     if (
         $imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg"
-        && $imageFileType != "gif" && $imageFileType != "webp" && $imageFileType != "mp4" && $imageFileType != "webm"
+        && $imageFileType != "gif" && $imageFileType != "webp" && $imageFileType != "mp4"
     ) {
         errorResponse(400, 'File type not supported.');
     }

@@ -10,4 +10,4 @@
         <?php include_once "../bottom-left/content.php"; ?>
     </div>
 </div>
-<script src="../functions/activeNavLinks.js"></script>
+<script src="../scripts/activeNavLinks.js"></script>

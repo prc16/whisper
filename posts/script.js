@@ -22,7 +22,6 @@ function displayPosts(posts) {
                         ${post.post_file_path.endsWith('.mp4') || post.post_file_path.endsWith('.webm') ?
                 `<video controls class="video-preview">
                                 <source src="${post.post_file_path}" type="video/mp4">
-                                <source src="${post.post_file_path}" type="video/webm">
                                 Your browser does not support the video tag.
                             </video>` :
                 `<img src="${post.post_file_path}" alt="" class="image-preview">`}
@@ -46,26 +45,18 @@ function vote(event) {
     if (target.classList.contains('vote-btn')) {
         const type = target.dataset.type;
         const postId = target.dataset.id;
-        if (type !== 'upvote' && type !== 'downvote') {
-            console.error('Invalid vote type');
-            return;
-        }
-        if (!postId || postId.length !== 16) {
-            console.error('Invalid postId');
-            return;
-        }
 
         const formData = new FormData();
         formData.append('action', type);
         formData.append('post_id', postId);
 
-        fetch('../posts/posts.php', {
+        fetch('../posts/server.php', {
             method: 'POST',
             body: formData
         })
         .then(response => {
             if (response.status === 200) {
-                return response.json(); // Parse JSON response
+                return response.json();
             } else if (response.status === 401) {
                 alert('You need to log in to vote.');
                 throw new Error('Unauthorized');
@@ -74,8 +65,8 @@ function vote(event) {
             }
         })
         .then(posts => {
-            // Assuming posts is an array of posts
-            displayPosts(posts); // Call displayPosts with the posts array
+            // FINSHME: only update vote count
+            displayPosts(posts);
         })
         .catch(error => {
             console.error('Error:', error.message);
@@ -88,7 +79,7 @@ function vote(event) {
 document.addEventListener('click', vote);
 
 function fetchPosts() {
-    fetch('../posts/posts.php')
+    fetch('../posts/server.php')
         .then(response => {
             if (!response.ok) {
                 throw new Error('Network response was not ok');
