@@ -2,6 +2,7 @@
 
 include_once '../php/all.php';
 include_once '../php/uuid.php';
+include_once '../php/errors.php';
 include_once '../database/config.php';
 
 /**
@@ -13,15 +14,20 @@ include_once '../database/config.php';
  */
 function getConnection()
 {
-    $hostname = DATABASE_HOSTNAME;
-    $username = DATABASE_USERNAME;
-    $password = DATABASE_PASSWORD;
-    $database = DATABASE_NAME;
+    try {
+        $hostname = DATABASE_HOSTNAME;
+        $username = DATABASE_USERNAME;
+        $password = DATABASE_PASSWORD;
+        $database = DATABASE_NAME;
 
-    $conn = new mysqli($hostname, $username, $password, $database);
+        $conn = new mysqli($hostname, $username, $password, $database);
 
-    if ($conn->connect_error) {
-        throw new Exception("Failed to connect to Database: " . $conn->connect_error);
+        if ($conn->connect_error) {
+            throw new Exception("Failed to connect to Database: " . $conn->connect_error);
+        }
+    } catch (Exception $e) {
+        error_log($e->getMessage());
+        return false;
     }
 
     return $conn;
@@ -179,7 +185,7 @@ function getUserId($conn, $username)
  * @param string $userId The user ID for which the profile picture ID needs to be retrieved.
  * @return string The profile picture ID associated with the provided user ID. Returns an empty string if no profile picture ID is found.
  */
-function getProfilePictureId($conn, $userId) 
+function getProfilePictureId($conn, $userId)
 {
     $sql = "SELECT profile_file_id FROM profile_pictures WHERE user_id=? LIMIT 1";
     $stmt = $conn->prepare($sql);
@@ -371,7 +377,7 @@ function fetchPosts($result)
             // Set post_file_path to empty if file doesn't exist or is not a file
             $row['post_file_path'] = '';
         }
-        
+
         $posts[] = $row;
     }
     return $posts;

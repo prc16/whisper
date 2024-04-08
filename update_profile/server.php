@@ -35,6 +35,10 @@ if (!in_array(strtolower($fileInfo['extension']), $allowedExtensions) || exif_im
 
 // get Database Connection
 $conn = getConnection();
+if(!$conn) {
+    serverMaintenanceResponse();
+    exit;
+}
 $userId = $_SESSION['user_id'];
 $fileId = genUUID();
 $filePath = PROFILES_DIRECTORY . $fileId . '.jpg';

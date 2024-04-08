@@ -2,15 +2,30 @@
 
 include_once '../php/all.php';
 
-function errorResponse($code, $message)
+function errorResponse($code, $errorMessage)
 {
-    http_response_code($code);
-    if($code >= 500) {
-        error_log('ERROR_LOG:' . $message);
-        $response['message'] = 'Internal Server Error, please try again later.';
-        echo json_encode($response);
+    $response = array();
+
+    // Log error message for server errors (status code >= 500)
+    if ($code >= 500) {
+        error_log('ERROR_LOG: ' . $errorMessage);
+        $response = array('message' => 'Internal Server Error, please try again later.');
+    } else {
+        $response = array('message' => $errorMessage);
     }
-    $response['message'] = $message;
+
+    http_response_code($code);
+    header('Content-Type: application/json');
+    echo json_encode($response);
+    exit();
+}
+
+
+function serverMaintenanceResponse() {
+    $response = array('message' => 'Service is unavailable right now, please try again later.');
+    http_response_code(503);
+    header('Retry-After: 120');
+    header('Content-Type: application/json');
     echo json_encode($response);
     exit();
 }

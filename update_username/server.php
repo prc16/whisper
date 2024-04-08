@@ -30,6 +30,10 @@ if (!preg_match('/^[a-zA-Z0-9_]+$/', $_POST['newUsername'])) {
 
 // get Database Connection
 $conn = getConnection();
+if(!$conn) {
+    serverMaintenanceResponse();
+    exit;
+}
 $userId = $_SESSION['user_id'];
 $username = $_POST['newUsername'];
 

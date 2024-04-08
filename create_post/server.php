@@ -67,6 +67,11 @@ if (isset($_FILES['media_file'])) {
 
 // get Database Connection
 $conn = getConnection();
+if(!$conn) {
+    serverMaintenanceResponse();
+    exit;
+}
+
 $userId = $_SESSION['user_id'];
 
 if(!createPost($conn, $userId, $content, $media_file_id, $media_file_ext)) {

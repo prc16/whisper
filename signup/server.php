@@ -6,6 +6,10 @@ include_once '../php/database.php';
 include_once '../php/errors.php';
 
 $conn = getConnection();
+if(!$conn) {
+    serverMaintenanceResponse();
+    exit;
+}
 
 
 // Validate the Request

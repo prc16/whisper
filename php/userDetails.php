@@ -3,10 +3,8 @@
 include_once '../php/all.php';
 include_once '../php/database.php';
 
-try {
-    $conn = getConnection();
-} catch (Exception $e) {
-    error_log($e->getMessage());
+$conn = getConnection();
+if(!$conn) {
     header('Location: ../maintenance/');
     exit;
 }

@@ -2,6 +2,10 @@
 include_once '../database/functions.php';
 
 $conn = getConnection();
+if(!$conn) {
+    serverMaintenanceResponse();
+    exit;
+}
 
 session_start();
 
