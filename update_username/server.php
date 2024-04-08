@@ -35,7 +35,7 @@ $username = $_POST['newUsername'];
 
 
 // Check if username exists
-if ($username === getUsername($conn, $userId)) {
+if (usernameExists($conn, $username)) {
     $conn->close();
     errorResponse(400, 'Username already exists.');
 }

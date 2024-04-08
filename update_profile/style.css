@@ -1,5 +1,5 @@
 #updateProfileContainer {
-    display: flex;
+    display: none;
     flex-direction: column;
     width: 100%;
     margin: 50px auto;
@@ -7,10 +7,10 @@
 }
 
 #cropper-container {
-    display: none;
+    display: block;
     width: 100%;
     height: 300px;
-    border: 1px solid #ccc; /* Adding border for visualization */
+    /* border: 1px solid #ccc; */
     overflow: hidden; /* Ensuring image doesn't overflow */
 }
 
@@ -42,9 +42,9 @@
     margin: 0px 2px;
 }
 
-#updateProfileContainer .fa-image {
+/* #updateProfileContainer .fa-image {
     margin-right: 10px;
-}
+} */
 
 #updateProfileContainerButtons {
     display: flex;

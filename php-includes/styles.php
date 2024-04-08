@@ -13,5 +13,6 @@
 <link rel="stylesheet" href="../topbar-middle/style.css">
 
 <link rel="stylesheet" href="../dependencies/fontawesome/css/all.css">
+<link href="../dependencies/cropperjs/cropper.min.css" rel="stylesheet">
 
 <link rel="icon" type="image/svg+xml" href="../images/whisper-logo.svg">

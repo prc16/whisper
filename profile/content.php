@@ -13,5 +13,7 @@
         <button class="btn" onclick="updateProfilePicture()">Update Picture</button>
         <button class="btn" onclick="updateUsername()">Update Username</button>
     </div>
+    <?php include_once '../update_profile/content.php'; ?>
+    <?php include_once '../update_username/content.php'; ?>
     <?php endif; ?>
 </div>

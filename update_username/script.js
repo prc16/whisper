@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', function () {
             } else {
                 // Parse JSON response
                 return response.json().then(data => {
-                    alert(data.message);
+                    document.getElementById('updateUsernameErrorMessage').innerText = data.message;
                     console.log(data.message);
                 });
             }
