@@ -5,16 +5,16 @@
         <img src="<?= htmlspecialchars($profilePicture) ?>" class="profile-picture" alt="">
     </div>
     <div id="createPostContainerPart2">
-        <textarea id="createPostTextArea" placeholder="What is happening?!" rows="1"></textarea>
+        <textarea id="createPostTextArea" placeholder="What is happening?!" rows="1" required></textarea>
         <div id="createPostMediaPreview">
             <!-- Placeholder for media preview -->
         </div>
         <div id="createPostErrorMessage" class="errorMessage"></div>
         <div id="createPostButtons">
             <div id="createPostButtonsStart">
-                <label for="createPostMediaUpload" class="btn btn2" title="Media"><i class="far fa-image"></i>Upload Media</label>
+                <label for="createPostMediaUpload" class="btn btn2" title="Media"><i class="fas fa-paperclip"></i></label>
                 <input type="file" id="createPostMediaUpload" accept="image/*, video/*">
-                <button id="createPostClearButton" class="btn" style="display: none;">clear</button>
+                <button id="createPostClearButton" class="btn" style="display: none;"><i class="fas fa-minus-circle"></i></button>
             </div>
             <div>
                 <button id="createPostPostButton" class="btn">Post</button>

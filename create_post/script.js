@@ -11,16 +11,12 @@ document.addEventListener('DOMContentLoaded', () => {
     createPostTextArea.addEventListener("input", function (event) {
         this.style.height = "auto";
         this.style.height = this.scrollHeight + "px";
-        // display remove button
-        createPostClearButton.style.display = 'block';
+        createPostErrorMessage.innerText = "";
     });
 
     createPostClearButton.addEventListener('click', function () {
-        createPostTextArea.value = "";
         createPostMediaUpload.value = "";
         createPostMediaPreview.innerHTML = "";
-        createPostTextArea.rows = 1;
-        createPostTextArea.style.height = "auto";
         createPostClearButton.style.display = 'none';
         createPostErrorMessage.innerText = "";
     });
@@ -65,8 +61,13 @@ document.addEventListener('DOMContentLoaded', () => {
         })
             .then(response => {
                 if (response.ok) {
-                    const clearEvent = new Event('click');
-                    createPostClearButton.dispatchEvent(clearEvent);
+                    createPostTextArea.value = "";
+                    createPostMediaUpload.value = "";
+                    createPostMediaPreview.innerHTML = "";
+                    createPostTextArea.rows = 1;
+                    createPostTextArea.style.height = "auto";
+                    createPostClearButton.style.display = 'none';
+                    createPostErrorMessage.innerText = "";
 
                     // Trigger update event on displayPosts div
                     const updateEvent = new Event('updateNeeded');

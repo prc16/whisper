@@ -8,6 +8,7 @@
 
     <?php include_once '../php-includes/styles.php'; ?>
     <?php include_once '../php-includes/scripts.php'; ?>
+    <link rel="icon" type="image/svg+xml" href="../images/whisper-logo.svg">
 
 </head>
 

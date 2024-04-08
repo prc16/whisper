@@ -68,8 +68,10 @@
     margin-right: 4px;
 }
 
-#createPostButtons .fa-image {
-    margin-right: 10px;
+#createPostButtons .fa-photo-video {
+    margin-left: 0px;
+    margin-right: 0px;
+    padding-left: 0px;
 }
 
 #createPostPostButton {
