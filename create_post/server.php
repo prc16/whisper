@@ -38,13 +38,13 @@ if (isset($_FILES['media_file'])) {
         errorResponse(400, 'Sorry, your file is too large.');
     }
 
-    // Allow certain file formats (you can adjust allowed formats)
-    if (
-        $imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg"
-        && $imageFileType != "gif" && $imageFileType != "webp" && $imageFileType != "mp4"
-    ) {
+    // Allow certain file formats
+    $allowedExtensions = array("jpg", "jpeg", "png", "gif", "webp", "mp4");
+
+    if (!in_array($imageFileType, $allowedExtensions)) {
         errorResponse(400, 'File type not supported.');
     }
+
     // Check if file already exists
     if (file_exists($target_file)) {
         errorResponse(500, 'Error when creating post:' . $target_file . ' already exists.');
