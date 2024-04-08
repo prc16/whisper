@@ -1,0 +1,38 @@
+document.getElementById('signup-form').addEventListener('submit', function(event) {
+    event.preventDefault(); // Prevent the form from submitting
+
+    var username = document.getElementById('signup_username').value;
+    var password = document.getElementById('signup_password').value;
+    var confirmPassword = document.getElementById('confirm-password').value;
+
+    if (password !== confirmPassword) {
+        document.getElementById('signupFormErrorMessage').innerText = 'Passwords do not match.';
+        return;
+    }
+
+    const formData = new FormData();
+    formData.append("signup_username", username);
+    formData.append("signup_password", password);
+
+    // Send the form data to the server using Fetch API
+    fetch('../signup/server.php', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => {
+        if (response.ok) {
+            // Successful signup
+            window.location.href = '../home/';
+        } else {
+            // Parse JSON response
+            return response.json().then(data => {
+                // Server returned an error, display the error message
+                document.getElementById('signupFormErrorMessage').innerText = data.message;
+                console.log(data.message);
+            });
+        }
+    })
+    .catch(error => {
+        console.error('There was a problem with your fetch operation:', error);
+    });
+});

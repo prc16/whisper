@@ -46,8 +46,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const postText = createPostTextArea.value;
         const file = createPostMediaUpload.files[0];
 
-        if (postText.trim() === "") {
-            createPostErrorMessage.innerText = "Please enter some text for your post.";
+        if ((postText.trim() === "") && !file) {
+            createPostErrorMessage.innerText = "Empty post not allowed.";
             return;
         }
 

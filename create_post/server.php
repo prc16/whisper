@@ -18,7 +18,7 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 }
 
 // Check if the username is provided
-if (!isset($_POST['post_text'])) {
+if (!isset($_POST['post_text']) || empty($_POST['post_text'])) {
     errorResponse(400, 'No post text provided.');
 }
 
