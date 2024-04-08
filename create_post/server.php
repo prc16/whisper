@@ -9,7 +9,7 @@ session_start();
 
 // Check if the user is logged in
 if (!isset($_SESSION['user_id'])) {
-    errorResponse(401, 'User not logged in');
+    errorResponse(401, 'You need to log in to create post');
 }
 
 // Validate the Request
@@ -17,12 +17,7 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     errorResponse(400, 'Bad Request');
 }
 
-// Check if the username is provided
-if (!isset($_POST['post_text']) || empty($_POST['post_text'])) {
-    errorResponse(400, 'No post text provided.');
-}
-
-$content = $_POST['post_text'];
+$content = trim($_POST['post_text']);
 
 // Check if a media file is uploaded
 if (isset($_FILES['media_file'])) {
@@ -60,6 +55,10 @@ if (isset($_FILES['media_file'])) {
         errorResponse(500, 'Error when creating post: ' . $target_file . ' Movin to uploads directory failed.');
     }
 } else {
+    // Check if the post text and media are not empty together
+    if (empty($content)) {
+        errorResponse(400, 'Empty post not allowed.');
+    }
     $media_file_id = null;
     $media_file_ext = null;
     $media_file_name = null;
@@ -67,16 +66,16 @@ if (isset($_FILES['media_file'])) {
 
 // get Database Connection
 $conn = getConnection();
-if(!$conn) {
+if (!$conn) {
     serverMaintenanceResponse();
     exit;
 }
 
 $userId = $_SESSION['user_id'];
 
-if(!createPost($conn, $userId, $content, $media_file_id, $media_file_ext)) {
-    if($media_file_name){
-        if(unlink($media_file_name) === false) {
+if (!createPost($conn, $userId, $content, $media_file_id, $media_file_ext)) {
+    if ($media_file_name) {
+        if (unlink($media_file_name) === false) {
             error_log('Error: Failed to delete ' . $filePath);
         }
     }

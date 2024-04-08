@@ -46,7 +46,9 @@ CREATE TABLE `posts` (
     PRIMARY KEY (id),
     UNIQUE KEY `unique_post_id` (post_id),
     UNIQUE KEY `unique_media_file_id` (media_file_id),
-    CONSTRAINT `fk_posts_users` FOREIGN KEY (user_id) REFERENCES `users` (user_id) ON DELETE CASCADE
+    CONSTRAINT `fk_posts_users` FOREIGN KEY (user_id) REFERENCES `users` (user_id) ON DELETE CASCADE,
+    CONSTRAINT `check_content_media`  CHECK (content != '' OR (media_file_id IS NOT NULL AND media_file_ext IS NOT NULL)),
+    CONSTRAINT `check_media` CHECK ((media_file_id IS NOT NULL AND media_file_ext IS NOT NULL) OR (media_file_id IS NULL AND media_file_ext IS NULL))
 ) ENGINE=InnoDB CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- Create Table: votes

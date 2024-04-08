@@ -23,6 +23,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Function to handle file upload
     createPostMediaUpload.addEventListener("change", function () {
+        createPostErrorMessage.innerText = "";
         // display remove button
         createPostClearButton.style.display = 'block';
         const file = this.files[0];
@@ -46,10 +47,10 @@ document.addEventListener('DOMContentLoaded', () => {
         const postText = createPostTextArea.value;
         const file = createPostMediaUpload.files[0];
 
-        if ((postText.trim() === "") && !file) {
-            createPostErrorMessage.innerText = "Empty post not allowed.";
-            return;
-        }
+        // if ((postText.trim() === "") && !file) {
+        //     createPostErrorMessage.innerText = "Empty post not allowed.";
+        //     return;
+        // }
 
         const formData = new FormData();
         formData.append("post_text", postText.trim());
