@@ -68,11 +68,6 @@
     display: block;
 }
 
-#displayPostMediaPreview {
-    display: flex;
-    max-height: 500px;
-}
-
 #displayPostButtons {
     display: flex;
     width: 100%;
@@ -88,8 +83,14 @@
     margin-left: 4px;
 }
 
-.displayPostContainer .image-preview,
-.displayPostContainer .video-preview {
-    max-width: 100%;
+#displayPostMediaPreview {
+    display: flex;
+    flex-direction: column;
+    max-width: 500px;
+}
+
+#displayPostMediaPreview .image-preview,
+#displayPostMediaPreview .video-preview {
+    max-height: 500px;
     border-radius: 16px;
 }
