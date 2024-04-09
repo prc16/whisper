@@ -23,8 +23,8 @@ h2 {
 .web-container {
     display: flex;
     align-items: flex-start;
-    max-width: 1366px !important;
-    width: 1366px !important;
+    max-width: 1326px !important;
+    width: 1326px !important;
     margin-left: auto;
     margin-right: auto;
 }
@@ -43,9 +43,9 @@ h2 {
 }
 
 .main-content {
-    flex: 0 0 1024px !important;
-    max-width: 1024px !important;
-    width: 1024px !important;
+    flex: 0 0 1000px !important;
+    max-width: 1000px !important;
+    width: 1000px !important;
     display: flex;
     align-items: flex-start;
 }
@@ -60,9 +60,9 @@ h2 {
 }
 
 .right-sidebar {
-    flex: 0 0 440px !important;
-    max-width: 440px !important;
-    width: 440px !important;
+    flex: 0 0 400px !important;
+    max-width: 400px !important;
+    width: 400px !important;
     top: 0px;
     height: 100svh;
     position: sticky;
