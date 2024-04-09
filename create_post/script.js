@@ -22,25 +22,27 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // Function to handle file upload
-    createPostMediaUpload.addEventListener("change", function () {
-        createPostErrorMessage.innerText = "";
-        // display remove button
-        createPostClearButton.style.display = 'block';
-        const file = this.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = function (e) {
-                const mediaType = file.type.split("/")[0];
-                if (mediaType === "image") {
-                    createPostMediaPreview.innerHTML = `<img src="${e.target.result}" alt="Media Preview" class="image-preview">`;
-                } else if (mediaType === "video") {
-                    createPostMediaPreview.innerHTML = `<video src="${e.target.result}" alt="Media Preview" class="video-preview" controls></video>`;
-                }
+createPostMediaUpload.addEventListener("change", function () {
+    const file = this.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+            const mediaType = file.type.split("/")[0];
+            if (mediaType === "image") {
+                createPostErrorMessage.innerText = "";
+                createPostClearButton.style.display = 'block'; // Display the remove button
+                createPostMediaPreview.innerHTML = `<img src="${e.target.result}" alt="Image Preview" class="image-preview">`;
+            } else  {
+                createPostMediaUpload.value = ""; // This line will clear the file input
+                createPostMediaPreview.innerHTML = ""; // Clear any existing preview
+                createPostErrorMessage.innerText = "Only images are allowed";
+            }
 
-            };
-            reader.readAsDataURL(file);
-        }
-    });
+        };
+        reader.readAsDataURL(file);
+    }
+});
+
 
     // Function to handle post submission
     createPostPostButton.addEventListener("click", function () {
@@ -77,7 +79,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     // Parse JSON response
                     return response.json().then(data => {
                         // Server returned an error, display the error message
-                        document.getElementById('createPostErrorMessage').innerText = data.message;
+                        createPostErrorMessage.innerText = data.message;
                         console.log(data.message);
                     });
                 }

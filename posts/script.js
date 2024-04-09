@@ -19,12 +19,7 @@ function displayPosts(posts) {
                     <h2>${post.username}</h2>
                     <p>${post.content}</p>
                     <div id="displayPostMediaPreview">
-                        ${post.post_file_path.endsWith('.mp4') || post.post_file_path.endsWith('.webm') ?
-                `<video controls class="video-preview">
-                                <source src="${post.post_file_path}" type="video/mp4">
-                                Your browser does not support the video tag.
-                            </video>` :
-                `<img src="${post.post_file_path}" alt="" class="image-preview">`}
+                    <img src="${post.post_file_path}" alt="" class="image-preview">
                     </div>
                     <div id="displayPostButtons">
                         <p class="voteCount"> Votes: ${post.vote_count}</p>
