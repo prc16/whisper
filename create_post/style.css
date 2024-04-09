@@ -47,11 +47,6 @@
     display: block;
 }
 
-#createPostMediaPreview {
-    display: flex;
-    max-height: 500px;
-}
-
 #createPostButtons {
     display: flex;
     width: 100%;
@@ -68,7 +63,7 @@
     margin-right: 4px;
 }
 
-#createPostButtons .fa-photo-video {
+#createPostButtons .fa-paperclip {
     margin-left: 0px;
     margin-right: 0px;
     padding-left: 0px;
@@ -78,8 +73,14 @@
     font-size: 16px;
 }
 
-.createPostContainer .image-preview,
-.createPostContainer .video-preview {
-    max-width: 100%;
+#createPostMediaPreview {
+    display: flex;
+    flex-direction: column;
+    max-width: 500px;
+}
+
+#createPostMediaPreview .image-preview,
+#createPostMediaPreview .video-preview {
+    max-height: 500px;
     border-radius: 16px;
 }
