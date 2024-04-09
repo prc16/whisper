@@ -14,7 +14,7 @@
             <div id="createPostButtonsStart">
                 <label for="createPostMediaUpload" class="btn btn2" title="Media"><i class="fas fa-paperclip"></i></label>
                 <input type="file" id="createPostMediaUpload" accept="image/jpeg, image/png, image/gif, image/webp">
-                <button id="createPostClearButton" class="btn" style="display: none;"><i class="fas fa-minus-circle"></i></button>
+                <button id="createPostClearButton" class="btn hidden" title="Remove"><i class="fas fa-minus-circle"></i></button>
             </div>
             <div>
                 <button id="createPostPostButton" class="btn">Post</button>

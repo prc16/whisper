@@ -144,3 +144,7 @@ a.active .far {
     color: red;
     margin-bottom: 10px;
 }
+
+.hidden {
+    display: none !important;
+}
