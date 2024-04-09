@@ -105,10 +105,15 @@ h2 {
 }
 
 .btn {
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
     text-decoration: none;
     font-size: 16px;
     color: #fff;
-    padding: 10px 15px;
+    padding: 0px 15px;
     border-radius: 5px;
     border: none;
     background-color: var(--whisper-color);
@@ -127,9 +132,10 @@ h2 {
 }
 
 .btn2 {
-    height: 40px;
+    height: 36px;
     display: flex;
     align-items: center;
+    text-align: center;
 }
 
 

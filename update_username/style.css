@@ -28,8 +28,7 @@
 }
 
 /* Button styles */
-#updateUsernameForm button[type="submit"] {
+#updateUsernameForm .btn {
     width: 100%;
-    cursor: pointer;
 }
 
