@@ -1,7 +1,5 @@
 <?php
 
-include_once $_SERVER['DOCUMENT_ROOT'] . '/php/all.php';
-
 define('DATABASE_HOSTNAME', 'localhost');
 define('DATABASE_USERNAME', 'root');
 define('DATABASE_PASSWORD', '');
