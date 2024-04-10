@@ -19,7 +19,7 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     exit;
 }
 
-$content = trim($_POST['post_text']);
+$post_text = trim($_POST['post_text']);
 
 // Check if a media file is uploaded
 if (isset($_FILES['media_file'])) {
@@ -59,7 +59,7 @@ if (isset($_FILES['media_file'])) {
 
 } else {
     // Check if the post text and media are not empty together
-    if (empty($content)) {
+    if (empty($post_text)) {
         errorResponse(400, 'Empty post not allowed.');
         exit;
     }
@@ -68,6 +68,13 @@ if (isset($_FILES['media_file'])) {
     $target_file = null;
 }
 
+if (!isset($_POST['anon_post'])) {
+    errorResponse(400, 'Bad Request');
+    exit;
+}
+
+$anon_post = $_POST['anon_post'] == 'true' ? 1 : 0;
+
 // get Database Connection
 $conn = getConnection();
 if (!$conn) {
@@ -75,9 +82,9 @@ if (!$conn) {
     exit;
 }
 
-$userId = $_SESSION['user_id'];
+$user_id = $_SESSION['user_id'];
 
-if (!createPost($conn, $userId, $content, $media_file_id, $media_file_ext)) {
+if (!createPost($conn, $user_id, $anon_post, $post_text, $media_file_id, $media_file_ext)) {
     if ($target_file) {
         if (unlink($target_file) === false) {
             error_log('Error: Failed to delete untracked file: ' . $target_file);

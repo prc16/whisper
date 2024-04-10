@@ -37,8 +37,8 @@ CREATE TABLE `posts` (
     id BIGINT UNSIGNED AUTO_INCREMENT,
     post_id CHAR(16) NOT NULL,
     user_id CHAR(16) NOT NULL,
-    is_anonymous BOOLEAN NOT NULL DEFAULT FALSE,
-    content TEXT NOT NULL,
+    anon_post BOOLEAN NOT NULL DEFAULT FALSE,
+    post_text TEXT NOT NULL,
     media_file_id CHAR(16),
     media_file_ext VARCHAR(5),
     created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -48,7 +48,7 @@ CREATE TABLE `posts` (
     UNIQUE KEY `unique_post_id` (post_id),
     UNIQUE KEY `unique_media_file_id` (media_file_id),
     CONSTRAINT `fk_posts_users` FOREIGN KEY (user_id) REFERENCES `users` (user_id) ON DELETE CASCADE,
-    CONSTRAINT `check_content_media`  CHECK (content != '' OR (media_file_id IS NOT NULL AND media_file_ext IS NOT NULL)),
+    CONSTRAINT `check_content_media`  CHECK (post_text != '' OR (media_file_id IS NOT NULL AND media_file_ext IS NOT NULL)),
     CONSTRAINT `check_media` CHECK ((media_file_id IS NOT NULL AND media_file_ext IS NOT NULL) OR (media_file_id IS NULL AND media_file_ext IS NULL))
 ) ENGINE=InnoDB CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;
 

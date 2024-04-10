@@ -21,7 +21,7 @@
                 </div>
                 <div id="displayPostContainerPart2">
                     <a href="/u/${post.username}" class="username_link"><h2>${post.username}</h2></a>
-                    <p>${post.content}</p>
+                    <p>${post.post_text}</p>
                     <div id="displayPostMediaPreview">
                     <img src="${post.post_file_path}" alt="" class="image-preview">
                     </div>

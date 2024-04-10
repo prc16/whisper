@@ -38,6 +38,7 @@
     const postsFeedContainer = document.getElementById("postsFeedContainer");
     const createPostClearButton = document.getElementById("createPostClearButton");
     const createPostErrorMessage = document.getElementById('createPostErrorMessage');
+    const createPostAnonCheckbox = document.getElementById('createPostAnonCheckbox');
 
     // Event listeners
     createPostTextArea.addEventListener("input", handleTextAreaInput);
@@ -93,6 +94,7 @@
         const formData = new FormData();
         formData.append("post_text", postText);
         formData.append("media_file", file);
+        formData.append("anon_post", createPostAnonCheckbox.checked);
 
         fetch('/whisper/create_post/server.php', {
             method: 'POST',
@@ -103,7 +105,7 @@
                     handleClearButtonClick(); // Clear inputs and hide button
                     createPostTextArea.value = "";
                     createPostTextArea.style.height = "auto";
-                    document.getElementById('createPostAnonCheckbox').checked = false;
+                    createPostAnonCheckbox.checked = false;
                     postsFeedContainer.dispatchEvent(new Event('updateNeeded'));
                 } else {
                     return response.json().then(data => {

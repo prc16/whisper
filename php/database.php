@@ -272,19 +272,19 @@ function updateProfilePicture($conn, $userId, $profileFileId)
  *
  * @param mysqli $conn          The mysqli database connection object.
  * @param string $user_id       The ID of the user creating the post.
- * @param string $content       The content of the post.
+ * @param string $post_text       The post_text of the post.
  * @param string $media_file_id (Optional) The ID of the media file associated with the post.
  * @param string $media_file_ext (Optional) The extension of the media file.
  * @param string $expire_at     (Optional) The expiration date and time of the post.
  *
  * @return bool                 Returns true if the post is successfully created, false otherwise.
  */
-function createPost($conn, $user_id, $content, $media_file_id = null, $media_file_ext = null, $expire_at = null)
+function createPost($conn, $user_id, $anon_post, $post_text, $media_file_id = null, $media_file_ext = null, $expire_at = null)
 {
     $post_id = genUUID();
-    $query = "INSERT INTO posts (post_id, user_id, content, media_file_id, media_file_ext, expire_at) VALUES (?, ?, ?, ?, ?, ?)";
+    $query = "INSERT INTO posts (post_id, user_id, anon_post, post_text, media_file_id, media_file_ext, expire_at) VALUES (?, ?, ?, ?, ?, ?, ?)";
     $stmt = $conn->prepare($query);
-    $stmt->bind_param("ssssss", $post_id, $user_id, $content, $media_file_id, $media_file_ext, $expire_at);
+    $stmt->bind_param("ssissss", $post_id, $user_id, $anon_post, $post_text, $media_file_id, $media_file_ext, $expire_at);
     return $stmt->execute();
 }
 
@@ -295,7 +295,7 @@ function getPosts($conn, $limit = 10)
                 p.post_id, 
                 p.user_id, 
                 u.username AS username, 
-                p.content, 
+                p.post_text, 
                 p.vote_count, 
                 p.media_file_id, 
                 p.media_file_ext, 
@@ -321,13 +321,13 @@ function getPosts($conn, $limit = 10)
     return $posts;
 }
 
-function getPostsWithVotes($conn, $userId, $limit = 10)
+function getPostsWithVotes($conn, $userId, $limit = 50)
 {
     $sql = "SELECT 
                 p.post_id, 
-                p.user_id, 
                 u.username AS username, 
-                p.content, 
+                p.anon_post, 
+                p.post_text, 
                 p.vote_count, 
                 p.media_file_id, 
                 p.media_file_ext, 
@@ -360,13 +360,20 @@ function fetchPosts($result)
 {
     $posts = [];
     while ($row = $result->fetch_assoc()) {
-        $row['profile_file_path'] = PROFILES_DIRECTORY . $row['profile_file_id'] . '.jpg';
-        // Check if file exists and is a file
-        if (file_exists($_SERVER['DOCUMENT_ROOT'] . $row['profile_file_path']) && is_file($_SERVER['DOCUMENT_ROOT'] . $row['profile_file_path'])) {
-            // File exists and is a file
-        } else {
-            // Use default profile if file doesn't exist or is not a file
+
+        if ($row['anon_post']) {
+            $row['username'] = 'Anonymous';
+            $row['profile_file_id'] = null;
             $row['profile_file_path'] = DEFAULT_PROFILE;
+        } else {
+            $row['profile_file_path'] = PROFILES_DIRECTORY . $row['profile_file_id'] . '.jpg';
+            // Check if file exists and is a file
+            if (file_exists($_SERVER['DOCUMENT_ROOT'] . $row['profile_file_path']) && is_file($_SERVER['DOCUMENT_ROOT'] . $row['profile_file_path'])) {
+                // File exists and is a file
+            } else {
+                // Use default profile if file doesn't exist or is not a file
+                $row['profile_file_path'] = DEFAULT_PROFILE;
+            }
         }
 
         $row['post_file_path'] = POSTS_DIRECTORY . $row['media_file_id'] . '.' . $row['media_file_ext'];
