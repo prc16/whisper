@@ -17,7 +17,7 @@
                 <button id="createPostClearButton" class="btn hidden" title="Remove"><i class="fas fa-minus-circle"></i></button>
                 
                 <input type="checkbox" id="createPostAnonCheckbox" class="hidden" name="createPostAnonCheckbox">
-                <label for="createPostAnonCheckbox" class="btn btn2" title="Anonymous Post"><i class="far fa-user-shield"></i></label>
+                <label for="createPostAnonCheckbox" class="btn btn2" title="Anonymous Post"><i class="fas fa-user-shield"></i></label>
                 
             </div>
             <div>

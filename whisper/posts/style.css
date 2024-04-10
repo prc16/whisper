@@ -64,9 +64,9 @@
     display: none;
 }
 
-.displayPostContainer .btn {
+/* .displayPostContainer .btn {
     display: block;
-}
+} */
 
 #displayPostButtons {
     display: flex;

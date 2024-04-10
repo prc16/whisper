@@ -27,8 +27,12 @@
                     </div>
                     <div id="displayPostButtons">
                         <p class="voteCount"> Votes: ${post.vote_count}</p>
-                        <button class="vote-btn btn ${post.vote_type === 'upvote' ? '' : 'btn-alt'}" data-id="${post.post_id}" data-type="upvote">Upvote</button>
-                        <button class="vote-btn btn ${post.vote_type === 'downvote' ? '' : 'btn-alt'}" data-id="${post.post_id}" data-type="downvote">Downvote</button>
+                        
+                        <label for="upvote${post.post_id}" class="btn btn2 ${post.vote_type === 'upvote' ? 'btn-selected' : 'btn-alt'}" title="Upvote"><i class="fas fa-arrow-alt-up"></i></label>
+                        <button id="upvote${post.post_id}" class="vote-btn hidden" data-id="${post.post_id}" data-type="upvote"></button>
+                        
+                        <label for="downvote${post.post_id}" class="btn btn2 ${post.vote_type === 'downvote' ? 'btn-selected' : 'btn-alt'}" title="Downvote"><i class="fas fa-arrow-alt-down"></i></label>
+                        <button id="downvote${post.post_id}" class="vote-btn hidden" data-id="${post.post_id}" data-type="downvote"></button>
                     </div>
                 </div>
             </div>

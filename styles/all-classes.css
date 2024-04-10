@@ -140,6 +140,10 @@ h2 {
     text-align: center;
 }
 
+.btn-selected {
+    color: var(--whisper-selected);
+    transition: color 0.2s ease;
+}
 
 /* Initially using regular icons 
 a .far {
@@ -151,9 +155,9 @@ a.active .far {
     font-weight: bold;
 }
 
-input[type="checkbox"]:checked + label .far {
-    font-weight: bold;
+input[type="checkbox"]:checked + label .fas {
     color: var(--whisper-selected);
+    transition: color 0.2s ease;
 }
 
 .errorMessage {
