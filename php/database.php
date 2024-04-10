@@ -361,7 +361,8 @@ function fetchPosts($result)
     $posts = [];
     while ($row = $result->fetch_assoc()) {
 
-        if ($row['anon_post']) {
+        // Check if 'anon_post' key exists in the row
+        if (isset($row['anon_post']) && $row['anon_post']) {
             $row['username'] = 'Anonymous';
             $row['profile_file_id'] = null;
             $row['profile_file_path'] = DEFAULT_PROFILE;
