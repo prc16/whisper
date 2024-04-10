@@ -41,7 +41,7 @@ if(!$conn) {
 }
 $userId = $_SESSION['user_id'];
 $fileId = genUUID();
-$filePath = PROFILES_DIRECTORY . $fileId . '.jpg';
+$filePath = $_SERVER['DOCUMENT_ROOT'] . PROFILES_DIRECTORY . $fileId . '.jpg';
 
 // move the uploaded file to the uploads directory
 if (move_uploaded_file($file['tmp_name'], $filePath) === false) {
@@ -55,7 +55,7 @@ $conn->autocommit(false);
 try {
     if($oldfileId = getProfilePictureId($conn, $userId)) {
 
-        $oldfilePath = PROFILES_DIRECTORY . $oldfileId . '.jpg';
+        $oldfilePath = $_SERVER['DOCUMENT_ROOT'] . PROFILES_DIRECTORY . $oldfileId . '.jpg';
 
         if(!updateProfilePicture($conn, $userId, $fileId)) {
             throw new Exception("Failed to update profile picture: " . $conn->error);

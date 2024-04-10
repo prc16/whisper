@@ -15,7 +15,7 @@
     <div class="web-container">
         <!--------------- left sidebar --------------->
         <header class="left-sidebar">
-            <?php include_once $_SERVER['DOCUMENT_ROOT'] . '/sidebar-left/content.php'; ?>
+            <?php include_once $_SERVER['DOCUMENT_ROOT'] . '/whisper/sidebar-left/content.php'; ?>
         </header>
 
         <!--------------- main content--------------->
@@ -23,12 +23,12 @@
 
             <!--------------- middle feed --------------->
             <div class="middle-feed">
-                <?php include_once './content.php'; ?>
+                <?php include_once __DIR__ . '/content.php'; ?>
             </div>
 
             <!--------------- right sidebar --------------->
             <div class="right-sidebar">
-                <?php include_once './content-right.php'; ?>
+                <?php include_once __DIR__ . '/content-right.php'; ?>
             </div>
         </main>
     </div>

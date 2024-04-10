@@ -20,7 +20,7 @@
 
 /* Input styles */
 #updateUsernameForm input[type="text"] {
-    width: calc(100% - 20px); /* width minus padding */
+    width: 100%;
     padding: 10px;
     margin-bottom: 20px;
     border: 1px solid #ccc;

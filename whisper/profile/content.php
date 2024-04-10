@@ -10,8 +10,8 @@
     </div>
     <?php if ($loggedIn) : ?>
         <div id="profile-update-options">
-            <button class="btn" onclick="updateProfilePicture()">Update Picture</button>
-            <button class="btn" onclick="updateUsername()">Update Username</button>
+            <button class="btn" id="updateProfileButton">Update Picture</button>
+            <button class="btn" id="updateUsernameButton">Update Username</button>
         </div>
         <?php include_once $_SERVER['DOCUMENT_ROOT'] . '/whisper/update_profile/content.php'; ?>
         <?php include_once $_SERVER['DOCUMENT_ROOT'] . '/whisper/update_username/content.php'; ?>
@@ -19,6 +19,10 @@
 </div>
 <script>
     document.addEventListener('DOMContentLoaded', () => {
+
+        document.getElementById('updateProfileButton').addEventListener("click", updateProfilePicture);
+        document.getElementById('updateUsernameButton').addEventListener("click", updateUsername);
+
         function updateProfilePicture() {
             // Add functionality to update profile picture
             // window.location.href = '../update_profile/';

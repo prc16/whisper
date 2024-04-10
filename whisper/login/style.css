@@ -18,8 +18,7 @@
 }
 
 #login-form input[type="text"],
-#login-form input[type="password"],
-#login-form input[type="submit"] {
+#login-form input[type="password"] {
     width: 100%;
     padding: 10px;
     margin-bottom: 10px;
@@ -29,11 +28,5 @@
 }
 
 #login-form input[type="submit"] {
-    background-color: #007bff;
-    color: #fff;
-    cursor: pointer;
-}
-
-#login-form input[type="submit"]:hover {
-    background-color: #0056b3;
+    width: 100%;
 }

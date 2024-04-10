@@ -31,8 +31,7 @@
 }
 
 #signup-form input[type="text"],
-#signup-form input[type="password"],
-#signup-form input[type="submit"] {
+#signup-form input[type="password"] {
     width: 100%;
     padding: 10px;
     margin-bottom: 10px;
@@ -42,16 +41,5 @@
 }
 
 #signup-form input[type="submit"] {
-    background-color: #007bff;
-    color: #fff;
-    cursor: pointer;
-}
-
-#signup-form input[type="submit"]:hover {
-    background-color: #0056b3;
-}
-
-#signup-form .error {
-    color: red;
-    margin-bottom: 10px;
+    width: 100%;
 }

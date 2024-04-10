@@ -25,7 +25,7 @@ $content = trim($_POST['post_text']);
 if (isset($_FILES['media_file'])) {
 
     // Handle Media File Upload
-    $target_dir = POSTS_DIRECTORY; // Directory where media files will be saved
+    $target_dir = $_SERVER['DOCUMENT_ROOT'] . POSTS_DIRECTORY; // Directory where media files will be saved
 
     // Generate a unique filename using genUUID() function
     $media_file_id = genUUID();
