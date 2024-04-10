@@ -7,7 +7,7 @@
         <a href="#"><i class="far fa-user-friends"></i>Following</a>
     </nav>
     <div class="bottom-left">
-        <?php include_once "/whisper/bottom-left/content.php"; ?>
+        <?php include_once $_SERVER['DOCUMENT_ROOT'] . "/whisper/bottom-left/content.php"; ?>
     </div>
 </div>
 <script src="/scripts/activeNavLinks.js"></script>
