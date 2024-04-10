@@ -1,9 +1,9 @@
 <?php
 
-include_once '../php/all.php';
-include_once '../php/uuid.php';
-include_once '../php/errors.php';
-include_once '../database/config.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/php/all.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/php/uuid.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/php/errors.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/database/config.php';
 
 /**
  * Establishes a connection to the database.
@@ -218,7 +218,7 @@ function getProfilePicture($conn, $userId)
 {
     $pictureId = getProfilePictureId($conn, $userId);
     $picture = PROFILES_DIRECTORY . $pictureId . '.jpg';
-    if (!file_exists($picture)) {
+    if (!file_exists($_SERVER['DOCUMENT_ROOT'] . $picture)) {
         $picture = DEFAULT_PROFILE;
     }
     return $picture;
@@ -362,7 +362,7 @@ function fetchPosts($result)
     while ($row = $result->fetch_assoc()) {
         $row['profile_file_path'] = PROFILES_DIRECTORY . $row['profile_file_id'] . '.jpg';
         // Check if file exists and is a file
-        if (file_exists($row['profile_file_path']) && is_file($row['profile_file_path'])) {
+        if (file_exists($_SERVER['DOCUMENT_ROOT'] . $row['profile_file_path']) && is_file($_SERVER['DOCUMENT_ROOT'] . $row['profile_file_path'])) {
             // File exists and is a file
         } else {
             // Use default profile if file doesn't exist or is not a file
@@ -371,7 +371,7 @@ function fetchPosts($result)
 
         $row['post_file_path'] = POSTS_DIRECTORY . $row['media_file_id'] . '.' . $row['media_file_ext'];
         // Check if file exists and is a file
-        if (file_exists($row['post_file_path']) && is_file($row['post_file_path'])) {
+        if (file_exists($_SERVER['DOCUMENT_ROOT'] . $row['post_file_path']) && is_file($_SERVER['DOCUMENT_ROOT'] . $row['post_file_path'])) {
             // File exists and is a file
         } else {
             // Set post_file_path to empty if file doesn't exist or is not a file

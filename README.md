@@ -1,6 +1,6 @@
 <div align="center">
 
-[![Whisper](https://raw.githubusercontent.com/prc16/whisper/master/.github/whisper-logo.png)](#readme)
+[![Whisper](https://raw.githubusercontent.com/prc16/whisper/master/.github/whisper-logo2.png)](#readme)
 
 ### A Privacy-Centric Social Media Platform.  
 
@@ -31,22 +31,24 @@ Before getting started, ensure that you have the following prerequisites install
 XAMPP: [Download and install XAMPP](https://www.apachefriends.org/download.html)  
 
 ## Setup  
-Follow these steps to set up the Whisper project on your local machine:
+Follow these steps to set up the Whisper project on your local machine:  
   
-### Clone the Project:
-Open a terminal or command prompt and run the following command:
+### Clone the Project:  
+Make sure you have a clean web hosting root directory. if you are using xampp, make sure htdocs directory is empty.  
+Open a terminal or command prompt and clone this reposetory in your web hosting root:  
 
-    git clone https://github.com/prc16/whisper.git C:\xampp\htdocs\whisper
+    git clone https://github.com/prc16/whisper.git C:\xampp\htdocs
   
 ### Start XAMPP:
   Start the XAMPP control panel and ensure that the Apache and MySQL modules are running.  
+  Also make sure your apache mod_rewrite mode is enabled. In xampp it's enabled by default.  
   
 ### Database Configuration:  
 Open phpmyadmin in your browser (http://localhost/phpmyadmin).  
-Import database.sql file.
+Import database.sql file located in database directory.  
   
 ### Configuration File:  
-Update your database connection details, uploads directory, etc...  in the 'config.json' located in 'database' directory.  
+Update your database connection details, uploads directory, etc...  in the 'config.php' located in 'database' directory.  
   
 ### Access the Website:
 Open your web browser and navigate to http://localhost/whisper. You should see the Whisper website.

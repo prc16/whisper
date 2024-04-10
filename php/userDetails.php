@@ -1,11 +1,11 @@
 <?php
 
-include_once '../php/all.php';
-include_once '../php/database.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/php/all.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/php/database.php';
 
 $conn = getConnection();
 if(!$conn) {
-    header('Location: ../maintenance/');
+    header('Location: ' . $_SERVER['DOCUMENT_ROOT'] . '/whisper/maintenance/');
     exit;
 }
 

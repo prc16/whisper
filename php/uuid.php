@@ -1,5 +1,7 @@
 <?php
 
+include_once $_SERVER['DOCUMENT_ROOT'] . '/php/all.php';
+
 /**
  * Generates a Universally Unique Identifier (UUID) string.
  *

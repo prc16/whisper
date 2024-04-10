@@ -1,18 +1,20 @@
-<link rel="stylesheet" href="../home/style.css">
-<link rel="stylesheet" href="../login/style.css">
-<link rel="stylesheet" href="../signup/style.css">
-<link rel="stylesheet" href="../sidebar-left/style.css">
-<link rel="stylesheet" href="../bottom-left/style.css">
-<link rel="stylesheet" href="../sidebar-right/style.css">
-<link rel="stylesheet" href="../posts/style.css">
-<link rel="stylesheet" href="../profile/style.css">
-<link rel="stylesheet" href="../styles/all-classes.css">
-<link rel="stylesheet" href="../create_post/style.css">
-<link rel="stylesheet" href="../update_profile/style.css">
-<link rel="stylesheet" href="../update_username/style.css">
-<link rel="stylesheet" href="../topbar-middle/style.css">
 
-<link rel="stylesheet" href="../dependencies/fontawesome/css/all.css">
-<link href="../dependencies/cropperjs/cropper.min.css" rel="stylesheet">
+<link rel="stylesheet" href="/whisper/home/style.css">
+<link rel="stylesheet" href="/whisper/login/style.css">
+<link rel="stylesheet" href="/whisper/signup/style.css">
+<link rel="stylesheet" href="/whisper/sidebar-left/style.css">
+<link rel="stylesheet" href="/whisper/bottom-left/style.css">
+<link rel="stylesheet" href="/whisper/sidebar-right/style.css">
+<link rel="stylesheet" href="/whisper/posts/style.css">
+<link rel="stylesheet" href="/whisper/profile/style.css">
+<link rel="stylesheet" href="/whisper/create_post/style.css">
+<link rel="stylesheet" href="/whisper/update_profile/style.css">
+<link rel="stylesheet" href="/whisper/update_username/style.css">
+<link rel="stylesheet" href="/whisper/topbar-middle/style.css">
 
-<link rel="icon" type="image/svg+xml" href="../images/whisper-logo.svg">
+<link rel="stylesheet" href="/styles/all-classes.css">
+
+<link rel="stylesheet" href="/dependencies/fontawesome/css/all.css">
+<link rel="stylesheet" href="/dependencies/cropperjs/cropper.min.css">
+
+<link rel="icon" type="image/svg+xml" href="/images/whisper-logo.svg">

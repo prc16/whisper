@@ -1,6 +1,6 @@
 <?php
 
-include_once '../php/all.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/php/all.php';
 
 function errorResponse($code, $errorMessage)
 {

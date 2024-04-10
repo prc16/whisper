@@ -1,0 +1,32 @@
+#login-container {
+    display: flex;
+    flex-direction: column;
+    align-self: flex-start;
+    width: 100%;
+}
+
+#login-form {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    padding: 24px 24px;
+}
+
+#login-form h2 {
+    margin-top: 24px;
+    margin-bottom:  14px;
+}
+
+#login-form input[type="text"],
+#login-form input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+#login-form input[type="submit"] {
+    width: 100%;
+}

@@ -1,0 +1,34 @@
+#updateUsernameContainer {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+/* Form styles */
+#updateUsernameForm {
+    width: 100%;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* Label styles */
+#updateUsernameForm label {
+    display: block;
+    margin-bottom: 10px;
+}
+
+/* Input styles */
+#updateUsernameForm input[type="text"] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+/* Button styles */
+#updateUsernameForm .btn {
+    width: 100%;
+}
+
