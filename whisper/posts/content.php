@@ -20,7 +20,7 @@
                     <img src="${post.profile_file_path}" class="profile-picture" alt="">
                 </div>
                 <div id="displayPostContainerPart2">
-                    <h2>${post.username}</h2>
+                    <a href="/u/${post.username}" class="username_link"><h2>${post.username}</h2></a>
                     <p>${post.content}</p>
                     <div id="displayPostMediaPreview">
                     <img src="${post.post_file_path}" alt="" class="image-preview">

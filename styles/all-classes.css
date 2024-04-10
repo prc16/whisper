@@ -157,3 +157,12 @@ a.active .far {
 .hidden {
     display: none !important;
 }
+
+.username_link {
+    text-decoration: none;
+    color: black;
+}
+
+.username_link:hover {
+    text-decoration: underline;
+}
