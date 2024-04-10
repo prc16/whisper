@@ -15,7 +15,10 @@
                 <label for="createPostMediaUpload" class="btn btn2" title="Media"><i class="fas fa-paperclip"></i></label>
                 <input type="file" id="createPostMediaUpload" accept="image/jpeg, image/png, image/gif, image/webp">
                 <button id="createPostClearButton" class="btn hidden" title="Remove"><i class="fas fa-minus-circle"></i></button>
-                <button id="createPostAnonButton" class="btn" title="Anonymous Post"><i class="far fa-user-shield"></i></button>
+                
+                <input type="checkbox" id="createPostAnonCheckbox" class="hidden" name="createPostAnonCheckbox">
+                <label for="createPostAnonCheckbox" class="btn btn2" title="Anonymous Post"><i class="far fa-user-shield"></i></label>
+                
             </div>
             <div>
                 <button id="createPostPostButton" class="btn">Post</button>
@@ -100,6 +103,7 @@
                     handleClearButtonClick(); // Clear inputs and hide button
                     createPostTextArea.value = "";
                     createPostTextArea.style.height = "auto";
+                    document.getElementById('createPostAnonCheckbox').checked = false;
                     postsFeedContainer.dispatchEvent(new Event('updateNeeded'));
                 } else {
                     return response.json().then(data => {

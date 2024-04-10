@@ -37,6 +37,7 @@ CREATE TABLE `posts` (
     id BIGINT UNSIGNED AUTO_INCREMENT,
     post_id CHAR(16) NOT NULL,
     user_id CHAR(16) NOT NULL,
+    is_anonymous BOOLEAN NOT NULL DEFAULT FALSE,
     content TEXT NOT NULL,
     media_file_id CHAR(16),
     media_file_ext VARCHAR(5),

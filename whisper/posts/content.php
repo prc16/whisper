@@ -17,7 +17,7 @@
                  postElement.innerHTML = `
             <div class="displayPostContainer">
                 <div id="displayPostContainerPart1">
-                    <img src="${post.profile_file_path}" class="profile-picture" alt="">
+                    <a href="/u/${post.username}" class="profile_link"><img src="${post.profile_file_path}" class="profile-picture" alt=""></a>
                 </div>
                 <div id="displayPostContainerPart2">
                     <a href="/u/${post.username}" class="username_link"><h2>${post.username}</h2></a>

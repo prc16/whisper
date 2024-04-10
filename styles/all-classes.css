@@ -11,6 +11,7 @@ body {
     --whisper-font-size: 16px;
     --whisper-font-size-large: 20px;
     --whisper-background: #FFF;
+    --whisper-selected: gold;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background-color: var(--whisper-background);
     overflow-y: scroll;
@@ -133,6 +134,7 @@ h2 {
 
 .btn2 {
     height: 36px;
+    width: 48px;
     display: flex;
     align-items: center;
     text-align: center;
@@ -147,6 +149,11 @@ a .far {
 /* When the link is active, switch to solid icons */
 a.active .far {
     font-weight: bold;
+}
+
+input[type="checkbox"]:checked + label .far {
+    font-weight: bold;
+    color: var(--whisper-selected);
 }
 
 .errorMessage {
