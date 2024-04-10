@@ -2,7 +2,7 @@
 <div id="signup-container">
     <form id="signup-form">
         <div id="signupFormErrorMessage" class="errorMessage"></div>
-        <input type="text" id="signup_username" name="signup_username" placeholder="Username" required>
+        <input type="text" id="signup_username" name="signup_username" placeholder="Username" autocomplete="username" required>
         <input type="password" id="signup_password" name="signup_password" placeholder="Password" autocomplete="new-password" required>
         <input type="password" id="confirm-password" name="confirm-password" placeholder="Confirm Password" autocomplete="new-password" required>
         <input type="submit" value="Sign Up" class="btn">

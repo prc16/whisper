@@ -2,7 +2,7 @@
 <div id="login-container">
     <form id="login-form" method="POST">
         <div id="loginFormErrorMessage" class="errorMessage"></div>
-        <input type="text" id="login_username" name="login_username" placeholder="Username" required>
+        <input type="text" id="login_username" name="login_username" placeholder="Username" autocomplete="username" required>
         <input type="password" id="login_password" name="login_password" placeholder="Password" autocomplete="current-password" required>
         <input type="submit" value="Log In" class="btn">
     </form>
