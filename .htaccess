@@ -1,0 +1,7 @@
+RewriteEngine On
+
+RewriteRule ^$ /home [L,R=301]
+RewriteRule ^home$ /whisper/home/index.php [L]
+RewriteRule ^login$ /whisper/login/index.php [L]
+RewriteRule ^signup$ /whisper/signup/index.php [L]
+RewriteRule ^profile$ /whisper/profile/index.php [L]

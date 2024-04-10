@@ -1,17 +1,11 @@
 <?php
 
-include_once '../php/all.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/php/all.php';
 
-$jsonData = file_get_contents('../database/config.json');
-
-$config = json_decode($jsonData, true);
-
-// Define variables based on JSON data
-define("DATABASE_HOSTNAME", $config['database_hostname']);
-define("DATABASE_USERNAME", $config['database_username']);
-define("DATABASE_PASSWORD", $config['database_password']);
-define("DATABASE_NAME", $config['database_name']);
-
-define("PROFILES_DIRECTORY", $config['profiles_directory']);
-define("POSTS_DIRECTORY", $config['posts_directory']);
-define("DEFAULT_PROFILE", $config['default_profile']);
+define('DATABASE_HOSTNAME', 'localhost');
+define('DATABASE_USERNAME', 'root');
+define('DATABASE_PASSWORD', '');
+define('DATABASE_NAME', 'whisper_db');
+define('PROFILES_DIRECTORY', '/uploads/profile_images/');
+define('POSTS_DIRECTORY', '/uploads/post_media/');
+define('DEFAULT_PROFILE', '/images/default_profile.jpg');

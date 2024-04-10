@@ -1,9 +1,9 @@
 <?php
 
-include_once '../php/all.php';
-include_once '../php/uuid.php';
-include_once '../php/errors.php';
-include_once '../database/config.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/php/all.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/php/uuid.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/php/errors.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/database/config.php';
 
 /**
  * Establishes a connection to the database.
