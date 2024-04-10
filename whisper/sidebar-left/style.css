@@ -37,7 +37,7 @@
     border-radius: 30px;
 }
 
-nav a.active {
+.imp-links a.active {
     color: var(--whisper-color);
 }
 

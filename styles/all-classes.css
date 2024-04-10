@@ -178,3 +178,7 @@ input[type="checkbox"]:checked + label .fas {
 .username_link:hover {
     text-decoration: underline;
 }
+
+/* .username_link.active {
+    color: black;
+} */
