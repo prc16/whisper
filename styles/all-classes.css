@@ -106,6 +106,7 @@ h2 {
 }
 
 .btn {
+    font-weight: bold;
     height: 36px;
     display: flex;
     align-items: center;

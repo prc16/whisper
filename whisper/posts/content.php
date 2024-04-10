@@ -20,18 +20,20 @@
                     <a href="/u/${post.username}" class="profile_link"><img src="${post.profile_file_path}" class="profile-picture" alt=""></a>
                 </div>
                 <div id="displayPostContainerPart2">
-                    <a href="/u/${post.username}" class="username_link"><h2>${post.username}</h2></a>
+                    <a href="/u/${post.username}" class="username_link"><h2 class="profile-username">${post.username}</h2></a>
                     <p>${post.post_text}</p>
                     <div id="displayPostMediaPreview">
                     <img src="${post.post_file_path}" alt="" class="image-preview">
                     </div>
                     <div id="displayPostButtons">
-                        <p class="voteCount"> Votes: ${post.vote_count}</p>
                         
-                        <label for="upvote${post.post_id}" class="btn btn2 ${post.vote_type === 'upvote' ? 'btn-selected' : 'btn-alt'}" title="Upvote"><i class="fas fa-arrow-alt-up"></i></label>
+                        <div class="voteCount">Votes: ${post.vote_count}</div>
+                    
+                        <label for="upvote${post.post_id}" class="btn btn2 ${post.vote_type === 'upvote' ? 'btn-selected' : ''}" title="Upvote"><i class="fas fa-arrow-alt-up"></i></label>
                         <button id="upvote${post.post_id}" class="vote-btn hidden" data-id="${post.post_id}" data-type="upvote"></button>
+        
                         
-                        <label for="downvote${post.post_id}" class="btn btn2 ${post.vote_type === 'downvote' ? 'btn-selected' : 'btn-alt'}" title="Downvote"><i class="fas fa-arrow-alt-down"></i></label>
+                        <label for="downvote${post.post_id}" class="btn btn2 ${post.vote_type === 'downvote' ? 'btn-selected' : ''}" title="Downvote"><i class="fas fa-arrow-alt-down"></i></label>
                         <button id="downvote${post.post_id}" class="vote-btn hidden" data-id="${post.post_id}" data-type="downvote"></button>
                     </div>
                 </div>

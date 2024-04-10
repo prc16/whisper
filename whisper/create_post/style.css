@@ -32,6 +32,7 @@
     border: none;
     outline: none;
     resize: none;
+    margin-bottom: 4px;
 }
 
 #createPostTextArea::selection {
