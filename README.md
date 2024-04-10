@@ -2,7 +2,8 @@
 
 [![Whisper](https://raw.githubusercontent.com/prc16/whisper/master/.github/whisper-logo.png)](#readme)
 
-### Whisper: A Privacy-Centric Social Media Platform.  
+### Whisper
+### A Privacy-Centric Social Media Platform.  
 
 Whisper is a social media website that places user privacy at its core. In an era where data security and confidentiality are paramount concerns, Whisper provides a refreshing approach to online social interaction.  
   
