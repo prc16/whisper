@@ -12,7 +12,7 @@ body {
     --whisper-font-size-large: 20px;
     --whisper-background: #FFF;
     --whisper-selected: gold;
-    --whisper-overlay: #f7f7f7
+    --whisper-overlay: #f7f7f7;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background-color: var(--whisper-background);
     overflow-y: scroll;

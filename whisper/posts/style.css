@@ -14,7 +14,7 @@
 
 
 .displayPostContainer:hover {
-    background-color: #f7f7f7;
+    background-color: var(--whisper-overlay);
     transition: background-color 200ms ease-in-out;
 }
 
