@@ -77,12 +77,13 @@
             const formData = new FormData();
             formData.append('profile_picture', blob, 'profile_picture.jpg');
 
-            fetch('/whisper/update_profile/server.php', {
+            fetch('/server/update/profile', {
                     method: 'POST',
                     body: formData
                 })
                 .then(response => {
                     if (response.ok) {
+                        // Redirect to the Profile page
                         window.location.href = '/profile';
                     } else {
                         // Parse JSON response

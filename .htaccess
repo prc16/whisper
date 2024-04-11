@@ -8,16 +8,23 @@ RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^home$ /whisper/home/index.php [L]
 RewriteRule ^login$ /whisper/login/index.php [L]
 RewriteRule ^signup$ /whisper/signup/index.php [L]
-RewriteRule ^logout$ /whisper/logout/index.php [L]
-RewriteRule ^profile$ /server/profile.php [L]
 RewriteRule ^maintenance$ /whisper//maintenance/ [L]
 
-RewriteRule ^server/vote$ /server/vote.php [L]
+# Redirect servers
+RewriteRule ^profile$ /server/profile.php [L]
+RewriteRule ^logout$ /server/logout.php [L]
 
-# Rewrite rule for posts server
+# Rewrite rule for POST servers
+RewriteRule ^server/vote$ /server/vote.php [L]
+RewriteRule ^server/login$ /server/login.php [L]
+RewriteRule ^server/signup$ /server/signup.php [L]
+RewriteRule ^server/create/post$ /server/create_post.php [L]
+RewriteRule ^server/update/username$ /server/update_username.php [L]
+RewriteRule ^server/update/profile$ /server/update_profile.php [L]
+
+# posts GET server
 RewriteRule ^server/posts/?$ /server/posts.php [L]
 RewriteRule ^server/posts/([^/]+)$ /server/posts.php?username=$1 [L]
 
-
-# Rewrite rule for user profiles
+# u GET server
 RewriteRule ^u/([^/]+)/?$ /whisper/user/index.php?username=$1 [L,QSA]

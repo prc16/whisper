@@ -96,7 +96,7 @@
         formData.append("media_file", file);
         formData.append("anon_post", createPostAnonCheckbox.checked);
 
-        fetch('/whisper/create_post/server.php', {
+        fetch('/server/create/post', {
             method: 'POST',
             body: formData
         })

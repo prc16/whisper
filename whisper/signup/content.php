@@ -27,7 +27,7 @@
             formData.append("signup_password", password);
 
             // Send the form data to the server using Fetch API
-            fetch('/whisper/signup/server.php', {
+            fetch('/server/signup', {
                     method: 'POST',
                     body: formData
                 })

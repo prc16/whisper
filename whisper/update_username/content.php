@@ -23,12 +23,13 @@
             const formData = new FormData(updateUsernameForm);
 
             // Send the data to the server
-            fetch('/whisper/update_username/server.php', {
+            fetch('/server/update/username', {
                     method: 'POST', // Change method as required
                     body: formData
                 })
                 .then(response => {
                     if (response.ok) {
+                        // Redirect to the Profile page
                         window.location.href = '/profile';
                     } else {
                         // Parse JSON response

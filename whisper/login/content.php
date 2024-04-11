@@ -20,7 +20,7 @@
             formData.append("login_password", password);
 
             // Send the form data to the server using Fetch API
-            fetch('/whisper/login/server.php', {
+            fetch('/server/login', {
                     method: 'POST',
                     body: formData
                 })
