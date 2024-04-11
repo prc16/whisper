@@ -2,15 +2,23 @@
 <div id="postsFeedContainer"></div>
 <script src="/whisper/posts/posts.js"></script>
 <script>
-    document.addEventListener('DOMContentLoaded', () => {
-        // Fetch posts initially
+    // Function to handle the 'updateNeeded' event
+    function handleUpdateEvent() {
         fetchPosts();
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+
         // Add event listener for 'update' event on displayPosts div
-        document.getElementById('postsFeedContainer').addEventListener("updateNeeded", handleUpdateEvent);
+        postsFeedContainer.addEventListener("updateNeeded", handleUpdateEvent);
+        
+        // Fetch posts initially
+        handleUpdateEvent();
+
         // Event listener for voting
         document.addEventListener('click', vote);
 
         // Fetch posts every 5 seconds
-        // setInterval(fetchPosts, 5000);
+        // setInterval(handleUpdateEvent, 5000);
     });
 </script>

@@ -1,6 +1,7 @@
+const postsFeedContainer = document.getElementById('postsFeedContainer');
+
 // Function to display posts
 function displayPosts(posts) {
-    const postsFeedContainer = document.getElementById('postsFeedContainer');
     if (!postsFeedContainer) {
         console.error("Posts container not found");
         return;
@@ -58,7 +59,7 @@ function vote(event) {
         .then(response => {
             if (response.ok) {
                 // Successful vote
-                fetchPosts();
+                postsFeedContainer.dispatchEvent(new Event('updateNeeded'));
             } else {
                 // Parse JSON response
                 return response.json().then(data => {
@@ -74,8 +75,8 @@ function vote(event) {
     }
 }
 
-function fetchPosts() {
-    fetch('/server/posts')
+function fetchPosts(username = '') {
+    fetch('/server/posts/' + username)
         .then(response => {
             if (!response.ok) {
                 throw new Error('Network response was not ok');
@@ -88,9 +89,4 @@ function fetchPosts() {
         .catch(error => {
             console.error('Fetch error:', error);
         });
-}
-
-// Function to handle the 'updateNeeded' event
-function handleUpdateEvent() {
-    fetchPosts();
 }
