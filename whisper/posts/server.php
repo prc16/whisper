@@ -4,7 +4,7 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/php/all.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/php/database.php';
 
 $conn = getConnection();
-if(!$conn) {
+if (!$conn) {
     serverMaintenanceResponse();
     exit;
 }
@@ -16,34 +16,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // Validate session and action
     if (!isset($_SESSION['user_id'])) {
-        http_response_code(401); // Unauthorized
         $conn->close();
-        exit();
+        errorResponse(401, 'User not logged in.');
+        exit;
     }
 
     $userId = $_SESSION['user_id'];
 
-    // Disable autocommit to start a new transaction
-    $conn->autocommit(false);
+    // Validate form data
+    $action = $_POST['action'] ?? null;
+    $postId = $_POST['post_id'] ?? null;
+    if (!$action || !in_array($action, ['upvote', 'downvote']) || !$postId || strlen($postId) !== 16) {
+        $conn->close();
+        errorResponse(400, 'Invalid action or post ID provided.');
+        exit;
+    }
 
-    try {
-        // Validate form data
-        $action = $_POST['action'] ?? null;
-        $postId = $_POST['post_id'] ?? null;
-        if (!$action || !in_array($action, ['upvote', 'downvote']) || !$postId || strlen($postId) !== 16) {
-            throw new InvalidArgumentException("Invalid action or post ID provided.");
-        }
-
-        handleVote($conn, $userId, $postId, $action);
-
-        // Commit the transaction if no exceptions occur
-        $conn->commit();
-    } catch (Exception $e) {
-        $conn->rollback();
-        handleException($e);
-    } finally {
-        // Re-enable autocommit
-        $conn->autocommit(true);
+    if(!handleVote($conn, $userId, $postId, $action)) {
+        $conn->close();
+        errorResponse(500, 'Failed to handle vote request');
+        exit;
     }
 }
 

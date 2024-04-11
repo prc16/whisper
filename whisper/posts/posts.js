@@ -38,7 +38,6 @@ function displayPosts(posts) {
     });
 }
 
-
 // Function to handle voting
 function vote(event) {
     const {
@@ -76,8 +75,6 @@ function vote(event) {
     }
 }
 
-
-
 function fetchPosts() {
     fetch('/whisper/posts/server.php')
         .then(response => {
@@ -93,11 +90,6 @@ function fetchPosts() {
             console.error('Fetch error:', error);
         });
 }
-
-
-// Fetch posts every 5 seconds
-// setInterval(fetchPosts, 5000);
-
 
 // Function to handle the 'updateNeeded' event
 function handleUpdateEvent() {
