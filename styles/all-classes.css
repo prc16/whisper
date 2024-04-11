@@ -126,7 +126,6 @@ h2 {
 
 .btn-selected {
     color: var(--whisper-selected);
-    transition: color 0.2s ease;
 }
 
 /* Initially using regular icons 
@@ -141,7 +140,6 @@ a.active .far {
 
 input[type="checkbox"]:checked + label .fas {
     color: var(--whisper-selected);
-    transition: color 0.2s ease;
 }
 
 .errorMessage {

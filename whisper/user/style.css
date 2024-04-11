@@ -3,7 +3,8 @@
     flex-direction: column;
     align-items: center;
     width: 100%;
-    margin-bottom: 36px;
+    padding-bottom: 36px;
+    border-bottom: 1px solid var(--whisper-border);
 }
 
 #profile-container-large {
