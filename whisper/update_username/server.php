@@ -37,6 +37,11 @@ if(!$conn) {
 $userId = $_SESSION['user_id'];
 $username = $_POST['newUsername'];
 
+// Check if username is not set to Anonymous
+if (strcasecmp($username, 'Anonymous') === 0) {
+    $conn->close();
+    errorResponse(400, 'Username "Anonymous" not allowed.');
+}
 
 // Check if username exists
 if (usernameExists($conn, $username)) {

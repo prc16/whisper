@@ -33,6 +33,12 @@ if (!isset($_POST['signup_password']) || empty($_POST['signup_password'])) {
 $username = htmlspecialchars($_POST["signup_username"], ENT_QUOTES, 'UTF-8');
 $password = $_POST["signup_password"];
 
+// Check if username is not set to Anonymous
+if (strcasecmp($username, 'Anonymous') === 0) {
+    $conn->close();
+    errorResponse(400, 'Username "Anonymous" not allowed.');
+}
+
 // Validate username format
 if (!preg_match('/^[a-zA-Z0-9_]+$/', $username)) {
     errorResponse(400, 'Invalid username. Username can only contain letters, numbers, and underscores.');
