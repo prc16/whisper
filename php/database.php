@@ -408,7 +408,8 @@ function getUserPosts($conn, $userId, $limit = 50)
             LEFT JOIN 
                 profile_pictures pp ON p.user_id = pp.user_id 
             WHERE 
-                p.user_id = ?
+                p.user_id = ? AND 
+                p.anon_post = 0 
             ORDER BY 
                 p.id DESC 
             LIMIT ?";
@@ -480,7 +481,8 @@ function getUserPostsWithVotes($conn, $voterUserId, $userId, $limit = 50)
             LEFT JOIN 
                 votes v ON p.post_id = v.post_id AND v.user_id = ? 
             WHERE 
-                p.user_id = ? 
+                p.user_id = ? AND 
+                p.anon_post = 0 
             ORDER BY 
                 p.id DESC 
             LIMIT ?";
