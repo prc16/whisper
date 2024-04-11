@@ -362,6 +362,7 @@ function getPosts($conn, $limit = 50)
                 p.post_id, 
                 p.user_id, 
                 u.username AS username, 
+                p.anon_post, 
                 p.post_text, 
                 p.vote_count, 
                 p.media_file_id, 
@@ -388,7 +389,42 @@ function getPosts($conn, $limit = 50)
     return $posts;
 }
 
-function getPostsWithVotes($conn, $userId, $limit = 50)
+function getUserPosts($conn, $userId, $limit = 50)
+{
+    $sql = "SELECT 
+                p.post_id, 
+                p.user_id, 
+                u.username AS username, 
+                p.anon_post, 
+                p.post_text, 
+                p.vote_count, 
+                p.media_file_id, 
+                p.media_file_ext, 
+                pp.profile_file_id AS profile_file_id 
+            FROM 
+                posts p 
+            LEFT JOIN 
+                users u ON p.user_id = u.user_id 
+            LEFT JOIN 
+                profile_pictures pp ON p.user_id = pp.user_id 
+            WHERE 
+                p.user_id = ?
+            ORDER BY 
+                p.id DESC 
+            LIMIT ?";
+
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("si", $userId, $limit);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    $posts = fetchPosts($result);
+
+    $stmt->close();
+    return $posts;
+}
+
+function getPostsWithVotes($conn, $voterUserId, $limit = 50)
 {
     $sql = "SELECT 
                 p.post_id, 
@@ -413,7 +449,44 @@ function getPostsWithVotes($conn, $userId, $limit = 50)
             LIMIT ?";
 
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param("si", $userId, $limit);
+    $stmt->bind_param("si", $voterUserId, $limit);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    $posts = fetchPosts($result);
+
+    $stmt->close();
+    return $posts;
+}
+
+function getUserPostsWithVotes($conn, $voterUserId, $userId, $limit = 50)
+{
+    $sql = "SELECT 
+                p.post_id, 
+                u.username AS username, 
+                p.anon_post, 
+                p.post_text, 
+                p.vote_count, 
+                p.media_file_id, 
+                p.media_file_ext, 
+                pp.profile_file_id AS profile_file_id, 
+                v.vote_type AS vote_type
+            FROM 
+                posts p 
+            LEFT JOIN 
+                users u ON p.user_id = u.user_id 
+            LEFT JOIN 
+                profile_pictures pp ON p.user_id = pp.user_id 
+            LEFT JOIN 
+                votes v ON p.post_id = v.post_id AND v.user_id = ? 
+            WHERE 
+                p.user_id = ? 
+            ORDER BY 
+                p.id DESC 
+            LIMIT ?";
+
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("ssi", $voterUserId, $userId, $limit);
     $stmt->execute();
     $result = $stmt->get_result();
 
@@ -429,7 +502,7 @@ function fetchPosts($result)
     while ($row = $result->fetch_assoc()) {
 
         // Check if 'anon_post' key exists in the row
-        if (isset($row['anon_post']) && $row['anon_post']) {
+        if ($row['anon_post']) {
             $row['username'] = 'Anonymous';
             $row['profile_file_id'] = null;
             $row['profile_file_path'] = DEFAULT_PROFILE;

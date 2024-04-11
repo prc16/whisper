@@ -11,10 +11,10 @@ if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
 
 session_start();
 
-$userId = $_SESSION['user_id'] ?? null;
-// $username = $_POST['username'] ?? null;
-// $postId = $_POST['post_id'] ?? null;
+$voterUserId = $_SESSION['user_id'] ?? null;
+$reqUsername = $_GET['username'] ?? null;
 
+// Establish database connection
 $conn = getConnection();
 if (!$conn) {
     serverMaintenanceResponse();
@@ -24,9 +24,19 @@ if (!$conn) {
 // Set character encoding to UTF-8
 header('Content-Type: application/json; charset=utf-8');
 
-// Return posts as JSON
-if (isset($_SESSION['user_id'])) {
-    echo json_encode(getPostsWithVotes($conn, $_SESSION['user_id']));
+// Determine the user ID
+$reqUserId = null;
+if ($reqUsername) {
+    $reqUserId = getUserId($conn, $reqUsername);
+}
+
+// Fetch posts based on user and voter
+if ($reqUserId !== null && $voterUserId !== null) {
+    echo json_encode(getUserPostsWithVotes($conn, $voterUserId, $reqUserId));
+} elseif ($reqUserId !== null) {
+    echo json_encode(getUserPosts($conn, $reqUserId));
+} elseif ($voterUserId !== null) {
+    echo json_encode(getPostsWithVotes($conn, $voterUserId));
 } else {
     echo json_encode(getPosts($conn));
 }
