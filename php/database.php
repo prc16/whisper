@@ -533,6 +533,75 @@ function fetchPosts($result)
     return $posts;
 }
 
+function fetchRows($result)
+{
+    $rows = [];
+    while ($row = $result->fetch_assoc()) {
+        $rows[] = $row;
+    }
+    return $rows;
+}
+
+function getFollowees($conn, $userId, $limit = 50)
+{
+    $sql = "SELECT 
+                f.followee_id, 
+                u.username AS username, 
+                pp.profile_file_id AS profile_file_id 
+            FROM 
+                followers f 
+            LEFT JOIN 
+                users u ON f.followee_id = u.user_id 
+            LEFT JOIN 
+                profile_pictures pp ON f.followee_id = pp.user_id 
+            WHERE 
+                f.follower_id = ? 
+            ORDER BY 
+                f.id DESC 
+            LIMIT ?";
+
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("si", $userId, $limit);
+    $stmt->execute();
+    $stmt->execute(); 
+    $result = $stmt->get_result();
+
+    $followees = fetchRows($result);
+
+    $stmt->close();
+    return $followees;
+}
+
+function getFollowers($conn, $userId, $limit = 50)
+{
+    $sql = "SELECT 
+                f.follower_id, 
+                u.username AS username, 
+                pp.profile_file_id AS profile_file_id 
+            FROM 
+                followers f 
+            LEFT JOIN 
+                users u ON f.follower_id = u.user_id 
+            LEFT JOIN 
+                profile_pictures pp ON f.follower_id = pp.user_id 
+            WHERE 
+                f.followee_id = ? 
+            ORDER BY 
+                f.id DESC 
+            LIMIT ?";
+
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("si", $userId, $limit);
+    $stmt->execute();
+    $stmt->execute(); 
+    $result = $stmt->get_result();
+
+    $followers = fetchRows($result);
+
+    $stmt->close();
+    return $followers;
+}
+
 
 /**
  * Updates the vote count of a post in the database.
