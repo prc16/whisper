@@ -7,6 +7,9 @@ RewriteRule ^signup$ /whisper/signup/index.php [L]
 RewriteRule ^logout$ /whisper/logout/index.php [L]
 RewriteRule ^profile$ /whisper/profile/index.php [L]
 
+RewriteRule ^server/vote$ /server/vote.php [L]
+RewriteRule ^server/posts$ /server/posts.php [L]
+
 # Rewrite rule for user profiles
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
