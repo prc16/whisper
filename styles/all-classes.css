@@ -12,6 +12,7 @@ body {
     --whisper-font-size-large: 20px;
     --whisper-background: #FFF;
     --whisper-selected: gold;
+    --whisper-overlay: #f7f7f7
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background-color: var(--whisper-background);
     overflow-y: scroll;
@@ -29,8 +30,7 @@ h2 {
     align-items: flex-start;
     max-width: 1326px !important;
     width: 1326px !important;
-    margin-left: auto;
-    margin-right: auto;
+    margin: 0 auto;
 }
 
 .left-sidebar {
@@ -38,7 +38,7 @@ h2 {
     max-width: 300px !important;
     width: 300px !important;
     top: 0px;
-    height: 100svh;
+    height: 100vh;
     position: sticky;
     display: flex;
     flex-direction: column;
@@ -86,23 +86,6 @@ h2 {
 .profile-username {
     font-size: var(--whisper-font-size);
     font-weight: bold;
-}
-
-.login-btn,
-.logout-btn,
-.signup-btn {
-    text-decoration: none;
-    font-size: 16px;
-    color: #fff;
-    padding: 10px 15px;
-    border-radius: 5px;
-    background-color: var(--whisper-color);
-}
-
-.login-btn:hover,
-.logout-btn:hover,
-.signup-btn:hover {
-    background-color: var(--whisper-color-alt);
 }
 
 .btn {
