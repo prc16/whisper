@@ -1,14 +1,17 @@
 RewriteEngine On
 
+# Redirect to home page
 RewriteRule ^$ /home [L,R=301]
 
+# Handle static files and directories
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 
+# Rewrite rules for specific pages
 RewriteRule ^home$ /whisper/home/index.php [L]
 RewriteRule ^login$ /whisper/login/index.php [L]
 RewriteRule ^signup$ /whisper/signup/index.php [L]
-RewriteRule ^maintenance$ /whisper//maintenance/ [L]
+RewriteRule ^maintenance$ /whisper/maintenance/ [R=301,L]
 
 # Redirect servers
 RewriteRule ^profile$ /server/profile.php [L]
@@ -26,5 +29,5 @@ RewriteRule ^server/update/profile$ /server/update_profile.php [L]
 RewriteRule ^server/posts/?$ /server/posts.php [L]
 RewriteRule ^server/posts/([^/]+)$ /server/posts.php?username=$1 [L]
 
-# u GET server
+# user GET server
 RewriteRule ^u/([^/]+)/?$ /whisper/user/index.php?username=$1 [L,QSA]
