@@ -1,13 +1,23 @@
 RewriteEngine On
 
 RewriteRule ^$ /home [L,R=301]
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+
 RewriteRule ^home$ /whisper/home/index.php [L]
 RewriteRule ^login$ /whisper/login/index.php [L]
 RewriteRule ^signup$ /whisper/signup/index.php [L]
 RewriteRule ^logout$ /whisper/logout/index.php [L]
-RewriteRule ^profile$ /whisper/profile/index.php [L]
+RewriteRule ^profile$ /server/profile.php [L]
+RewriteRule ^maintenance$ /whisper//maintenance/ [L]
+
+RewriteRule ^server/vote$ /server/vote.php [L]
+
+# Rewrite rule for posts server
+RewriteRule ^server/posts/?$ /server/posts.php [L]
+RewriteRule ^server/posts/([^/]+)$ /server/posts.php?username=$1 [L]
+
 
 # Rewrite rule for user profiles
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^u/([^/]+)/?$ /whisper/user/index.php?username=$1 [L,QSA]

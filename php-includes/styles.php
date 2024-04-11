@@ -6,7 +6,7 @@
 <link rel="stylesheet" href="/whisper/bottom-left/style.css">
 <link rel="stylesheet" href="/whisper/sidebar-right/style.css">
 <link rel="stylesheet" href="/whisper/posts/style.css">
-<link rel="stylesheet" href="/whisper/profile/style.css">
+<link rel="stylesheet" href="/whisper/user/style.css">
 <link rel="stylesheet" href="/whisper/create_post/style.css">
 <link rel="stylesheet" href="/whisper/update_profile/style.css">
 <link rel="stylesheet" href="/whisper/update_username/style.css">

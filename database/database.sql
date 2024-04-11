@@ -18,7 +18,8 @@ CREATE TABLE `users` (
     password_hash CHAR(60) NOT NULL,
     PRIMARY KEY (id),
     UNIQUE KEY `unique_user_id` (user_id),
-    UNIQUE KEY `unique_username` (username)
+    UNIQUE KEY `unique_username` (username),
+    CONSTRAINT `username_not_anonymous` CHECK (username != 'Anonymous')
 ) ENGINE=InnoDB CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- Create Table: profile_pictures

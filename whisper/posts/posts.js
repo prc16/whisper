@@ -1,6 +1,7 @@
+const postsFeedContainer = document.getElementById('postsFeedContainer');
+
 // Function to display posts
 function displayPosts(posts) {
-    const postsFeedContainer = document.getElementById('postsFeedContainer');
     if (!postsFeedContainer) {
         console.error("Posts container not found");
         return;
@@ -51,32 +52,31 @@ function vote(event) {
         formData.append('action', type);
         formData.append('post_id', postId);
 
-        fetch('/whisper/posts/server.php', {
+        fetch('/server/vote', {
             method: 'POST',
             body: formData
         })
-            .then(response => {
-                if (response.status === 200) {
-                    return response.json();
-                } else if (response.status === 401) {
-                    alert('You need to log in to vote.');
-                    throw new Error('Unauthorized');
-                } else {
-                    throw new Error(`Error: Status ${response.status}`);
-                }
-            })
-            .then(posts => {
-                // FINSHME: only update vote count
-                displayPosts(posts);
-            })
-            .catch(error => {
-                console.error('Error:', error.message);
-            });
+        .then(response => {
+            if (response.ok) {
+                // Successful vote
+                postsFeedContainer.dispatchEvent(new Event('updateNeeded'));
+            } else {
+                // Parse JSON response
+                return response.json().then(data => {
+                    // Server returned an error, display the error message
+                    alert(data.message);
+                    console.log(data.message);
+                });
+            }
+        })
+        .catch(error => {
+            console.error('There was a problem with your fetch operation:', error);
+        });
     }
 }
 
-function fetchPosts() {
-    fetch('/whisper/posts/server.php')
+function fetchPosts(username = '') {
+    fetch('/server/posts/' + username)
         .then(response => {
             if (!response.ok) {
                 throw new Error('Network response was not ok');
@@ -89,9 +89,4 @@ function fetchPosts() {
         .catch(error => {
             console.error('Fetch error:', error);
         });
-}
-
-// Function to handle the 'updateNeeded' event
-function handleUpdateEvent() {
-    fetchPosts();
 }
