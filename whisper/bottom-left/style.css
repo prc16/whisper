@@ -1,9 +1,8 @@
 #bottom-left-container {
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
     align-items: flex-start;
-    margin-bottom: 1svh;
+    margin-bottom: 6px;
 }
 
 #bottom-left-profile-container {

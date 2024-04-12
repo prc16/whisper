@@ -20,7 +20,11 @@
 }
 
 .displayFolloweeProfile .profile-picture {
-    margin-right: 12px;
+    margin-right: 16px;
+}
+
+.displayFolloweeProfile .profile-username {
+    margin: 0px;
 }
 
 .displayFolloweeContainer:hover {

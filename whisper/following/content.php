@@ -4,7 +4,7 @@
 <div id="profile-main">
     <div id="profile-container-large">
         <img id="profile-container-large-picture" src="<?= htmlspecialchars($profilePicture) ?>">
-        <div id="profile-container-large-username">
+        <div id="profile-container-large-username" class="profile-username">
             <?= htmlspecialchars($username) ?>
         </div>
     </div>
