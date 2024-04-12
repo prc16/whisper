@@ -9,7 +9,7 @@ session_start();
 
 // Check if the user is logged in
 if (!isset($_SESSION['user_id'])) {
-    errorResponse(401, 'You need to log in to create post');
+    errorResponse(401, 'You must log in first to create a post');
     exit;
 }
 

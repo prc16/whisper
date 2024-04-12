@@ -1,6 +1,6 @@
 <!-- Display existing posts -->
 <div id="postsFeedContainer"></div>
-<script src="/whisper/posts/posts.js"></script>
+<script src="/scripts/posts.js"></script>
 <script>
     // Function to handle the 'updateNeeded' event
     function handleUpdateEvent() {

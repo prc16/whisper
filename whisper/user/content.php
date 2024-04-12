@@ -1,4 +1,3 @@
-
 <?php include_once $_SERVER['DOCUMENT_ROOT'] . '/whisper/topbar-middle/content.php'; ?>
 <!--------------- profile main --------------->
 <div id="profile-main">
@@ -9,7 +8,7 @@
         </div>
     </div>
     <?php if ($reqLoggedIn) : ?>
-        <div id="profile-update-options">
+        <div id="profile-update-options" class="profileButtonsContainer">
             <button class="btn" id="updateProfileButton">Update Picture</button>
             <button class="btn" id="updateUsernameButton">Update Username</button>
         </div>
@@ -43,11 +42,20 @@
                 }
             });
         </script>
+    <?php elseif ((strcasecmp($reqUsername, 'Anonymous') !== 0) && $isFollowing) : ?>
+        <div id="profile-update-options" class="profileButtonsContainer">
+            <button class="follow-btn btn" data-type='unfollow' data-id='<?= htmlspecialchars($reqUsername) ?>' id="profileFollowButton">Unfollow</button>
+        </div>
+    <?php elseif (strcasecmp($reqUsername, 'Anonymous') !== 0) : ?>
+        <div id="profile-update-options" class="profileButtonsContainer">
+            <button class="follow-btn btn" data-type='follow' data-id='<?= htmlspecialchars($reqUsername) ?>' id="profileFollowButton">Follow</button>
+        </div>
     <?php endif; ?>
 </div>
 <!-- Display existing posts -->
 <div id="postsFeedContainer"></div>
-<script src="/whisper/posts/posts.js"></script>
+<script src="/scripts/posts.js"></script>
+<script src="/scripts/follow.js"></script>
 <script>
     // Function to handle the 'updateNeeded' event
     function handleUpdateEvent() {
@@ -58,12 +66,15 @@
 
         // Add event listener for 'update' event on displayPosts div
         postsFeedContainer.addEventListener("updateNeeded", handleUpdateEvent);
-        
+
         // Fetch posts initially
         handleUpdateEvent();
 
         // Event listener for voting
         document.addEventListener('click', vote);
+        try {
+            document.getElementById('profileFollowButton').addEventListener('click', follow);
+        } catch (e) {};
 
         // Fetch posts every 5 seconds
         // setInterval(handleUpdateEvent, 5000);

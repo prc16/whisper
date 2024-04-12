@@ -28,6 +28,7 @@ $reqUsername = $_GET['username'];
 $reqProfilePicture = DEFAULT_PROFILE;
 $ownUserId = null;
 $reqUserId = null;
+$isFollowing = false;
 
 if (isset($_SESSION['user_id'])) {
     $ownUserId = $_SESSION['user_id'];
@@ -37,6 +38,7 @@ if (isset($_SESSION['user_id'])) {
 if(usernameExists($conn, $reqUsername)) {
     $reqUserId = getUserId($conn, $reqUsername);
     $reqProfilePicture = getProfilePicture($conn, $reqUserId);
+    $isFollowing = followerExists($conn, $ownUserId, $reqUserId);
     if($reqUserId == $ownUserId) {
         $reqLoggedIn = true;
     }

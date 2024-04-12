@@ -11,6 +11,7 @@ RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^home$ /whisper/home/index.php [L]
 RewriteRule ^login$ /whisper/login/index.php [L]
 RewriteRule ^signup$ /whisper/signup/index.php [L]
+RewriteRule ^following$ /whisper/following/index.php [L]
 RewriteRule ^maintenance$ /whisper/maintenance/ [R=301,L]
 
 # Redirect servers
@@ -19,11 +20,15 @@ RewriteRule ^logout$ /server/logout.php [L]
 
 # Rewrite rule for POST servers
 RewriteRule ^server/vote$ /server/vote.php [L]
+RewriteRule ^server/follow$ /server/follow.php [L]
 RewriteRule ^server/login$ /server/login.php [L]
 RewriteRule ^server/signup$ /server/signup.php [L]
 RewriteRule ^server/create/post$ /server/create_post.php [L]
 RewriteRule ^server/update/username$ /server/update_username.php [L]
 RewriteRule ^server/update/profile$ /server/update_profile.php [L]
+
+# following GET server
+RewriteRule ^server/following/?$ /server/following.php [L]
 
 # posts GET server
 RewriteRule ^server/posts/?$ /server/posts.php [L]

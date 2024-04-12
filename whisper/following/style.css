@@ -1,0 +1,39 @@
+#followeesFeedContainer {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.displayFolloweeContainer {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    padding: 12px;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--whisper-border);
+}
+
+.displayFolloweeProfile {
+    display: flex;
+    align-items: flex-start;
+    align-items: center;
+}
+
+.displayFolloweeProfile .profile-picture {
+    margin-right: 12px;
+}
+
+.displayFolloweeContainer:hover {
+    background-color: var(--whisper-overlay);
+    transition: background-color 200ms ease-in-out;
+}
+
+.displayfolloweeButtons {
+    display: flex;
+    align-items: center;
+}
+
+.displayfolloweeButtons .btn,
+.displayfolloweeButtons .btn2 {
+    margin-right: 12px;
+}

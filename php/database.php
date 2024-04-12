@@ -47,6 +47,7 @@ function getConnection()
  */
 function usernameExists($conn, $username)
 {
+    $count = 0;
     $checkSql = "SELECT COUNT(*) FROM users WHERE username = ?";
     $stmt = $conn->prepare($checkSql);
     $stmt->bind_param("s", $username);
@@ -533,6 +534,95 @@ function fetchPosts($result)
     return $posts;
 }
 
+function fetchRows($result)
+{
+    $rows = [];
+    while ($row = $result->fetch_assoc()) {
+        $rows[] = $row;
+    }
+    return $rows;
+}
+
+function getFollowees($conn, $userId, $limit = 50)
+{
+    $sql = "SELECT 
+                f.followee_id, 
+                u.username AS username, 
+                pp.profile_file_id AS profile_file_id 
+            FROM 
+                followers f 
+            LEFT JOIN 
+                users u ON f.followee_id = u.user_id 
+            LEFT JOIN 
+                profile_pictures pp ON f.followee_id = pp.user_id 
+            WHERE 
+                f.follower_id = ? 
+            ORDER BY 
+                f.id DESC 
+            LIMIT ?";
+
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("si", $userId, $limit);
+    $stmt->execute();
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    $followees = fetchRowsWithProfile($result);
+
+    $stmt->close();
+    return $followees;
+}
+
+function getFollowers($conn, $userId, $limit = 50)
+{
+    $sql = "SELECT 
+                f.follower_id, 
+                u.username AS username, 
+                pp.profile_file_id AS profile_file_id 
+            FROM 
+                followers f 
+            LEFT JOIN 
+                users u ON f.follower_id = u.user_id 
+            LEFT JOIN 
+                profile_pictures pp ON f.follower_id = pp.user_id 
+            WHERE 
+                f.followee_id = ? 
+            ORDER BY 
+                f.id DESC 
+            LIMIT ?";
+
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("si", $userId, $limit);
+    $stmt->execute();
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    $followers = fetchRowsWithProfile($result);
+
+    $stmt->close();
+    return $followers;
+}
+
+
+function fetchRowsWithProfile($result)
+{
+    $rows = [];
+    while ($row = $result->fetch_assoc()) {
+
+
+        $row['profile_file_path'] = PROFILES_DIRECTORY . $row['profile_file_id'] . '.jpg';
+        // Check if file exists and is a file
+        if (file_exists($_SERVER['DOCUMENT_ROOT'] . $row['profile_file_path']) && is_file($_SERVER['DOCUMENT_ROOT'] . $row['profile_file_path'])) {
+            // File exists and is a file
+        } else {
+            // Use default profile if file doesn't exist or is not a file
+            $row['profile_file_path'] = DEFAULT_PROFILE;
+        }
+
+        $rows[] = $row;
+    }
+    return $rows;
+}
 
 /**
  * Updates the vote count of a post in the database.
@@ -698,5 +788,45 @@ function handleVote($conn, $userId, $postId, $voteType)
 
         error_log($e->getMessage());
         return false; // Return false indicating failure
+    }
+}
+
+
+function followerExists($conn, $follower_id, $followee_id)
+{
+    $count = 0;
+    $sql = "SELECT COUNT(*) as count FROM followers WHERE follower_id = ? AND followee_id = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("ss", $follower_id, $followee_id);
+    $stmt->execute();
+    $stmt->bind_result($count);
+    $stmt->fetch();
+    $stmt->close();
+    return $count > 0;
+}
+
+function insertFollower($conn, $follower_id, $followee_id)
+{
+    $query = "INSERT INTO followers (follower_id, followee_id) VALUES (?, ?)";
+    try {
+        $stmt = $conn->prepare($query);
+        $stmt->bind_param("ss", $follower_id, $followee_id);
+        return $stmt->execute();
+    } catch (Exception $e) {
+        error_log($e->getMessage());
+        return false;
+    }
+}
+
+function deleteFollower($conn, $follower_id, $followee_id)
+{
+    $query = "DELETE FROM followers WHERE follower_id = ? AND followee_id = ?";
+    try {
+        $stmt = $conn->prepare($query);
+        $stmt->bind_param("ss", $follower_id, $followee_id);
+        return $stmt->execute();
+    } catch (Exception $e) {
+        error_log($e->getMessage());
+        return false;
     }
 }
