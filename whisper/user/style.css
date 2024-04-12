@@ -30,13 +30,3 @@
     margin-bottom: 20px;
     text-align: center;
 }
-
-#profile-update-options {
-    display: flex;
-    width: 100%;
-    justify-content: center;
-}
-
-#profile-update-options .btn {
-    margin: 0px 4px;
-}

@@ -1,69 +1,39 @@
-#followeeListContainer,
-#followerListContainer {
+#followeesFeedContainer {
     display: flex;
     flex-direction: column;
     width: 100%;
 }
 
-.displayUserContainer {
+.displayFolloweeContainer {
     display: flex;
-    align-items: flex-start;
     align-items: center;
     width: 100%;
     padding: 12px;
+    justify-content: space-between;
     border-bottom: 1px solid var(--whisper-border);
 }
 
+.displayFolloweeProfile {
+    display: flex;
+    align-items: flex-start;
+    align-items: center;
+}
 
-.displayUserContainer:hover {
+.displayFolloweeProfile .profile-picture {
+    margin-right: 12px;
+}
+
+.displayFolloweeContainer:hover {
     background-color: var(--whisper-overlay);
     transition: background-color 200ms ease-in-out;
 }
 
-
-.displayUserContainer .profile-picture {
-    margin-right: 12px;
-}
-
-#profileFollowOptions {
+.displayfolloweeButtons {
     display: flex;
-    width: 100%;
-    justify-content: center;
-}
-
-#profileFollowOptions .btn {
-    margin: 0px 4px;
-}
-
-
-/* .displayPostContainer .btn {
-    display: block;
-} */
-
-#displayPostButtons {
-    display: flex;
-    width: 100%;
     align-items: center;
-    margin-top: 12px;
 }
 
-#displayPostButtons .fa-image {
-    margin-right: 10px;
-}
-
-#displayPostButtons .btn {
-    margin-left: 4px;
-}
-
-#displayPostMediaPreview {
-    display: flex;
-    flex-direction: column;
-    max-width: 500px;
-}
-
-#displayPostMediaPreview .image-preview,
-#displayPostMediaPreview .video-preview {
-    max-height: 500px;
-    border-radius: 16px;
-    border: 1px solid rgb(207, 217, 222);
+.displayfolloweeButtons .btn,
+.displayfolloweeButtons .btn2 {
+    margin-right: 12px;
 }
