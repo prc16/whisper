@@ -1,6 +1,6 @@
 <?php
 
-// Set the default timezone to New York
+// Set the default timezone
 date_default_timezone_set('Asia/Kolkata');
 
 // Turn off displaying errors to users

@@ -1,6 +1,3 @@
--- Enable event scheduler
--- SET GLOBAL event_scheduler = ON;
-
 -- Drop Database: whisper_db
 DROP DATABASE IF EXISTS whisper_db;
 
