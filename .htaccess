@@ -9,9 +9,10 @@ RewriteCond %{REQUEST_FILENAME} !-d
 
 # Rewrite rules for specific pages
 RewriteRule ^home$ /whisper/home/index.php [L]
+RewriteRule ^following$ /whisper/following/index.php [L]
+RewriteRule ^messages$ /whisper/messages/index.php [L]
 RewriteRule ^login$ /whisper/login/index.php [L]
 RewriteRule ^signup$ /whisper/signup/index.php [L]
-RewriteRule ^following$ /whisper/following/index.php [L]
 RewriteRule ^maintenance$ /whisper/maintenance/ [R=301,L]
 
 # Redirect servers
@@ -29,6 +30,9 @@ RewriteRule ^server/update/profile$ /server/update_profile.php [L]
 
 # following GET server
 RewriteRule ^server/following/?$ /server/following.php [L]
+
+# Messages GET server
+RewriteRule ^server/messages/([^/]+)$ /server/messages.php?username=$1 [L]
 
 # posts GET server
 RewriteRule ^server/posts/?$ /server/posts.php [L]

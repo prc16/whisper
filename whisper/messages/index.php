@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Following</title>
+    <title>Messages</title>
 
     <?php include_once $_SERVER['DOCUMENT_ROOT'] . '/php-includes/styles.php'; ?>
     <?php include_once $_SERVER['DOCUMENT_ROOT'] . '/php-includes/scripts.php'; ?>

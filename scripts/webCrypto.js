@@ -13,6 +13,7 @@ async function generateKeyPair() {
 
     return { publicKey, privateKey };
 }
+
 async function deriveSharedSecret(theirPublicKey, myPrivateKey) {
     const publicKey = await crypto.subtle.importKey(
         "spki",

@@ -3,14 +3,17 @@
 </div>
 
 <script>
-    // Get the title of the page
-    var pageTitle = document.title;
+    function updateTitle(title) {
 
-    // Find the element with id "topbar-middle-title"
-    var topbarMiddleTitle = document.getElementById("topbar-middle-title");
+        // Find the element with id "topbar-middle-title"
+        var topbarMiddleTitle = document.getElementById("topbar-middle-title");
 
-    // Set the text content of the element to the page title
-    if (topbarMiddleTitle) {
-        topbarMiddleTitle.textContent = pageTitle;
+        // Set the text content of the element to the page title
+        if (topbarMiddleTitle) {
+            topbarMiddleTitle.textContent = title;
+        }
     }
+    document.addEventListener('DOMContentLoaded', () => {
+        updateTitle(document.title);
+    });
 </script>

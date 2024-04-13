@@ -1,1 +1,1 @@
-<?php include_once $_SERVER['DOCUMENT_ROOT'] . '/whisper/sidebar-right/content.php'; ?>
+<?php include_once $_SERVER['DOCUMENT_ROOT'] . '/whisper/search/content.php'; ?>

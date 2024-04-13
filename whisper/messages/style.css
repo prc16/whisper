@@ -1,0 +1,67 @@
+#messageFeedContainer {
+    display: flex;
+    flex-direction: column-reverse;
+    width: 100%;
+    height: 100%;
+    overflow-y: auto;
+    scrollbar-width: none;
+    padding: 24px;
+}
+
+#messageFeedContainer div {
+    padding: 8px 24px;
+    margin-bottom: 8px;
+    border-radius: 50px;
+    background-color: #f2f2f2;
+}
+
+#messageFeedContainer div.sent {
+    background-color: #4CAF50;
+    color: white;
+    align-self: flex-end;
+    border-bottom-right-radius: 12px;
+}
+
+#messageFeedContainer div.received {
+    background-color: #008CBA;
+    color: white;
+    align-self: flex-start;
+    border-bottom-left-radius: 12px;
+}
+
+#messageInputContainer {
+    position: sticky;
+    bottom: 0px;
+    display: flex;
+    width: 100%;
+    align-items: center;
+    padding: 12px;
+    padding-bottom: 24px;
+    border-top: 1px solid var(--whisper-border);
+    background-color: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(10px);
+}
+
+#messageInputArea {
+    display: flex;
+    width: 100%;
+    height: 48px;
+    align-items: center;
+    background-color: var(--whisper-border);
+    border-radius: 50px;
+}
+
+#messageInputContainer .btn2 {
+    border-radius: 50px;
+    margin: 0px 8px;
+}
+
+#messageInput {
+    font-size: var(--whisper-font-size);
+    border: none;
+    outline: none;
+    width: 100%;
+    height: 100%;
+    padding: 8px 24px;
+    background: transparent;
+}

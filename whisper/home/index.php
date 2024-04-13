@@ -8,7 +8,6 @@
 
     <?php include_once $_SERVER['DOCUMENT_ROOT'] . '/php-includes/styles.php'; ?>
     <?php include_once $_SERVER['DOCUMENT_ROOT'] . '/php-includes/scripts.php'; ?>
-    <link rel="icon" type="image/svg+xml" href="/images/whisper-logo.svg">
 
 </head>
 
@@ -19,19 +18,16 @@
             <?php include_once $_SERVER['DOCUMENT_ROOT'] . '/whisper/sidebar-left/content.php'; ?>
         </header>
 
-        <!--------------- main content--------------->
-        <main class="main-content">
-
-            <!--------------- middle feed --------------->
-            <div class="middle-feed">
-                <?php include_once __DIR__ . '/content.php'; ?>
-            </div>
-
-            <!--------------- right sidebar --------------->
-            <div class="right-sidebar">
-                <?php include_once __DIR__ . '/content-right.php'; ?>
-            </div>
+        <!--------------- middle feed --------------->
+        <main class="middle-feed">
+            <?php include_once __DIR__ . '/content.php'; ?>
         </main>
+
+        <!--------------- right sidebar --------------->
+        <div class="right-sidebar">
+            <?php include_once __DIR__ . '/content-right.php'; ?>
+        </div>
+
     </div>
 
 </body>

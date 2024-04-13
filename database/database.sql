@@ -19,6 +19,16 @@ CREATE TABLE `users` (
     CONSTRAINT `username_not_anonymous` CHECK (username != 'Anonymous')
 ) ENGINE=InnoDB CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;
 
+-- Create Table: Keys
+CREATE TABLE `keys` (
+    id INT UNSIGNED AUTO_INCREMENT,
+    user_id CHAR(16) NOT NULL,
+    public_key VARBINARY(4096) NOT NULL,
+    PRIMARY KEY (id),
+    UNIQUE KEY `unique_user_id` (user_id),
+    CONSTRAINT `fk_keys_users` FOREIGN KEY (user_id) REFERENCES `users` (user_id) ON DELETE CASCADE
+) ENGINE=InnoDB CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;
+
 -- Create Table: profile_pictures
 CREATE TABLE `profile_pictures` (
     id INT UNSIGNED AUTO_INCREMENT,
@@ -65,7 +75,7 @@ CREATE TABLE `messages` (
     id INT UNSIGNED AUTO_INCREMENT,
     sender_id CHAR(16) NOT NULL,
     receiver_id CHAR(16) NOT NULL,
-    message TEXT NOT NULL,
+    message_text TEXT NOT NULL,
     sent_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (id),
     CONSTRAINT `fk_messages_sender` FOREIGN KEY (sender_id) REFERENCES `users` (user_id) ON DELETE CASCADE,
@@ -163,3 +173,46 @@ INSERT INTO `followers` (`follower_id`, `followee_id`) VALUES
 
 INSERT INTO `followers` (`follower_id`, `followee_id`) VALUES
 ('Alphatester0----', 'Alphatester9----');
+
+
+INSERT INTO `messages` (`sender_id`, `receiver_id`, `message_text`) VALUES
+('Alphatester1----', 'Alphatester0----' , 'test1');
+
+INSERT INTO `messages` (`sender_id`, `receiver_id`, `message_text`) VALUES
+('Alphatester0----', 'Alphatester1----' , 'test2');
+
+INSERT INTO `messages` (`sender_id`, `receiver_id`, `message_text`) VALUES
+('Alphatester1----', 'Alphatester0----' , 'test3');
+
+INSERT INTO `messages` (`sender_id`, `receiver_id`, `message_text`) VALUES
+('Alphatester0----', 'Alphatester1----' , 'test4');
+
+INSERT INTO `messages` (`sender_id`, `receiver_id`, `message_text`) VALUES
+('Alphatester1----', 'Alphatester0----' , 'test5');
+
+INSERT INTO `messages` (`sender_id`, `receiver_id`, `message_text`) VALUES
+('Alphatester0----', 'Alphatester1----' , 'test6');
+
+INSERT INTO `messages` (`sender_id`, `receiver_id`, `message_text`) VALUES
+('Alphatester1----', 'Alphatester0----' , 'test7');
+
+INSERT INTO `messages` (`sender_id`, `receiver_id`, `message_text`) VALUES
+('Alphatester0----', 'Alphatester1----' , 'test8');
+
+INSERT INTO `messages` (`sender_id`, `receiver_id`, `message_text`) VALUES
+('Alphatester1----', 'Alphatester0----' , 'test9');
+
+INSERT INTO `messages` (`sender_id`, `receiver_id`, `message_text`) VALUES
+('Alphatester0----', 'Alphatester1----' , 'test10');
+
+INSERT INTO `messages` (`sender_id`, `receiver_id`, `message_text`) VALUES
+('Alphatester1----', 'Alphatester0----' , 'test11');
+
+INSERT INTO `messages` (`sender_id`, `receiver_id`, `message_text`) VALUES
+('Alphatester0----', 'Alphatester1----' , 'test12');
+
+INSERT INTO `messages` (`sender_id`, `receiver_id`, `message_text`) VALUES
+('Alphatester1----', 'Alphatester0----' , 'test13');
+
+INSERT INTO `messages` (`sender_id`, `receiver_id`, `message_text`) VALUES
+('Alphatester0----', 'Alphatester1----' , 'test14');

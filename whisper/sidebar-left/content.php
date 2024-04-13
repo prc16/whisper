@@ -4,7 +4,7 @@
         <a href="/"><i class="fab fa-discourse"></i><b>Whisper</b></a>
         <a href="/home"><i class="far fa-home-alt"></i>Home</a>
         <a href="/u/<?= htmlspecialchars($username) ?>"><i class="far fa-user"></i>Profile</a>
-        <a href="#"><i class="far fa-envelope"></i>Messages</a>
+        <a href="/messages"><i class="far fa-envelope"></i>Messages</a>
         <a href="/following"><i class="far fa-user-friends"></i>Following</a>
         <?php if ($loggedIn) : ?>
             <a href="/logout"><i class="far fa-sign-out"></i>Log Out</a>

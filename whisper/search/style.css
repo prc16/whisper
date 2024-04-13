@@ -1,0 +1,26 @@
+#sidebarsearchContainer {
+    display: flex;
+    align-items: center;
+    padding: 4px 24px;
+    width: 100%;
+}
+
+.sidebarsearch {
+    display: flex;
+    align-items: center;
+    border: none;
+    border-radius: 25px;
+    padding: 8px 15px;
+    width: 100%;
+    height: 46px;
+    background: var(--whisper-border);
+}
+
+.sidebarsearch input {
+    background: transparent;
+    font-size: var(--whisper-font-size);
+    width: 100%;
+    border: none;
+    outline: none;
+    padding-left: 12px;
+}

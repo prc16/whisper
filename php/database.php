@@ -624,6 +624,47 @@ function fetchRowsWithProfile($result)
     return $rows;
 }
 
+function getMessages($conn, $userId, $reqUserId, $limit = 50)
+{
+    $sql = "SELECT 
+                * 
+            FROM 
+                messages 
+            WHERE 
+                (sender_id = ? AND receiver_id = ?) OR 
+                (sender_id = ? AND receiver_id = ?)
+            ORDER BY 
+                id DESC 
+            LIMIT ?";
+
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("ssssi", $userId, $reqUserId, $reqUserId, $userId, $limit);
+    $stmt->execute();
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    $messages = fetchMessages($result, $userId);
+
+    $stmt->close();
+    return $messages;
+}
+
+function fetchMessages($result, $userId)
+{
+    $rows = [];
+    while ($row = $result->fetch_assoc()) {
+        $message = array();
+        $message['message_text'] = $row['message_text'];
+        if ($row['sender_id'] == $userId) {
+            $message['type'] = 'sent';
+        } else {
+            $message['type'] ='received';
+        }
+        $rows[] = $message;
+    }
+    return $rows;
+}
+
 /**
  * Updates the vote count of a post in the database.
  *
