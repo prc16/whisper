@@ -654,11 +654,12 @@ function fetchMessages($result, $userId)
     $rows = [];
     while ($row = $result->fetch_assoc()) {
         $message = array();
-        $message['message_text'] = $row['message_text'];
+        $message['encryptedData'] = $row['encrypted_message'];
+        $message['initializationVector'] = $row['initialization_vector'];
         if ($row['sender_id'] == $userId) {
             $message['type'] = 'sent';
         } else {
-            $message['type'] ='received';
+            $message['type'] = 'received';
         }
         $rows[] = $message;
     }
@@ -870,4 +871,105 @@ function deleteFollower($conn, $follower_id, $followee_id)
         error_log($e->getMessage());
         return false;
     }
+}
+
+function insertPublicKey($conn, $userId, $keyPairId, $publicKeyJwk)
+{
+    try {
+        // Check if a record with the specified user ID already exists
+        $stmt = $conn->prepare("SELECT id FROM `keys` WHERE user_id = ?");
+        $stmt->bind_param("s", $userId);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $stmt->close();
+
+        // If a record exists, update the public key
+        if ($result->num_rows > 0) {
+            $stmt = $conn->prepare("UPDATE `keys` SET key_pair_id = ?, public_key_jwk = ? WHERE user_id = ?");
+            $stmt->bind_param("sss", $keyPairId, $publicKeyJwk, $userId);
+            $stmt->execute();
+            $stmt->close();
+        } else {
+            // If no record exists, insert a new record
+            $stmt = $conn->prepare("INSERT INTO `keys` (user_id, key_pair_id, public_key_jwk) VALUES (?, ?, ?)");
+            $stmt->bind_param("sss", $userId, $keyPairId, $publicKeyJwk);
+            $stmt->execute();
+            $stmt->close();
+        }
+
+        // Return true indicating successful insertion or update
+        return true;
+    } catch (Exception $e) {
+        // Return false if an error occurs
+        return false;
+    }
+}
+
+
+
+function getPublicKey($conn, $userId)
+{
+    $publicKeyJwk = null;
+    // Prepare the SQL statement
+    $stmt = $conn->prepare("SELECT public_key_jwk FROM `keys` WHERE user_id = ?");
+
+    // Bind parameters
+    $stmt->bind_param("s", $userId);
+
+    // Execute the statement
+    $stmt->execute();
+
+    // Bind result variables
+    $stmt->bind_result($publicKeyJwk);
+
+    // Fetch the result
+    $stmt->fetch();
+
+    // Close the statement
+    $stmt->close();
+
+    // Return the public key
+    return $publicKeyJwk;
+}
+
+function insertMessage($conn, $sender_id, $receiver_id, $encrypted_message, $initialization_vector)
+{
+    try {
+        // Prepare the SQL statement
+        $sql = "INSERT INTO messages (sender_id, receiver_id, encrypted_message, initialization_vector) VALUES (?, ?, ?, ?)";
+
+        // Bind parameters and execute the statement
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("ssss", $sender_id, $receiver_id, $encrypted_message, $initialization_vector);
+
+        return $stmt->execute();
+    } catch (Exception $e) {
+        // Return false if an error occurs
+        return false;
+    }
+}
+
+function getKeyPairId($conn, $userId)
+{
+    $keyPairId = null;
+    // Prepare the SQL statement
+    $stmt = $conn->prepare("SELECT key_pair_id FROM `keys` WHERE user_id = ?");
+
+    // Bind parameters
+    $stmt->bind_param("s", $userId);
+
+    // Execute the statement
+    $stmt->execute();
+
+    // Bind result variables
+    $stmt->bind_result($keyPairId);
+
+    // Fetch the result
+    $stmt->fetch();
+
+    // Close the statement
+    $stmt->close();
+
+    // Return the key pair ID
+    return $keyPairId;
 }

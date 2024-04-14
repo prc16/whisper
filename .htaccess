@@ -13,6 +13,7 @@ RewriteRule ^following$ /whisper/following/index.php [L]
 RewriteRule ^messages$ /whisper/messages/index.php [L]
 RewriteRule ^login$ /whisper/login/index.php [L]
 RewriteRule ^signup$ /whisper/signup/index.php [L]
+RewriteRule ^settings$ /whisper/settings/index.php [L]
 RewriteRule ^maintenance$ /whisper/maintenance/ [R=301,L]
 
 # Redirect servers
@@ -27,16 +28,14 @@ RewriteRule ^server/signup$ /server/signup.php [L]
 RewriteRule ^server/create/post$ /server/create_post.php [L]
 RewriteRule ^server/update/username$ /server/update_username.php [L]
 RewriteRule ^server/update/profile$ /server/update_profile.php [L]
+RewriteRule ^server/post/message$ /server/post_message.php [L]
+RewriteRule ^server/post/publicKeyJWK$ /server/post_publicKeyJwk.php [L]
 
-# following GET server
+# GET servers
 RewriteRule ^server/following/?$ /server/following.php [L]
-
-# Messages GET server
+RewriteRule ^server/keyPairId/?$ /server/keyPairId.php [L]
 RewriteRule ^server/messages/([^/]+)$ /server/messages.php?username=$1 [L]
-
-# posts GET server
 RewriteRule ^server/posts/?$ /server/posts.php [L]
 RewriteRule ^server/posts/([^/]+)$ /server/posts.php?username=$1 [L]
-
-# user GET server
 RewriteRule ^u/([^/]+)/?$ /whisper/user/index.php?username=$1 [L,QSA]
+RewriteRule ^server/publicKeyJwk/([^/]+)/?$ /server/publicKeyJwk.php?username=$1 [L,QSA]

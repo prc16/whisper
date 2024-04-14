@@ -8,6 +8,7 @@
         <input type="submit" value="Sign Up" class="btn">
     </form>
 </div>
+<script src="/scripts/webCrypto.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('signup-form').addEventListener('submit', function(event) {
@@ -34,7 +35,7 @@
                 .then(response => {
                     if (response.ok) {
                         // Successful signup
-                        window.location.href = '/home';
+                        initKeys();
                     } else {
                         // Parse JSON response
                         return response.json().then(data => {
