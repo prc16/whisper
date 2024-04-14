@@ -15,6 +15,7 @@ session_start();
 $loggedIn = false;
 $username = 'Anonymous';
 $profilePicture = DEFAULT_PROFILE;
+$keyPairId = '';
 
 if (isset($_SESSION['user_id'])) {
     // If user is logged in
@@ -22,6 +23,7 @@ if (isset($_SESSION['user_id'])) {
     $userId = $_SESSION['user_id'];    
     $username = getUsername($conn, $userId);
     $profilePicture = getProfilePicture($conn, $userId);
+    $keyPairId = getKeyPairId($conn, $userId);
 }
 
 $conn->close();

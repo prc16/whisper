@@ -634,7 +634,7 @@ function getMessages($conn, $userId, $reqUserId, $limit = 50)
                 (sender_id = ? AND receiver_id = ?) OR 
                 (sender_id = ? AND receiver_id = ?)
             ORDER BY 
-                id DESC 
+                id 
             LIMIT ?";
 
     $stmt = $conn->prepare($sql);
@@ -654,6 +654,7 @@ function fetchMessages($result, $userId)
     $rows = [];
     while ($row = $result->fetch_assoc()) {
         $message = array();
+        $message['id'] = $row['id'];
         $message['encryptedData'] = $row['encrypted_message'];
         $message['initializationVector'] = $row['initialization_vector'];
         if ($row['sender_id'] == $userId) {
@@ -945,6 +946,7 @@ function insertMessage($conn, $sender_id, $receiver_id, $encrypted_message, $ini
         return $stmt->execute();
     } catch (Exception $e) {
         // Return false if an error occurs
+        error_log($e->getMessage());
         return false;
     }
 }

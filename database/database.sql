@@ -96,84 +96,15 @@ CREATE TABLE `followers` (
     CONSTRAINT `fk_followers_followee` FOREIGN KEY (followee_id) REFERENCES `users` (user_id) ON DELETE CASCADE
 ) ENGINE=InnoDB CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;
 
--- Insert test records into the users table
--- Note: password = 'test'
-INSERT INTO `users` (`user_id`, `username`, `password_hash`) VALUES
-('Alphatester0----', 'Alphatester0', '$2y$10$2EQhA1F5zL49jWxCOz4ZpOHLUaGg.H99nEkoOdA/wzPERFRoxTxZa');
-
-INSERT INTO `users` (`user_id`, `username`, `password_hash`) VALUES
-('Alphatester1----', 'Alphatester1', '$2y$10$2EQhA1F5zL49jWxCOz4ZpOHLUaGg.H99nEkoOdA/wzPERFRoxTxZa');
-
-INSERT INTO `users` (`user_id`, `username`, `password_hash`) VALUES
-('Alphatester2----', 'Alphatester2', '$2y$10$2EQhA1F5zL49jWxCOz4ZpOHLUaGg.H99nEkoOdA/wzPERFRoxTxZa');
-
-INSERT INTO `users` (`user_id`, `username`, `password_hash`) VALUES
-('Alphatester3----', 'Alphatester3', '$2y$10$2EQhA1F5zL49jWxCOz4ZpOHLUaGg.H99nEkoOdA/wzPERFRoxTxZa');
-
-INSERT INTO `users` (`user_id`, `username`, `password_hash`) VALUES
-('Alphatester4----', 'Alphatester4', '$2y$10$2EQhA1F5zL49jWxCOz4ZpOHLUaGg.H99nEkoOdA/wzPERFRoxTxZa');
-
-INSERT INTO `users` (`user_id`, `username`, `password_hash`) VALUES
-('Alphatester5----', 'Alphatester5', '$2y$10$2EQhA1F5zL49jWxCOz4ZpOHLUaGg.H99nEkoOdA/wzPERFRoxTxZa');
-
-INSERT INTO `users` (`user_id`, `username`, `password_hash`) VALUES
-('Alphatester6----', 'Alphatester6', '$2y$10$2EQhA1F5zL49jWxCOz4ZpOHLUaGg.H99nEkoOdA/wzPERFRoxTxZa');
-
-INSERT INTO `users` (`user_id`, `username`, `password_hash`) VALUES
-('Alphatester7----', 'Alphatester7', '$2y$10$2EQhA1F5zL49jWxCOz4ZpOHLUaGg.H99nEkoOdA/wzPERFRoxTxZa');
-
-INSERT INTO `users` (`user_id`, `username`, `password_hash`) VALUES
-('Alphatester8----', 'Alphatester8', '$2y$10$2EQhA1F5zL49jWxCOz4ZpOHLUaGg.H99nEkoOdA/wzPERFRoxTxZa');
-
-INSERT INTO `users` (`user_id`, `username`, `password_hash`) VALUES
-('Alphatester9----', 'Alphatester9', '$2y$10$2EQhA1F5zL49jWxCOz4ZpOHLUaGg.H99nEkoOdA/wzPERFRoxTxZa');
-
--- Insert test records into the posts table
-INSERT INTO `posts` (`post_id`, `user_id`, `post_text`, `expire_at`)
-VALUES ('Alphatester0---0', 'Alphatester0----', 'Test 1 Post by Alphatester0', DATE_ADD(NOW(), INTERVAL 1 MINUTE));
-
-INSERT INTO `posts` (`post_id`, `user_id`, `post_text`, `expire_at`)
-VALUES ('Alphatester1---0', 'Alphatester1----', 'Test 1 Post by Alphatester1', DATE_ADD(NOW(), INTERVAL 1 MINUTE));
-
-INSERT INTO `followers` (`follower_id`, `followee_id`) VALUES
-('Alphatester1----', 'Alphatester0----');
-
-INSERT INTO `followers` (`follower_id`, `followee_id`) VALUES
-('Alphatester3----', 'Alphatester0----');
-
-INSERT INTO `followers` (`follower_id`, `followee_id`) VALUES
-('Alphatester5----', 'Alphatester0----');
-
-INSERT INTO `followers` (`follower_id`, `followee_id`) VALUES
-('Alphatester7----', 'Alphatester0----');
-
-INSERT INTO `followers` (`follower_id`, `followee_id`) VALUES
-('Alphatester9----', 'Alphatester0----');
-
-INSERT INTO `followers` (`follower_id`, `followee_id`) VALUES
-('Alphatester0----', 'Alphatester1----');
-
-INSERT INTO `followers` (`follower_id`, `followee_id`) VALUES
-('Alphatester0----', 'Alphatester2----');
-
-INSERT INTO `followers` (`follower_id`, `followee_id`) VALUES
-('Alphatester0----', 'Alphatester3----');
-
-INSERT INTO `followers` (`follower_id`, `followee_id`) VALUES
-('Alphatester0----', 'Alphatester4----');
-
-INSERT INTO `followers` (`follower_id`, `followee_id`) VALUES
-('Alphatester0----', 'Alphatester5----');
-
-INSERT INTO `followers` (`follower_id`, `followee_id`) VALUES
-('Alphatester0----', 'Alphatester6----');
-
-INSERT INTO `followers` (`follower_id`, `followee_id`) VALUES
-('Alphatester0----', 'Alphatester7----');
-
-INSERT INTO `followers` (`follower_id`, `followee_id`) VALUES
-('Alphatester0----', 'Alphatester8----');
-
-INSERT INTO `followers` (`follower_id`, `followee_id`) VALUES
-('Alphatester0----', 'Alphatester9----');
-
+-- Create Table: conversations
+CREATE TABLE `conversations` (
+    id INT UNSIGNED AUTO_INCREMENT,
+    user_id CHAR(16) NOT NULL,
+    participant_id CHAR(16) NOT NULL,
+    conversation_id CHAR(16) NOT NULL,
+    unread_count INT UNSIGNED NOT NULL DEFAULT 0,
+    updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (id),
+    CONSTRAINT `fk_conversations_user` FOREIGN KEY (user_id) REFERENCES `users` (user_id) ON DELETE CASCADE,
+    CONSTRAINT `fk_conversations_participant` FOREIGN KEY (participant_id) REFERENCES `users` (user_id) ON DELETE CASCADE
+) ENGINE=InnoDB CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;

@@ -12,6 +12,7 @@
         if (topbarMiddleTitle) {
             topbarMiddleTitle.textContent = title;
         }
+        document.title = title;
     }
     document.addEventListener('DOMContentLoaded', () => {
         updateTitle(document.title);
