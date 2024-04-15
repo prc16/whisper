@@ -13,7 +13,6 @@ RewriteRule ^following$ /whisper/following/index.php [L]
 RewriteRule ^messages$ /whisper/messages/index.php [L]
 RewriteRule ^login$ /whisper/login/index.php [L]
 RewriteRule ^signup$ /whisper/signup/index.php [L]
-RewriteRule ^settings$ /whisper/settings/index.php [L]
 RewriteRule ^maintenance$ /whisper/maintenance/ [R=301,L]
 
 # Redirect servers
