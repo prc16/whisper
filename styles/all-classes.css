@@ -13,7 +13,7 @@ body {
     --whisper-background: #FFF;
     --whisper-selected: gold;
     --whisper-overlay: #f7f7f7;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     background-color: var(--whisper-background);
     overflow-y: scroll;
     overflow-x: auto;

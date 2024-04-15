@@ -51,35 +51,38 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Function to handle post submission
-    function handlePostButtonClick() {
-        const postText = createPostTextArea.value.trim();
-        const file = createPostMediaUpload.files[0];
+function handlePostButtonClick() {
+    const postText = createPostTextArea.value.trim();
+    const file = createPostMediaUpload.files[0];
 
-        const formData = new FormData();
-        formData.append("post_text", postText);
-        formData.append("media_file", file);
-        formData.append("anon_post", createPostAnonCheckbox.checked);
+    console.log(dropDownValue);
+    const formData = new FormData();
+    formData.append("post_text", postText);
+    formData.append("media_file", file);
+    formData.append("anon_post", createPostAnonCheckbox.checked);
+    formData.append("expire_at", dropDownValue);
 
-        fetch('/server/create/post', {
-            method: 'POST',
-            body: formData
+    fetch('/server/create/post', {
+        method: 'POST',
+        body: formData
+    })
+        .then(response => {
+            if (response.ok) {
+                handleClearButtonClick(); // Clear inputs and hide button
+                createPostTextArea.value = "";
+                createPostTextArea.style.height = "auto";
+                createPostAnonCheckbox.checked = false;
+                postsFeedContainer.dispatchEvent(new Event('updateNeeded'));
+            } else {
+                return response.json().then(data => {
+                    createPostErrorMessage.innerText = data.message;
+                    console.log(data.message);
+                });
+            }
         })
-            .then(response => {
-                if (response.ok) {
-                    handleClearButtonClick(); // Clear inputs and hide button
-                    createPostTextArea.value = "";
-                    createPostTextArea.style.height = "auto";
-                    createPostAnonCheckbox.checked = false;
-                    postsFeedContainer.dispatchEvent(new Event('updateNeeded'));
-                } else {
-                    return response.json().then(data => {
-                        createPostErrorMessage.innerText = data.message;
-                        console.log(data.message);
-                    });
-                }
-            })
-            .catch(error => {
-                console.error('There was a problem with your fetch operation:', error);
-            });
-    }
+        .catch(error => {
+            console.error('There was a problem with your fetch operation:', error);
+        });
+}
+
 });

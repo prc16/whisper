@@ -345,10 +345,11 @@ function updateProfilePicture($conn, $userId, $profileFileId)
 function createPost($conn, $user_id, $anon_post, $post_text, $media_file_id = null, $media_file_ext = null, $expire_at = null)
 {
     $post_id = genUUID();
+    $expire_at_datetime = $expire_at ? date('Y-m-d H:i:s', time() + $expire_at) : null;
     $query = "INSERT INTO posts (post_id, user_id, anon_post, post_text, media_file_id, media_file_ext, expire_at) VALUES (?, ?, ?, ?, ?, ?, ?)";
     try {
         $stmt = $conn->prepare($query);
-        $stmt->bind_param("ssissss", $post_id, $user_id, $anon_post, $post_text, $media_file_id, $media_file_ext, $expire_at);
+        $stmt->bind_param("ssissss", $post_id, $user_id, $anon_post, $post_text, $media_file_id, $media_file_ext, $expire_at_datetime);
         return $stmt->execute();
     } catch (Exception $e) {
         error_log($e->getMessage());

@@ -74,6 +74,11 @@ if (!isset($_POST['anon_post'])) {
 }
 
 $anon_post = $_POST['anon_post'] == 'true' ? 1 : 0;
+$expire_at = null;
+
+if (isset($_POST['expire_at']) && $_POST['expire_at'] > 0) {
+    $expire_at = $_POST['expire_at'];
+} 
 
 // get Database Connection
 $conn = getConnection();
@@ -84,7 +89,7 @@ if (!$conn) {
 
 $user_id = $_SESSION['user_id'];
 
-if (!createPost($conn, $user_id, $anon_post, $post_text, $media_file_id, $media_file_ext)) {
+if (!createPost($conn, $user_id, $anon_post, $post_text, $media_file_id, $media_file_ext, $expire_at)) {
     if ($target_file) {
         if (unlink($target_file) === false) {
             error_log('Error: Failed to delete untracked file: ' . $target_file);
