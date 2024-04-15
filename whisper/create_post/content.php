@@ -74,10 +74,13 @@
             // You can close the dropdown here if needed
             dropdown.classList.remove("show");
             dropDownValue = parseInt(selectedTime);
+            const timerBtn = document.querySelector('label[for="createPostTimerButton"]');
             if (dropDownValue > 0) {
-                const timerBtn = document.querySelector('label[for="createPostTimerButton"]');
                 timerBtn.classList.add("btn-selected");
                 timerBtn.setAttribute("title", event.target.textContent);
+            } else {
+                timerBtn.classList.remove("btn-selected");
+                timerBtn.setAttribute("title", "Self Destruct");
             }
         }
     });

@@ -189,7 +189,7 @@
     async function encryptAndSendMessage() {
         try {
             const message = document.getElementById('messageInput').value;
-            if (message.trim() === '') {
+            if (message.trim() === '' || document.title === 'Messages') {
                 return;
             }
             const {

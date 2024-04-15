@@ -7,7 +7,7 @@ define('DATABASE_PASSWORD', '');
 define('DATABASE_NAME', 'whisper_db');
 
 // Define the document server root directory
-define('DOCUMENT_SERVER_ROOT', '/opt/lampp/htdocs');
+define('DOCUMENT_SERVER_ROOT', 'C:/xampp/htdocs');
 
 // Difine every other path ralative to document server root directory
 define('PROFILES_DIRECTORY', '/uploads/profile_images/');

@@ -51,6 +51,11 @@ Import database.sql file located in database directory.
 ### Configuration File:  
 Update your database connection details, uploads directory, etc...  in the 'config.php' located in 'database' directory.  
   
+### Post clean up script  
+Run the post cleanup script located in database directory to periodically clean expired posts  
+
+    C:\xampp\php\php.exe C:\xampp\htdocs\database\post_cleanup.php
+
 ### Access the Website:
 Open your web browser and navigate to http://localhost/whisper. You should see the Whisper website.
   
