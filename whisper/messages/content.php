@@ -201,6 +201,8 @@
         if (username == 'Messages') {
             return;
         }
+        messageFeedContainer.innerHTML = '';
+        displayedMessages.clear();
         updateTitle(username);
         const {
             publicKeyJwk,
