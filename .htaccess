@@ -33,6 +33,7 @@ RewriteRule ^server/post/publicKeyJWK$ /server/post_publicKeyJwk.php [L]
 
 # GET servers
 RewriteRule ^server/following/?$ /server/following.php [L]
+RewriteRule ^server/conversations/?$ /server/conversations.php [L]
 RewriteRule ^server/keyPairId/?$ /server/keyPairId.php [L]
 RewriteRule ^server/messages/([^/]+)$ /server/messages.php?username=$1 [L]
 RewriteRule ^server/posts/?$ /server/posts.php [L]

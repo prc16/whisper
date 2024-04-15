@@ -35,6 +35,7 @@
     align-self: center;
     width: 100%;
     text-align: center;
+    margin: 24px;
 }
 
 #messageInputContainer {
@@ -52,6 +53,32 @@
 
 #messageMediaUpload {
     display: none;
+}
+
+.sidebarHeading {
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    align-items: center;
+    align-self: center;
+    justify-content: space-around;
+    text-align: center;
+    padding: 12px;
+    border-bottom: 1px solid var(--whisper-border);
+}
+
+.unread_count {
+    color: white;
+    font-weight: bold;
+    background-color: var(--whisper-color);
+    border-radius: 50%;
+    padding: 5px 10px;
+}
+
+#conversationsFeedContainer {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
 }
 
 #messageInputArea {

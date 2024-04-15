@@ -594,7 +594,6 @@ function getFollowers($conn, $userId, $limit = 50)
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("si", $userId, $limit);
     $stmt->execute();
-    $stmt->execute();
     $result = $stmt->get_result();
 
     $followers = fetchRowsWithProfile($result);
@@ -603,6 +602,36 @@ function getFollowers($conn, $userId, $limit = 50)
     return $followers;
 }
 
+function getConversations($conn, $receiver_id, $limit = 50)
+{
+    $sql = "SELECT 
+                c.sender_id, 
+                c.unread_count, 
+                c.updated_at, 
+                u.username AS username, 
+                pp.profile_file_id AS profile_file_id 
+            FROM 
+                conversations c 
+            LEFT JOIN 
+                users u ON c.sender_id = u.user_id 
+            LEFT JOIN 
+                profile_pictures pp ON c.sender_id = pp.user_id 
+            WHERE 
+                c.receiver_id = ? 
+            ORDER BY 
+                c.updated_at DESC 
+            LIMIT ?";
+
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("si", $receiver_id, $limit);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    $conversations = fetchRowsWithProfile($result);
+
+    $stmt->close();
+    return $conversations;
+}
 
 function fetchRowsWithProfile($result)
 {
@@ -645,6 +674,7 @@ function getMessages($conn, $userId, $reqUserId, $limit = 50)
 
     $messages = fetchMessages($result, $userId);
 
+    resetConversation($conn, $userId, $reqUserId);
     $stmt->close();
     return $messages;
 }
@@ -937,20 +967,63 @@ function getPublicKey($conn, $userId)
 function insertMessage($conn, $sender_id, $receiver_id, $encrypted_message, $initialization_vector)
 {
     try {
-        // Prepare the SQL statement
+        // Prepare the SQL statement to insert message
         $sql = "INSERT INTO messages (sender_id, receiver_id, encrypted_message, initialization_vector) VALUES (?, ?, ?, ?)";
-
-        // Bind parameters and execute the statement
         $stmt = $conn->prepare($sql);
         $stmt->bind_param("ssss", $sender_id, $receiver_id, $encrypted_message, $initialization_vector);
 
-        return $stmt->execute();
+        // Execute the statement to insert message
+        $stmt->execute();
+
+        // Check if the message was inserted successfully
+        if ($stmt->affected_rows > 0) {
+            // Call function to update conversations table
+            updateConversation($conn, $sender_id, $receiver_id, 1);
+            updateConversation($conn, $receiver_id, $sender_id, 0);
+        }
+
+        return true;
     } catch (Exception $e) {
         // Return false if an error occurs
         error_log($e->getMessage());
         return false;
     }
 }
+
+function updateConversation($conn, $sender_id, $receiver_id, $unread_count)
+{
+    try {
+        // Update conversations table to increment unread count and update time
+        $update_sql = "INSERT INTO conversations (sender_id, receiver_id, unread_count, updated_at)
+                       VALUES (?, ?, ?, CURRENT_TIMESTAMP)
+                       ON DUPLICATE KEY UPDATE
+                       unread_count = unread_count + 1, updated_at = CURRENT_TIMESTAMP";
+        $update_stmt = $conn->prepare($update_sql);
+        $update_stmt->bind_param("sss", $sender_id, $receiver_id, $unread_count);
+        $update_stmt->execute();
+    } catch (Exception $e) {
+        // Handle error
+        error_log($e->getMessage());
+    }
+}
+
+function resetConversation($conn, $receiver_id, $sender_id)
+{
+    try {
+        // Reset unread count to zero for the specified conversation
+        $reset_sql = "UPDATE conversations 
+                      SET unread_count = 0 
+                      WHERE receiver_id = ? AND sender_id = ?";
+        $reset_stmt = $conn->prepare($reset_sql);
+        $reset_stmt->bind_param("ss", $receiver_id, $sender_id);
+        return $reset_stmt->execute();
+    } catch (Exception $e) {
+        // Handle error
+        error_log($e->getMessage());
+        return false;
+    }
+}
+
 
 function getKeyPairId($conn, $userId)
 {

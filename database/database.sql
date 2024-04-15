@@ -98,13 +98,11 @@ CREATE TABLE `followers` (
 
 -- Create Table: conversations
 CREATE TABLE `conversations` (
-    id INT UNSIGNED AUTO_INCREMENT,
-    user_id CHAR(16) NOT NULL,
-    participant_id CHAR(16) NOT NULL,
-    conversation_id CHAR(16) NOT NULL,
+    receiver_id CHAR(16) NOT NULL,
+    sender_id CHAR(16) NOT NULL,
     unread_count INT UNSIGNED NOT NULL DEFAULT 0,
     updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    PRIMARY KEY (id),
-    CONSTRAINT `fk_conversations_user` FOREIGN KEY (user_id) REFERENCES `users` (user_id) ON DELETE CASCADE,
-    CONSTRAINT `fk_conversations_participant` FOREIGN KEY (participant_id) REFERENCES `users` (user_id) ON DELETE CASCADE
+    PRIMARY KEY (receiver_id, sender_id),
+    CONSTRAINT `fk_conversations_receiver` FOREIGN KEY (receiver_id) REFERENCES `users` (user_id) ON DELETE CASCADE,
+    CONSTRAINT `fk_conversations_sebder` FOREIGN KEY (sender_id) REFERENCES `users` (user_id) ON DELETE CASCADE
 ) ENGINE=InnoDB CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;
