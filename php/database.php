@@ -1046,3 +1046,123 @@ function getKeyPairId($conn, $userId)
     // Return the key pair ID
     return $keyPairId;
 }
+
+
+function searchUsername($conn, $username, $limit = 50)
+{
+    // Prepare the SQL statement with LIKE operator for substring matching
+    $sql = "SELECT 
+                u.username AS username, 
+                pp.profile_file_id AS profile_file_id 
+            FROM 
+                users u 
+            LEFT JOIN 
+                profile_pictures pp ON u.user_id = pp.user_id 
+            WHERE 
+                u.username 
+            LIKE 
+                ? 
+            ORDER BY 
+                u.username 
+            LIMIT ? ";
+
+    // Add wildcard '%' to search for substrings
+    $username = '%' . $username . '%';
+
+    $stmt = $conn->prepare($sql);
+    if ($stmt) {
+        $stmt->bind_param("si", $username, $limit);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        $usernames = fetchRowsWithProfile($result);
+
+        $stmt->close();
+        return $usernames;
+    } else {
+        // Error handling if prepare fails
+        return false;
+    }
+}
+
+function searchPosts($conn, $post_text, $limit = 50)
+{
+    $sql = "SELECT 
+                p.post_id, 
+                p.user_id, 
+                u.username AS username, 
+                p.anon_post, 
+                p.post_text, 
+                p.vote_count, 
+                p.media_file_id, 
+                p.media_file_ext, 
+                pp.profile_file_id AS profile_file_id 
+            FROM 
+                posts p 
+            LEFT JOIN 
+                users u ON p.user_id = u.user_id 
+            LEFT JOIN 
+                profile_pictures pp ON p.user_id = pp.user_id 
+            WHERE 
+                post_text 
+            LIKE 
+                ?
+            ORDER BY 
+                p.id DESC 
+            LIMIT ?";
+
+    // Add wildcard '%' to search for substrings
+    $post_text = '%' . $post_text . '%';
+
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("si", $post_text, $limit);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    $posts = fetchPosts($result);
+
+    $stmt->close();
+    return $posts;
+}
+
+function searchPostsWithVotes($conn, $voterUserId, $post_text, $limit = 50)
+{
+    $sql = "SELECT 
+                p.post_id, 
+                u.username AS username, 
+                p.anon_post, 
+                p.post_text, 
+                p.vote_count, 
+                p.media_file_id, 
+                p.media_file_ext, 
+                pp.profile_file_id AS profile_file_id, 
+                v.vote_type AS vote_type
+            FROM 
+                posts p 
+            LEFT JOIN 
+                users u ON p.user_id = u.user_id 
+            LEFT JOIN 
+                profile_pictures pp ON p.user_id = pp.user_id 
+            LEFT JOIN 
+                votes v ON p.post_id = v.post_id AND v.user_id = ? 
+            WHERE
+                post_text 
+            LIKE 
+                ? 
+            ORDER BY 
+                p.id DESC 
+            LIMIT ?";
+    
+    // Add wildcard '%' to search for substrings
+    $post_text = '%' . $post_text . '%';
+
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("ssi", $voterUserId, $post_text, $limit);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    $posts = fetchPosts($result);
+
+    $stmt->close();
+    return $posts;
+}
