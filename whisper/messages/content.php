@@ -11,6 +11,7 @@
 <script src="/scripts/webCrypto.js"></script>
 <script>
     const messageFeedContainer = document.getElementById('messageFeedContainer');
+    let globUsername = '';
 
     async function displayMessage(message, type) {
         return new Promise(resolve => {
@@ -34,7 +35,6 @@
             resolve();
         });
     }
-
 
     async function fetchPublicKeyJwk(username) {
         try {
@@ -147,6 +147,40 @@
         }
     }
 
+    async function importKeyPair(file) {
+        if (!file) {
+            alert('Please select a file.');
+            return;
+        }
+
+        try {
+            const keyPairData = await readFileAsJSON(file);
+            console.log('Imported key pair:', keyPairData);
+            await storeKeyPairInIndexedDB(keyPairData.keyPair, keyPairData.keyPairId);
+            // Now you can use the key pair data as needed
+            // For example, you can reconstruct CryptoKey objects from the JWK data
+        } catch (error) {
+            console.error('Error importing key pair:', error);
+        }
+    }
+
+    function readFileAsJSON(file) {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = () => {
+                try {
+                    const keyPairData = JSON.parse(reader.result);
+                    resolve(keyPairData);
+                } catch (error) {
+                    reject(error);
+                }
+            };
+            reader.onerror = reject;
+            reader.readAsText(file);
+        });
+    }
+
+
 
     async function encryptAndSendMessage() {
         try {
@@ -197,17 +231,22 @@
 
 
     // Function to handle the 'updateNeeded' event
-    async function handleUpdateEvent(username) {
-        if (username == 'Messages') {
+    async function handleUpdateEvent(username = '') {
+        messageFeedContainer.innerHTML = '';
+        if (username == '') {
+            username = globUsername;
+        }
+        if (username == 'Messages' || username == '') {
             return;
         }
-        messageFeedContainer.innerHTML = '';
         displayedMessages.clear();
         updateTitle(username);
+        globUsername = username;
         const {
             publicKeyJwk,
             privateKeyJwk
         } = await retrieveKeyPairFromIndexedDB();
+        displayMessage("Your messages are End-to-End Encrypted.", 'system');
         // Call fetchMessagesPeriodically to start fetching messages
         fetchMessagesPeriodically(username, privateKeyJwk);
     }
@@ -227,14 +266,47 @@
         }, 2000); // Fetch messages every 2 seconds (2000 milliseconds)
     }
 
-    document.addEventListener('DOMContentLoaded', () => {
+    async function importKeyPrompt() {
+        if (!messageFeedContainer) {
+            console.error("message container not found");
+            resolve();
+            return;
+        }
+
+        const messageElement = document.createElement("div");
+        messageElement.innerHTML = `
+                <p>Your Message Box is Locked.<br>
+                Import Your Keys to unlock them.</p>
+                <center>
+                <label for="messageMediaUpload" class="btn btn2 btn3" title="Media"><i class="far fa-file-import"></i></label>
+                <input type="file" id="messageMediaUpload" accept=".json">
+                </center>`;
+        messageElement.classList.add('system');
+
+        // Inserting the new message at the beginning
+        if (messageFeedContainer.firstChild) {
+            messageFeedContainer.insertBefore(messageElement, messageFeedContainer.firstChild);
+        } else {
+            messageFeedContainer.appendChild(messageElement);
+        }
+        document.getElementById('messageMediaUpload').addEventListener('change', async function() {
+            const file = this.files[0];
+            await importKeyPair(file);
+            handleUpdateEvent();
+        });
+    }
+
+    document.addEventListener('DOMContentLoaded', async () => {
 
         // Add event listener for 'update' event on messageFeedContainer div
         messageFeedContainer.addEventListener("updateNeeded", handleUpdateEvent);
 
         // Fetch messages initially
         // handleUpdateEvent();
-
-
+        keyPair = await retrieveKeyPairFromIndexedDB();
+        if (!keyPair) {
+            console.error('Key pair not found in IndexedDB.');
+            await importKeyPrompt();
+        }
     });
 </script>

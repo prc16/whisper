@@ -164,7 +164,7 @@ async function storeKeyPairInIndexedDB(keyPair, keyPairId) {
     }
 }
 
-async function initKeys() {
+async function initKeys(username) {
     try {
         // Generate key pair
         const keyPair = await generateKeyPair();
@@ -193,7 +193,7 @@ async function initKeys() {
         // Create a link element
         const link = document.createElement('a');
         link.href = url;
-        link.download = 'keyPair_' + keyPairId + '.json'; // Specify the filename for the downloaded file
+        link.download = username  + '_' + 'keyPairId_' + keyPairId + '.json'; // Specify the filename for the downloaded file
         link.click();
 
         // Cleanup: remove the temporary URL

@@ -35,7 +35,7 @@
                 .then(response => {
                     if (response.ok) {
                         // Successful signup
-                        initKeys();
+                        initKeys(username);
                     } else {
                         // Parse JSON response
                         return response.json().then(data => {

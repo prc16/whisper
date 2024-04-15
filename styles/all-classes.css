@@ -121,6 +121,16 @@ h2 {
     text-align: center;
 }
 
+.btn3 {
+    background-color: var(--whisper-border);
+    color: #666;
+    margin: 24px;
+}
+
+.btn3:hover {
+    background-color: #d6dce0;
+}
+
 .btn-selected {
     color: var(--whisper-selected);
 }
