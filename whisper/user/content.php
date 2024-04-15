@@ -45,10 +45,12 @@
     <?php elseif ((strcasecmp($reqUsername, 'Anonymous') !== 0) && $isFollowing) : ?>
         <div id="profile-update-options" class="profileButtonsContainer">
             <button class="follow-btn btn" data-type='unfollow' data-id='<?= htmlspecialchars($reqUsername) ?>' id="profileFollowButton">Unfollow</button>
+            <button class="btn" id="profileMessageBtn" onclick="redirectToMessages()">Message</button>
         </div>
     <?php elseif (strcasecmp($reqUsername, 'Anonymous') !== 0) : ?>
         <div id="profile-update-options" class="profileButtonsContainer">
             <button class="follow-btn btn" data-type='follow' data-id='<?= htmlspecialchars($reqUsername) ?>' id="profileFollowButton">Follow</button>
+            <button class="btn" id="profileMessageBtn" onclick="redirectToMessages()">Message</button>
         </div>
     <?php endif; ?>
 </div>
@@ -57,6 +59,9 @@
 <script src="/scripts/posts.js"></script>
 <script src="/scripts/follow.js"></script>
 <script>
+    function redirectToMessages() {
+        window.location.href = '/message/<?= htmlspecialchars($reqUsername) ?>';
+    }
     // Function to handle the 'updateNeeded' event
     function handleUpdateEvent() {
         fetchPosts('<?= htmlspecialchars($reqUsername) ?>');

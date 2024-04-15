@@ -546,7 +546,6 @@ function fetchRows($result)
 function getFollowees($conn, $userId, $limit = 50)
 {
     $sql = "SELECT 
-                f.followee_id, 
                 u.username AS username, 
                 pp.profile_file_id AS profile_file_id 
             FROM 
@@ -576,7 +575,6 @@ function getFollowees($conn, $userId, $limit = 50)
 function getFollowers($conn, $userId, $limit = 50)
 {
     $sql = "SELECT 
-                f.follower_id, 
                 u.username AS username, 
                 pp.profile_file_id AS profile_file_id 
             FROM 
@@ -605,7 +603,6 @@ function getFollowers($conn, $userId, $limit = 50)
 function getConversations($conn, $receiver_id, $limit = 50)
 {
     $sql = "SELECT 
-                c.sender_id, 
                 c.unread_count, 
                 c.updated_at, 
                 u.username AS username, 

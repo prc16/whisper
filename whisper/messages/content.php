@@ -312,5 +312,9 @@
             console.error('Key pair not found in IndexedDB.');
             await importKeyPrompt();
         }
+
+        <?php session_start(); ?>
+        handleUpdateEvent('<?= htmlspecialchars($_SESSION['reqUsername'] ?? null) ?>');
+
     });
 </script>
