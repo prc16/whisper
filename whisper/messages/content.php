@@ -129,7 +129,11 @@
     async function retrieveKeyPairFromIndexedDB() {
         try {
             // Open a connection to IndexedDB
-            const db = await idb.openDB('keyPairsDB', 1);
+            const db = await idb.openDB('whisperDB', 1, {
+                upgrade(db) {
+                    db.createObjectStore('keyPairs');
+                },
+            });
 
             // Get the key pair from the database
             const keyPair = await db.get('keyPairs', '<?= htmlspecialchars($keyPairId) ?>');

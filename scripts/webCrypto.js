@@ -146,7 +146,7 @@ async function storeKeyPairInIndexedDB(keyPair, keyPairId) {
         // const keyPair = await generateKeyPair();
 
         // Open a connection to IndexedDB
-        const db = await idb.openDB('keyPairsDB', 1, {
+        const db = await idb.openDB('whisperDB', 1, {
             upgrade(db) {
                 db.createObjectStore('keyPairs');
             },
