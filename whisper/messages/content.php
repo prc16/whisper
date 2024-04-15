@@ -189,6 +189,9 @@
     async function encryptAndSendMessage() {
         try {
             const message = document.getElementById('messageInput').value;
+            if (message.trim() === '') {
+                return;
+            }
             const {
                 publicKeyJwk,
                 privateKeyJwk
