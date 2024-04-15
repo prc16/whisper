@@ -2,7 +2,7 @@
 <?php include_once $_SERVER['DOCUMENT_ROOT'] . '/php/userDetails.php'; ?>
 <div id="settingsContainer">
     <input type="file" id="fileInput" accept=".json">
-    <button onclick="importKeyPair(<?= htmlspecialchars($keyPairId) ?>)">Import Key Pair</button>
+    <button onclick="importKeyPair()">Import Key Pair</button>
 </div>
 <script src="/scripts/webCrypto.js"></script>
 <script>

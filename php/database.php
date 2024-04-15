@@ -657,6 +657,7 @@ function fetchMessages($result, $userId)
         $message['id'] = $row['id'];
         $message['encryptedData'] = $row['encrypted_message'];
         $message['initializationVector'] = $row['initialization_vector'];
+        $message['sent_at'] = $row['sent_at'];
         if ($row['sender_id'] == $userId) {
             $message['type'] = 'sent';
         } else {

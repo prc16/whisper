@@ -13,27 +13,27 @@
     const messageFeedContainer = document.getElementById('messageFeedContainer');
 
     async function displayMessage(message, type) {
-    return new Promise(resolve => {
-        if (!messageFeedContainer) {
-            console.error("message container not found");
+        return new Promise(resolve => {
+            if (!messageFeedContainer) {
+                console.error("message container not found");
+                resolve();
+                return;
+            }
+
+            const messageElement = document.createElement("div");
+            messageElement.textContent = message;
+            messageElement.classList.add(type);
+
+            // Inserting the new message at the beginning
+            if (messageFeedContainer.firstChild) {
+                messageFeedContainer.insertBefore(messageElement, messageFeedContainer.firstChild);
+            } else {
+                messageFeedContainer.appendChild(messageElement);
+            }
+
             resolve();
-            return;
-        }
-        
-        const messageElement = document.createElement("div");
-        messageElement.textContent = message;
-        messageElement.classList.add(type);
-
-        // Inserting the new message at the beginning
-        if (messageFeedContainer.firstChild) {
-            messageFeedContainer.insertBefore(messageElement, messageFeedContainer.firstChild);
-        } else {
-            messageFeedContainer.appendChild(messageElement);
-        }
-
-        resolve();
-    });
-}
+        });
+    }
 
 
     async function fetchPublicKeyJwk(username) {
@@ -151,27 +151,27 @@
     async function encryptAndSendMessage() {
         try {
             const message = document.getElementById('messageInput').value;
-        const {
-          publicKeyJwk,
-          privateKeyJwk
-        } = await retrieveKeyPairFromIndexedDB();
-        console.log("Public Key (JWK):", publicKeyJwk);
-        console.log("Private Key (JWK):", privateKeyJwk);
+            const {
+                publicKeyJwk,
+                privateKeyJwk
+            } = await retrieveKeyPairFromIndexedDB();
+            console.log("Public Key (JWK):", publicKeyJwk);
+            console.log("Private Key (JWK):", privateKeyJwk);
 
-        // await sendPublicKey(publicKeyJwk);
-        const receivedPublicKeyJwk = await fetchPublicKeyJwk(document.title);
+            // await sendPublicKey(publicKeyJwk);
+            const receivedPublicKeyJwk = await fetchPublicKeyJwk(document.title);
 
-        const encryptionKey = await deriveEncryptionKey(receivedPublicKeyJwk, privateKeyJwk);
-        console.log('Derived encryption key:', encryptionKey);
+            const encryptionKey = await deriveEncryptionKey(receivedPublicKeyJwk, privateKeyJwk);
+            console.log('Derived encryption key:', encryptionKey);
 
-        const {
-          base64Data,
-          base64IV
-        } = await encryptText(message, encryptionKey);
-        console.log('Encrypted message:', base64Data);
+            const {
+                base64Data,
+                base64IV
+            } = await encryptText(message, encryptionKey);
+            console.log('Encrypted message:', base64Data);
 
-        await sendEncryptedMessageToServer(base64Data, base64IV, document.title);
-        await receiveAndDecryptMessage(document.title, privateKeyJwk);
+            await sendEncryptedMessageToServer(base64Data, base64IV, document.title);
+            await receiveAndDecryptMessage(document.title, privateKeyJwk);
 
             // Optionally display a success message
             console.log('Message sent successfully.');
@@ -197,15 +197,33 @@
 
 
     // Function to handle the 'updateNeeded' event
-    async function handleUpdateEvent(username = '') {
+    async function handleUpdateEvent(username) {
+        if (username == 'Messages') {
+            return;
+        }
+        updateTitle(username);
         const {
-                publicKeyJwk,
-                privateKeyJwk
-            } = await retrieveKeyPairFromIndexedDB();
-        receiveAndDecryptMessage(username, privateKeyJwk);
-        updateTitle(username !== '' ? username : 'Messages');
+            publicKeyJwk,
+            privateKeyJwk
+        } = await retrieveKeyPairFromIndexedDB();
+        // Call fetchMessagesPeriodically to start fetching messages
+        fetchMessagesPeriodically(username, privateKeyJwk);
     }
 
+    let fetchMessagesIntervalId;
+
+    // Function to fetch messages every 2 seconds
+    async function fetchMessagesPeriodically(username, privateKeyJwk) {
+        // Clear previous interval if it exists
+        if (fetchMessagesIntervalId) {
+            clearInterval(fetchMessagesIntervalId);
+        }
+
+        // Set up a new interval
+        fetchMessagesIntervalId = setInterval(async () => {
+            receiveAndDecryptMessage(username, privateKeyJwk);
+        }, 2000); // Fetch messages every 2 seconds (2000 milliseconds)
+    }
 
     document.addEventListener('DOMContentLoaded', () => {
 
