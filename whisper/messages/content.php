@@ -312,7 +312,7 @@
         // handleUpdateEvent();
         keyPair = await retrieveKeyPairFromIndexedDB();
         if (!keyPair) {
-            console.error('Key pair not found in IndexedDB.');
+            console.error('ERROR: Key pair not found in IndexedDB.');
             await importKeyPrompt();
         }
 
