@@ -240,6 +240,12 @@
     // Function to handle the 'updateNeeded' event
     async function handleUpdateEvent(username = '') {
         messageFeedContainer.innerHTML = '';
+        keyPair = await retrieveKeyPairFromIndexedDB();
+        if (!keyPair) {
+            console.error('ERROR: Key pair not found in IndexedDB.');
+            await importKeyPrompt();
+            return;
+        }
         if (username == '') {
             username = globUsername;
         }
@@ -252,7 +258,7 @@
         const {
             publicKeyJwk,
             privateKeyJwk
-        } = await retrieveKeyPairFromIndexedDB();
+        } = keyPair;
         displayMessage("Your messages are End-to-End Encrypted.", 'system');
         // Call fetchMessagesPeriodically to start fetching messages
         fetchMessagesPeriodically(username, privateKeyJwk);
@@ -310,14 +316,9 @@
 
         // Fetch messages initially
         // handleUpdateEvent();
-        keyPair = await retrieveKeyPairFromIndexedDB();
-        if (!keyPair) {
-            console.error('ERROR: Key pair not found in IndexedDB.');
-            await importKeyPrompt();
-        }
 
         <?php session_start(); ?>
-        handleUpdateEvent('<?= htmlspecialchars($_SESSION['reqUsername'] ?? null) ?>');
+        handleUpdateEvent('<?= htmlspecialchars($_SESSION['reqUsername'] ?? '') ?>');
 
     });
 </script>
