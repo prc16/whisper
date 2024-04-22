@@ -33,12 +33,16 @@ function displayPosts(posts) {
                 <button id="downvote_${post.post_id}" class="vote-btn hidden" data-id="${post.post_id}" data-type="downvote"></button>
                 <div class="voteCount">Votes: ${post.vote_count}</div>
             </div>
-            <div class="displayPostButtons2">
+            <div class="displayPostButtons2 ${post.report_count > 0 ? '' : 'hidden'}">
                     <label id="review_label_${post.post_id}" for="review_${post.post_id}" class="btn btn2" title="Review"><i class="fas fa-eye-slash"></i></label>
                     <button id="review_${post.post_id}" class="review-btn hidden" data-id="${post.post_id}" data-type="review"></button>
             </div>
+            <div class="displayPostButtons2 ${post.report_count > 0 ? 'hidden' : ''}">
+            <label for="Report_${post.post_id}" class="btn btn2 ${post.report_type === 'approve' ? 'btn-selected' : ''}" title="Report Inappropriate">Report</label>
+            <button id="Report_${post.post_id}" class="vote-btn hidden" data-id="${post.post_id}" data-type="approve"></button>
+            </div>
         </div>
-        <div id="inappropriate_${post.post_id}">
+        <div id="inappropriate_${post.post_id}" class="${post.report_count > 0 ? '' : 'hidden'}">
             <p class="errorMessage">This post has been flagged inappropriate!</p>
             <div class="displayPostButtons0">
                 <div>
