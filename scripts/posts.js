@@ -11,26 +11,43 @@ function displayPosts(posts) {
         const postElement = document.createElement('div');
         postElement.className = 'post';
         postElement.innerHTML = `
-        <div class="displayPostContainer">
-            <div id="displayPostContainerPart1">
+        <div class="displayPostContainer" id="post_${post.post_id}">
+            <div class="displayPostContainerPart1">
                 <a href="/u/${post.username}" class="profile_link"><img src="${post.profile_file_path}" class="profile-picture" alt=""></a>
             </div>
-            <div id="displayPostContainerPart2">
+            <div class="displayPostContainerPart2">
                 <a href="/u/${post.username}" class="username_link"><h2 class="profile-username">${post.username}</h2></a>
-                <p>${post.post_text}</p>
-                <div id="displayPostMediaPreview">
-                <img src="${post.post_file_path}" alt="" class="image-preview">
+                <p id="text_${post.post_id}" class="blur-low">${post.post_text}</p>
+                <div class="displayPostMediaPreview">
+                    <img src="${post.post_file_path}" alt="" class="image-preview blur-high" id="media_${post.post_id}">
                 </div>
-                <div id="displayPostButtons">
+                <div class="displayPostButtons">
                     
-                    <div class="voteCount">Votes: ${post.vote_count}</div>
                 
-                    <label for="upvote${post.post_id}" class="btn btn2 ${post.vote_type === 'upvote' ? 'btn-selected' : ''}" title="Upvote"><i class="fas fa-arrow-alt-up"></i></label>
-                    <button id="upvote${post.post_id}" class="vote-btn hidden" data-id="${post.post_id}" data-type="upvote"></button>
-    
-                    
-                    <label for="downvote${post.post_id}" class="btn btn2 ${post.vote_type === 'downvote' ? 'btn-selected' : ''}" title="Downvote"><i class="fas fa-arrow-alt-down"></i></label>
-                    <button id="downvote${post.post_id}" class="vote-btn hidden" data-id="${post.post_id}" data-type="downvote"></button>
+                    <label for="upvote_${post.post_id}" class="btn btn2 ${post.vote_type === 'upvote' ? 'btn-selected' : ''}" title="Upvote"><i class="fas fa-arrow-alt-up"></i></label>
+                    <button id="upvote_${post.post_id}" class="vote-btn hidden" data-id="${post.post_id}" data-type="upvote"></button>
+                
+                
+                    <label for="downvote_${post.post_id}" class="btn btn2 ${post.vote_type === 'downvote' ? 'btn-selected' : ''}" title="Downvote"><i class="fas fa-arrow-alt-down"></i></label>
+                    <button id="downvote_${post.post_id}" class="vote-btn hidden" data-id="${post.post_id}" data-type="downvote"></button>
+                    <div class="voteCount">Votes: ${post.vote_count}</div>
+                </div>
+                <p class="errorMessage">This post has been flagged inappropriate!</p>
+                <div class="displayPostButtons0">
+                    <div>
+                        <div class="displayPostButtons3 hidden" id="hidden_${post.post_id}">
+                            <label for="approve_${post.post_id}" class="btn btn2 ${post.vote_type === 'upvote' ? 'btn-selected' : ''}" title="Upvote"><i class="fas fa-arrow-alt-up"></i></label>
+                            <button id="approve_${post.post_id}" class="vote-btn hidden" data-id="${post.post_id}" data-type="upvote"></button>
+
+                            <label for="disapprove_${post.post_id}" class="btn btn2 ${post.vote_type === 'downvote' ? 'btn-selected' : ''}" title="Downvote"><i class="fas fa-arrow-alt-down"></i></label>
+                            <button id="disapprove_${post.post_id}" class="vote-btn hidden" data-id="${post.post_id}" data-type="downvote"></button>
+                        </div>
+                        <div class="displayPostButtons2">
+                            <label id="review_label_${post.post_id}" for="review_${post.post_id}" class="btn btn2" title="Review"><i class="fas fa-eye-slash"></i></label>
+                            <button id="review_${post.post_id}" class="review-btn hidden" data-id="${post.post_id}" data-type="review"></button>
+                        </div>
+                    </div>
+                    <div class="voteCount approveCount">Approvals: ${post.vote_count}</div>
                 </div>
             </div>
         </div>
@@ -72,6 +89,24 @@ function vote(event) {
         .catch(error => {
             console.error('There was a problem with your fetch operation:', error);
         });
+    } else if (target.classList.contains('review-btn')) {
+        const postId = target.dataset.id;
+        const textContainer = document.getElementById(`text_${postId}`);
+        const mediaContainer = document.getElementById(`media_${postId}`);
+        const hiddenContainer = document.getElementById(`hidden_${postId}`);
+        const reviewLabel = document.getElementById(`review_label_${postId}`);
+
+        if (reviewLabel.classList.contains('btn-selected')){
+            textContainer.classList.add('blur-low');
+            mediaContainer.classList.add('blur-high');
+            hiddenContainer.classList.add('hidden');
+            reviewLabel.classList.remove('btn-selected');
+        } else {
+            textContainer.classList.remove('blur-low');
+            mediaContainer.classList.remove('blur-high');
+            hiddenContainer.classList.remove('hidden');
+            reviewLabel.classList.add('btn-selected');
+        }
     }
 }
 

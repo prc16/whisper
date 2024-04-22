@@ -135,6 +135,16 @@ h2 {
     color: var(--whisper-selected);
 }
 
+.blur-high {
+    filter: blur(50px);
+    /* Change the blur value as needed */
+}
+
+.blur-low {
+    filter: blur(5px);
+    /* Change the blur value as needed */
+}
+
 /* Initially using regular icons 
 a .far {
 }
@@ -145,7 +155,7 @@ a.active .far {
     font-weight: bold;
 }
 
-input[type="checkbox"]:checked + label .fas {
+input[type="checkbox"]:checked+label .fas {
     color: var(--whisper-selected);
 }
 
