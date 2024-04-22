@@ -54,6 +54,7 @@ CREATE TABLE `posts` (
     created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     expire_at DATETIME,
     vote_count INT NOT NULL DEFAULT 0,
+    report_count INT NOT NULL DEFAULT 0,
     PRIMARY KEY (id),
     UNIQUE KEY `unique_post_id` (post_id),
     UNIQUE KEY `unique_media_file_id` (media_file_id),
@@ -70,6 +71,16 @@ CREATE TABLE `votes` (
     PRIMARY KEY (post_id, user_id),
     CONSTRAINT `fk_votes_posts` FOREIGN KEY (post_id) REFERENCES `posts` (post_id) ON DELETE CASCADE,
     CONSTRAINT `fk_votes_users` FOREIGN KEY (user_id) REFERENCES `users` (user_id) ON DELETE CASCADE
+) ENGINE=InnoDB CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- Create Table: reports
+CREATE TABLE `reports` (
+    post_id CHAR(16) NOT NULL,
+    user_id CHAR(16) NOT NULL,
+    report_type ENUM('approve', 'disapprove') NOT NULL,
+    PRIMARY KEY (post_id, user_id),
+    CONSTRAINT `fk_reports_posts` FOREIGN KEY (post_id) REFERENCES `posts` (post_id) ON DELETE CASCADE,
+    CONSTRAINT `fk_reports_users` FOREIGN KEY (user_id) REFERENCES `users` (user_id) ON DELETE CASCADE
 ) ENGINE=InnoDB CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- Create Table: messages

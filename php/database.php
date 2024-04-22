@@ -367,6 +367,7 @@ function getPosts($conn, $limit = 50)
                 p.anon_post, 
                 p.post_text, 
                 p.vote_count, 
+                p.report_count, 
                 p.media_file_id, 
                 p.media_file_ext, 
                 pp.profile_file_id AS profile_file_id 
@@ -400,6 +401,7 @@ function getUserPosts($conn, $userId, $limit = 50)
                 p.anon_post, 
                 p.post_text, 
                 p.vote_count, 
+                p.report_count, 
                 p.media_file_id, 
                 p.media_file_ext, 
                 pp.profile_file_id AS profile_file_id 
@@ -435,10 +437,12 @@ function getPostsWithVotes($conn, $voterUserId, $limit = 50)
                 p.anon_post, 
                 p.post_text, 
                 p.vote_count, 
+                p.report_count, 
                 p.media_file_id, 
                 p.media_file_ext, 
                 pp.profile_file_id AS profile_file_id, 
-                v.vote_type AS vote_type
+                v.vote_type AS vote_type, 
+                r.report_type AS report_type 
             FROM 
                 posts p 
             LEFT JOIN 
@@ -447,12 +451,14 @@ function getPostsWithVotes($conn, $voterUserId, $limit = 50)
                 profile_pictures pp ON p.user_id = pp.user_id 
             LEFT JOIN 
                 votes v ON p.post_id = v.post_id AND v.user_id = ? 
+            LEFT JOIN 
+                reports r ON p.post_id = r.post_id AND r.user_id = ? 
             ORDER BY 
                 p.id DESC 
             LIMIT ?";
 
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param("si", $voterUserId, $limit);
+    $stmt->bind_param("ssi", $voterUserId, $voterUserId, $limit);
     $stmt->execute();
     $result = $stmt->get_result();
 
@@ -470,10 +476,12 @@ function getUserPostsWithVotes($conn, $voterUserId, $userId, $limit = 50)
                 p.anon_post, 
                 p.post_text, 
                 p.vote_count, 
+                p.report_count, 
                 p.media_file_id, 
                 p.media_file_ext, 
                 pp.profile_file_id AS profile_file_id, 
-                v.vote_type AS vote_type
+                v.vote_type AS vote_type, 
+                r.report_type AS report_type 
             FROM 
                 posts p 
             LEFT JOIN 
@@ -482,6 +490,8 @@ function getUserPostsWithVotes($conn, $voterUserId, $userId, $limit = 50)
                 profile_pictures pp ON p.user_id = pp.user_id 
             LEFT JOIN 
                 votes v ON p.post_id = v.post_id AND v.user_id = ? 
+            LEFT JOIN 
+                reports r ON p.post_id = r.post_id AND r.user_id = ? 
             WHERE 
                 p.user_id = ? AND 
                 p.anon_post = 0 
@@ -490,7 +500,7 @@ function getUserPostsWithVotes($conn, $voterUserId, $userId, $limit = 50)
             LIMIT ?";
 
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param("ssi", $voterUserId, $userId, $limit);
+    $stmt->bind_param("sssi", $voterUserId, $voterUserId, $userId, $limit);
     $stmt->execute();
     $result = $stmt->get_result();
 
@@ -803,6 +813,62 @@ function removeUserVote($conn, $userId, $postId)
     }
 }
 
+function updatePostReports($conn, $postId, $reportIncrement)
+{
+    $sql = "UPDATE posts SET report_count = report_count + ? WHERE post_id = ?";
+    try {
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("is", $reportIncrement, $postId);
+        return $stmt->execute();
+    } catch (Exception $e) {
+        error_log($e->getMessage());
+        return false;
+    }
+}
+
+function createReport($conn, $userId, $postId, $reportType)
+{
+    $sql = "INSERT INTO reports (user_id, post_id, report_type) VALUES (?, ?, ?)
+            ON DUPLICATE KEY UPDATE report_type = VALUES(report_type)";
+    try {
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("sss", $userId, $postId, $reportType);
+        return $stmt->execute();
+    } catch (Exception $e) {
+        error_log($e->getMessage());
+        return false;
+    }
+}
+
+function getUserReportType($conn, $userId, $postId)
+{
+    $sql = "SELECT report_type FROM reports WHERE user_id = ? AND post_id = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("ss", $userId, $postId);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    if ($result->num_rows > 0) {
+        $row = $result->fetch_assoc();
+        return $row['report_type'];
+    }
+
+    return null;
+}
+
+function removeUserReport($conn, $userId, $postId)
+{
+    $sql = "DELETE FROM reports WHERE user_id = ? AND post_id = ?";
+    try {
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("ss", $userId, $postId);
+        return $stmt->execute();
+    } catch (Exception $e) {
+        error_log($e->getMessage());
+        return false;
+    }
+}
+
 /**
  * Handles the voting process for a user on a specific post.
  *
@@ -821,36 +887,69 @@ function handleVote($conn, $userId, $postId, $voteType)
     // Turn off autocommit
     $conn->autocommit(false);
 
-    // Get the current vote type given by the user for the post
-    $currentVoteType = getUserVoteType($conn, $userId, $postId);
-
     try {
-        // Check if the current vote type matches the requested vote type
-        if ($currentVoteType === $voteType) {
-            // If they match, remove the user's vote
-            if (!removeUserVote($conn, $userId, $postId) || !updatePostVotes($conn, $postId, ($voteType === 'upvote' ? -1 : 1))) {
-                throw new Exception("Failed to remove user vote or update post votes");
-            }
-        } else {
-            // If they don't match, remove the user's current vote and add new vote
-            if ($currentVoteType !== null) {
-                if (!removeUserVote($conn, $userId, $postId) || !updatePostVotes($conn, $postId, ($currentVoteType === 'upvote' ? -1 : 1))) {
+        if ($voteType === 'upvote' || $voteType === 'downvote') {
+            // Get the current vote type given by the user for the post
+            $currentVoteType = getUserVoteType($conn, $userId, $postId);
+
+            // Check if the current vote type matches the requested vote type
+            if ($currentVoteType === $voteType) {
+                // If they match, remove the user's vote
+                if (!removeUserVote($conn, $userId, $postId) || !updatePostVotes($conn, $postId, ($voteType === 'upvote' ? -1 : 1))) {
                     throw new Exception("Failed to remove user vote or update post votes");
+                }
+            } else {
+                // If they don't match, remove the user's current vote and add new vote
+                if ($currentVoteType !== null) {
+                    if (!removeUserVote($conn, $userId, $postId) || !updatePostVotes($conn, $postId, ($currentVoteType === 'upvote' ? -1 : 1))) {
+                        throw new Exception("Failed to remove user vote or update post votes");
+                    }
+                }
+
+                if (!updatePostVotes($conn, $postId, ($voteType === 'upvote' ? 1 : -1)) || !createVote($conn, $userId, $postId, $voteType)) {
+                    throw new Exception("Failed to update post votes or create new vote");
                 }
             }
 
-            if (!updatePostVotes($conn, $postId, ($voteType === 'upvote' ? 1 : -1)) || !createVote($conn, $userId, $postId, $voteType)) {
-                throw new Exception("Failed to update post votes or create new vote");
+            // Commit changes
+            $conn->commit();
+
+            // Turn on autocommit
+            $conn->autocommit(true);
+
+            return true; // All operations succeeded
+        } else {
+            // Get the current report type given by the user for the post
+            $currentReportType = getUserReportType($conn, $userId, $postId);
+            $reportType = $voteType;
+
+            // Check if the current report type matches the requested report type
+            if ($currentReportType === $reportType) {
+                // If they match, remove the user's report
+                if (!removeUserReport($conn, $userId, $postId) || !updatePostReports($conn, $postId, ($reportType === 'approve' ? -1 : 1))) {
+                    throw new Exception("Failed to remove user report or update post reports");
+                }
+            } else {
+                // If they don't match, remove the user's current report and add new report
+                if ($currentReportType !== null) {
+                    if (!removeUserReport($conn, $userId, $postId) || !updatePostReports($conn, $postId, ($currentReportType === 'approve' ? -1 : 1))) {
+                        throw new Exception("Failed to remove user report or update post reports");
+                    }
+                }
+
+                if (!updatePostReports($conn, $postId, ($reportType === 'approve' ? 1 : -1)) || !createReport($conn, $userId, $postId, $reportType)) {
+                    throw new Exception("Failed to update post reports or create new report");
+                }
             }
+
+            // Commit changes
+            $conn->commit();
+
+            // Turn on autocommit
+            $conn->autocommit(true);
+
+            return true; // All operations succeeded
         }
-
-        // Commit changes
-        $conn->commit();
-
-        // Turn on autocommit
-        $conn->autocommit(true);
-
-        return true; // All operations succeeded
     } catch (Exception $e) {
         // Rollback changes
         $conn->rollback();
@@ -1153,7 +1252,7 @@ function searchPostsWithVotes($conn, $voterUserId, $post_text, $limit = 50)
             ORDER BY 
                 p.id DESC 
             LIMIT ?";
-    
+
     // Add wildcard '%' to search for substrings
     $post_text = '%' . $post_text . '%';
 

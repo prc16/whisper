@@ -20,7 +20,7 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 // Validate form data
 $action = $_POST['action'] ?? null;
 $postId = $_POST['post_id'] ?? null;
-if (!$action || !in_array($action, ['upvote', 'downvote']) || !$postId || strlen($postId) !== 16) {
+if (!$action || !in_array($action, ['upvote', 'downvote', 'approve', 'disapprove']) || !$postId || strlen($postId) !== 16) {
     errorResponse(400, 'Invalid action or post ID provided.');
     exit;
 }

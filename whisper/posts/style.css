@@ -70,6 +70,13 @@
     display: block;
 } */
 
+.displayPostButtonsJustify {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    padding-right: 14px;
+}
+
 .displayPostButtons {
     display: flex;
     align-items: center;
