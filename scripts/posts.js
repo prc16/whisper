@@ -33,28 +33,26 @@ function displayPosts(posts) {
                 <button id="downvote_${post.post_id}" class="vote-btn hidden" data-id="${post.post_id}" data-type="downvote"></button>
                 <div class="voteCount">Votes: ${post.vote_count}</div>
             </div>
-            <div class="displayPostButtons2 ${post.report_count > 0 ? '' : 'hidden'}">
-                    <label id="review_label_${post.post_id}" for="review_${post.post_id}" class="btn btn2" title="Review"><i class="fas fa-eye-slash"></i></label>
+            <div class="displayPostButtons">
+                <div class="${post.report_count > 0 ? '' : 'hidden'}">
+                    <label id="review_label_${post.post_id}" for="review_${post.post_id}" class="btn btn2" title="Review"><i class="fas fa-eye"></i></label>
                     <button id="review_${post.post_id}" class="review-btn hidden" data-id="${post.post_id}" data-type="review"></button>
-            </div>
-            <div class="displayPostButtons2 ${post.report_count > 0 ? 'hidden' : ''}">
-            <label for="Report_${post.post_id}" class="btn btn2 ${post.report_type === 'approve' ? 'btn-selected' : ''}" title="Report Inappropriate">Report</label>
-            <button id="Report_${post.post_id}" class="vote-btn hidden" data-id="${post.post_id}" data-type="approve"></button>
+                </div>
+                <label id="report_label_${post.post_id}" for="report_${post.post_id}" class="btn btn2 ${(post.report_type === 'approve' || post.report_type === 'disapprove') ? 'btn-selected' : ''}" title="Report Inappropriate"><i class="fas fa-pennant"></i></label>
+                <button id="report_${post.post_id}" class="report-btn hidden" data-id="${post.post_id}" data-type="report"></button>
             </div>
         </div>
-        <div id="inappropriate_${post.post_id}" class="${post.report_count > 0 ? '' : 'hidden'}">
-            <p class="errorMessage">This post has been flagged inappropriate!</p>
-            <div class="displayPostButtons0">
-                <div>
-                    <div class="displayPostButtons3">
-                        <label for="approve_${post.post_id}" class="btn btn2 ${post.report_type === 'approve' ? 'btn-selected' : ''}" title="Approve Report"><i class="fas fa-check"></i></label>
+        <div id="inappropriate_${post.post_id}" class="${(post.report_type === 'approve' || post.report_type === 'disapprove' || post.report_count > 0) ? '' : 'hidden'}">
+            
+            <div id="reportButtons_${post.post_id}" class="displayPostButtons ${(post.report_type === 'approve' || post.report_type === 'disapprove') ? '' : 'hidden'}">
+                        <label for="approve_${post.post_id}" class="btn btn2 ${post.report_type === 'approve' ? 'btn-selected' : ''}" title="Approve Report"><i class="fas fa-arrow-alt-up"></i></label>
                         <button id="approve_${post.post_id}" class="vote-btn hidden" data-id="${post.post_id}" data-type="approve"></button>
-                        <label for="disapprove_${post.post_id}" class="btn btn2 ${post.report_type === 'disapprove' ? 'btn-selected' : ''}" title="Dispprove Report"><i class="fas fa-times"></i></label>
+                        <label for="disapprove_${post.post_id}" class="btn btn2 ${post.report_type === 'disapprove' ? 'btn-selected' : ''}" title="Dispprove Report"><i class="fas fa-arrow-alt-down"></i></label>
                         <button id="disapprove_${post.post_id}" class="vote-btn hidden" data-id="${post.post_id}" data-type="disapprove"></button>
-                    </div>
-                </div>
-                <div class="voteCount approveCount">Reports: ${post.report_count}</div>
+     
+                <div class="voteCount">Reports: ${post.report_count}</div>
             </div>
+            <p class="errorMessage ${post.report_count > 0 ? '' : 'hidden'}">This post has been flagged inappropriate!</p>
         </div>
     </div>
 </div>
@@ -110,6 +108,21 @@ function vote(event) {
             textContainer.classList.remove('blur-low');
             mediaContainer.classList.remove('blur-high');
             reviewLabel.classList.add('btn-selected');
+        }
+    } else if (target.classList.contains('report-btn')) {
+        const postId = target.dataset.id;
+        const inappropriateContainer = document.getElementById(`inappropriate_${postId}`);
+        const reportButtonsContainer = document.getElementById(`reportButtons_${postId}`);
+        const reportLabel = document.getElementById(`report_label_${postId}`);
+
+        if (reportLabel.classList.contains('btn-selected')){
+            inappropriateContainer.classList.add('hidden');
+            reportButtonsContainer.classList.add('hidden');
+            reportLabel.classList.remove('btn-selected');
+        } else {
+            inappropriateContainer.classList.remove('hidden');
+            reportButtonsContainer.classList.remove('hidden');
+            reportLabel.classList.add('btn-selected');
         }
     }
 }

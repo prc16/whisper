@@ -869,6 +869,22 @@ function removeUserReport($conn, $userId, $postId)
     }
 }
 
+function getVotes($conn, $postId)
+{
+    $sql = "SELECT vote_count,report_count FROM posts WHERE post_id = ? LIMIT 1";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("s", $postId);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    if ($result->num_rows > 0) {
+        $row = $result->fetch_assoc();
+        return $row;
+    }
+
+    return null;
+}
+
 /**
  * Handles the voting process for a user on a specific post.
  *
