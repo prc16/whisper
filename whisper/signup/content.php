@@ -18,7 +18,7 @@
         </button>
         <p>
             These keys are used to encrypt and decrypt your message.
-            <br>These keys are stored in your web browser's database.
+            <br>These keys are not stored on the server.
             <br>If you clear your browser data or switch browsers, you'll need to import these keys to access your messages again.
         </p>
     </div>
@@ -162,7 +162,7 @@
                             keyPair: keyPair
                         };
                         const jsonData = JSON.stringify(data);
-                        const filename = username + '_keyPairData.json';
+                        const filename = username + '_keyPairId_' + keyPairId +'.json';
                         keyPairDownloadButton.addEventListener('click', () => {
                             downloadJsonFile(jsonData, filename);
                             // Redirect to home page

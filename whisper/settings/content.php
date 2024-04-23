@@ -1,29 +1,45 @@
 <?php include_once $_SERVER['DOCUMENT_ROOT'] . '/whisper/topbar-middle/content.php'; ?>
 <?php include_once $_SERVER['DOCUMENT_ROOT'] . '/php/userDetails.php'; ?>
+<div id="settingsContainer">
+    <div id="profile-container-large">
+        <img id="profile-container-large-picture" src="<?= htmlspecialchars($profilePicture) ?>">
+        <div id="profile-container-large-username">
+            <?= htmlspecialchars($username) ?>
+        </div>
+        <div>
+            keyPairId: <?= htmlspecialchars($keyPairId) ?>
+        </div>
+    </div>
 
-<div id="settingsErrorMessage" class="errorMessage"></div>
-<div id="settingsButtons">
-    <button id="keyPairExportButton" class="btn btn2">Export keys</button>
-    <button id="keyPairImportButton" class="btn btn2">Import keys</button>
-</div>
+    <div id="settingsButtons" class="profileButtonsContainer">
+        <button id="keyPairExportButton" class="btn">Export keys</button>
+        <button id="keyPairImportButton" class="btn">Import keys</button>
+    </div>
 
-<div id="exportKeysContainer" class="hidden">
-    <h2>
-        Download your key pair data
-    </h2>
-    <button id="keyPairDownloadButton" class="btn btn2">
-        <i class="fas fa-download"></i>
-        <div id="filenameContainer"><?= htmlspecialchars($username) ?>_keyPairData.json</div>
-    </button>
-    <p>
-        These keys are used to encrypt and decrypt your message.
-        <br>These keys are not stored on the server.
-        <br>If you clear your browser data or switch browsers, you'll need to import these keys to access your messages again.
-    </p>
-</div>
+    <div id="settingsErrorMessage" class="errorMessage"></div>
 
-<div id="importKeysContainer" class="hidden">
+    <div id="exportKeysContainer" class="hidden">
+        <h2>
+            Download your key pair data
+        </h2>
+        <button id="keyPairDownloadButton" class="btn btn2">
+            <i class="fas fa-download"></i>
+            <div id="filenameContainer"><?= htmlspecialchars($username) ?>_keyPairId_<?= htmlspecialchars($keyPairId) ?>.json</div>
+        </button>
+        <p>
+            These keys are used to encrypt and decrypt your message.
+            <br>These keys are not stored on the server.
+            <br>If you clear your browser data or switch browsers, you'll need to import these keys to access your messages again.
+        </p>
+    </div>
 
+    <div id="importKeysContainer" class="hidden">
+        <p>Select your keyPairData JSON file to import it to your browser.</p>
+
+        <label for="importKeyPairData" class="btn btn2" title="Import Keys"><i class="far fa-file-import"></i></label>
+        <input type="file" id="importKeyPairData" accept=".json">
+
+    </div>
 </div>
 
 <script>
@@ -45,7 +61,6 @@
                 });
                 const keyPair = await db.get('keyPairs', '<?= htmlspecialchars($keyPairId) ?>');
                 if (!keyPair) {
-                    errorMessageContainer.innerText = 'Key pair not found in IndexedDB.';
                     console.error('Key pair not found in IndexedDB.');
                     return null;
                 }
@@ -70,42 +85,42 @@
                 console.log('Key pair stored in IndexedDB.');
                 return true;
             } catch (error) {
-                handleIndexedDBError('Error storing key pair in IndexedDB', error);
+                errorMessageContainer.innerText = 'Error storing key pair in IndexedDB';
+                console.error('Error storing key pair in IndexedDB: ', error);
                 return false;
             }
         }
 
-        async function importKeyPrompt() {
-            const messageElement = document.createElement("div");
-            messageElement.innerHTML = `
-                <p>Select your keyPairData JSON file to import it to your browser.</p>
-                <center>
-                <label for="importKeyPairData" class="btn btn2 btn3" title="Media"><i class="far fa-file-import"></i></label>
-                <input type="file" id="importKeyPairData" accept=".json">
-                </center>`;
-            messageElement.classList.add('system');
-
-            importKeysContainer.appendChild(messageElement);
-            document.getElementById('importKeyPairData').addEventListener('change', async function() {
-                const file = this.files[0];
-                await importKeyPair(file);
-            });
-        }
+        document.getElementById('importKeyPairData').addEventListener('change', async function() {
+            const file = this.files[0];
+            await importKeyPair(file);
+            this.value = null;
+        });
 
         async function importKeyPair(file) {
             if (!file) {
                 alert('Please select a file.');
-                return;
+                return false;
             }
 
             try {
                 const keyPairData = await readFileAsJSON(file);
                 console.log('Imported key pair:', keyPairData);
-                await storeKeyPairInIndexedDB(keyPairData.keyPairId, keyPairData.keyPair);
-                // Now you can use the key pair data as needed
-                // For example, you can reconstruct CryptoKey objects from the JWK data
+                if (await storeKeyPairInIndexedDB(keyPairData.keyPairId, keyPairData.keyPair)) {
+                    const keyPair = await retrieveKeyPairFromIndexedDB();
+                    if (keyPair) {
+                        alert('Key pair imported successfully.');
+                        importKeysContainer.classList.add('hidden');
+                        errorMessageContainer.innerText = '';
+                        return true;
+                    } else {
+                        alert('This is not your keyPairData file. Please select correct file.');
+                        return false;
+                    }
+                }
             } catch (error) {
                 console.error('Error importing key pair:', error);
+                return false
             }
         }
 
@@ -149,30 +164,31 @@
                     keyPair: keyPair
                 };
                 const jsonData = JSON.stringify(data);
-                const filename = '<?= htmlspecialchars($username) ?>_keyPairData.json';
+                const filename = '<?= htmlspecialchars($username) ?>_keyPairId_<?= htmlspecialchars($keyPairId) ?>.json';
                 downloadJsonFile(jsonData, filename);
-                // Redirect to home page
-                // window.location.href = '/home';
             }
         });
 
         keyPairExportButton.addEventListener('click', async function() {
-            settingsButtons.classList.add('hidden');
-            exportKeysContainer.classList.remove('hidden');
+            errorMessageContainer.innerText = '';
+            importKeysContainer.classList.add('hidden');
+            const keyPair = await retrieveKeyPairFromIndexedDB();
+            if (keyPair) {
+                exportKeysContainer.classList.remove('hidden');
+            } else {
+                errorMessageContainer.innerText = 'Key pair not found in IndexedDB.';
+            }
         });
 
         keyPairImportButton.addEventListener('click', async function() {
-            settingsButtons.classList.add('hidden');
+            errorMessageContainer.innerText = '';
+            const keyPair = await retrieveKeyPairFromIndexedDB();
+            if (keyPair) {
+                errorMessageContainer.innerText = 'Your key pair already exists in IndexedDB';
+            }
+            exportKeysContainer.classList.add('hidden');
             importKeysContainer.classList.remove('hidden');
-            // const keyPair = await retrieveKeyPairFromIndexedDB();
-            // if (!keyPair) {
-            //     console.error('ERROR: Key pair not found in IndexedDB.');
-                await importKeyPrompt();
-                // return;
-            // }
         });
-
-
 
     });
 </script>

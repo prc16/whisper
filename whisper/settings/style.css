@@ -1,10 +1,16 @@
+#settingsContainer {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
 #settingsErrorMessage {
     text-align: center;
     align-self: center;
-    padding: 24px;
+    padding-top: 24px;
 }
 
-#settingsButtons {
+/* #settingsButtons {
     display: flex;
     flex-direction: column;
     width: 100%;
@@ -14,7 +20,7 @@
 #settingsButtons .btn {
     width: 100%;
     margin-bottom: 24px;
-}
+} */
 
 #exportKeysContainer {
     display: flex;
@@ -53,6 +59,11 @@
     text-align: center;
     width: 100%;
     padding: 24px 24px;
+}
+
+#importKeysContainer .btn2 {
+    width: 100%;
+    margin-top: 24px;
 }
 
 #importKeyPairData {

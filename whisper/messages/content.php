@@ -102,24 +102,6 @@
         }
     }
 
-    async function storeKeyPairInIndexedDB(keyPairId, keyPair) {
-        try {
-            const db = await idb.openDB('whisperDB', 1, {
-                upgrade(db) {
-                    db.createObjectStore('keyPairs');
-                }
-            });
-            const tx = db.transaction('keyPairs', 'readwrite');
-            await tx.store.put(keyPair, keyPairId);
-            await tx.done;
-            console.log('Key pair stored in IndexedDB.');
-            return true;
-        } catch (error) {
-            handleIndexedDBError('Error storing key pair in IndexedDB', error);
-            return false;
-        }
-    }
-
     async function encryptAndSendMessage() {
         try {
             const message = document.getElementById('messageInput').value.trim();
@@ -191,53 +173,12 @@
     async function importKeyPrompt() {
         const messageElement = document.createElement("div");
         messageElement.innerHTML = `
-                <p>Your Message Box is Locked.<br>
-                Import Your Keys to unlock them.</p>
-                <center>
-                <label for="messageMediaUpload" class="btn btn2 btn3" title="Media"><i class="far fa-file-import"></i></label>
-                <input type="file" id="messageMediaUpload" accept=".json">
-                </center>`;
+                <br><p><b>Your Message Box is Locked.</b><br><br><br>
+                We could not find your encryption keys in this browser.<br>
+                To unlock your message box, got settings and import your keys.</p><br><br>`;
         messageElement.classList.add('system');
 
         messageFeedContainer.prepend(messageElement);
-        document.getElementById('messageMediaUpload').addEventListener('change', async function() {
-            const file = this.files[0];
-            await importKeyPair(file);
-            handleUpdateEvent();
-        });
-    }
-
-    async function importKeyPair(file) {
-        if (!file) {
-            alert('Please select a file.');
-            return;
-        }
-
-        try {
-            const keyPairData = await readFileAsJSON(file);
-            console.log('Imported key pair:', keyPairData);
-            await storeKeyPairInIndexedDB(keyPairData.keyPairId, keyPairData.keyPair);
-            // Now you can use the key pair data as needed
-            // For example, you can reconstruct CryptoKey objects from the JWK data
-        } catch (error) {
-            console.error('Error importing key pair:', error);
-        }
-    }
-
-    function readFileAsJSON(file) {
-        return new Promise((resolve, reject) => {
-            const reader = new FileReader();
-            reader.onload = () => {
-                try {
-                    const keyPairData = JSON.parse(reader.result);
-                    resolve(keyPairData);
-                } catch (error) {
-                    reject(error);
-                }
-            };
-            reader.onerror = reject;
-            reader.readAsText(file);
-        });
     }
 
     document.addEventListener('DOMContentLoaded', async () => {
