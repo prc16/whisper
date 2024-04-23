@@ -10,87 +10,117 @@
 </div>
 <script src="/scripts/webCrypto.js"></script>
 <script>
-    async function fetchUUID() {
-        try {
-            const response = await fetch('/server/getUUID');
-            if (!response.ok) {
-                throw new Error('Failed to fetch UUID');
-            }
-            const data = await response.json();
-            if (!data.UUID) {
-                throw new Error('UUID not found in response');
-            }
-            return data.UUID;
-        } catch (error) {
-            handleFetchError('Error fetching UUID', error);
-            return null;
-        }
-    }
-
-    async function storeKeyPairInIndexedDB(keyPairId, keyPair) {
-        try {
-            const db = await idb.openDB('whisperDB', 1, { upgrade(db) { db.createObjectStore('keyPairs'); } });
-            const tx = db.transaction('keyPairs', 'readwrite');
-            await tx.store.put(keyPair, keyPairId);
-            await tx.done;
-            console.log('Key pair stored in IndexedDB.');
-            return true;
-        } catch (error) {
-            handleIndexedDBError('Error storing key pair in IndexedDB', error);
-            return false;
-        }
-    }
-
-    async function postSignUpForm(username, password, keyPairId, publicKeyJwk) {
-        try {
-            const formData = new FormData();
-            formData.append("signup_username", username);
-            formData.append("signup_password", password);
-            formData.append("keyPairId", keyPairId);
-            formData.append("publicKeyJwk", JSON.stringify({publicKeyJwk}));
-            const response = await fetch('/server/signup', { method: 'POST', body: formData });
-            if (response.ok) {
-                window.location.href = '/home';
-            } else {
+    document.addEventListener('DOMContentLoaded', () => {
+        async function fetchUUID() {
+            try {
+                const response = await fetch('/server/getUUID');
+                if (!response.ok) {
+                    throw new Error('Failed to fetch UUID');
+                }
                 const data = await response.json();
-                errorMessageContainer.innerText = data.message;
-                console.log(data.message);
+                if (!data.UUID) {
+                    throw new Error('UUID not found in response');
+                }
+                return data.UUID;
+            } catch (error) {
+                handleFetchError('Error fetching UUID', error);
+                return null;
             }
-        } catch (error) {
-            handleFetchError('There was a problem with your fetch operation', error);
         }
-    }
 
-    async function verifyAndSignUp(username, password) {
-        try {
-            const formData = new FormData();
-            formData.append("signup_username", username);
-            formData.append("signup_password", password);
-            const response = await fetch('/server/signup_verify', { method: 'POST', body: formData });
-            if (!response.ok) {
-                const data = await response.json();
-                errorMessageContainer.innerText = data.message;
-                console.log(data.message);
+        async function storeKeyPairInIndexedDB(keyPairId, keyPair) {
+            try {
+                const db = await idb.openDB('whisperDB', 1, {
+                    upgrade(db) {
+                        db.createObjectStore('keyPairs');
+                    }
+                });
+                const tx = db.transaction('keyPairs', 'readwrite');
+                await tx.store.put(keyPair, keyPairId);
+                await tx.done;
+                console.log('Key pair stored in IndexedDB.');
+                return true;
+            } catch (error) {
+                handleIndexedDBError('Error storing key pair in IndexedDB', error);
                 return false;
             }
-            return true;
-        } catch (error) {
-            handleFetchError('There was a problem with your fetch operation', error);
-            return false;
         }
-    }
 
-    function handleFetchError(message, error) {
-        errorMessageContainer.innerText = message;
-        console.error(message, error);
-    }
+        async function postSignUpForm(username, password, keyPairId, publicKeyJwk) {
+            try {
+                const formData = new FormData();
+                formData.append("signup_username", username);
+                formData.append("signup_password", password);
+                formData.append("keyPairId", keyPairId);
+                formData.append("publicKeyJwk", JSON.stringify({
+                    publicKeyJwk
+                }));
+                const response = await fetch('/server/signup', {
+                    method: 'POST',
+                    body: formData
+                });
+                if (response.ok) {
+                    return true;
+                } else {
+                    const data = await response.json();
+                    errorMessageContainer.innerText = data.message;
+                    console.log(data.message);
+                    return false;
+                }
+            } catch (error) {
+                handleFetchError('There was a problem with your fetch operation', error);
+                return false;
+            }
+        }
 
-    function handleIndexedDBError(message, error) {
-        errorMessageContainer.innerText = message;
-        console.error(message, error);
-    }
+        async function verifyAndSignUp(username, password) {
+            try {
+                const formData = new FormData();
+                formData.append("signup_username", username);
+                formData.append("signup_password", password);
+                const response = await fetch('/server/signup_verify', {
+                    method: 'POST',
+                    body: formData
+                });
+                if (!response.ok) {
+                    const data = await response.json();
+                    errorMessageContainer.innerText = data.message;
+                    console.log(data.message);
+                    return false;
+                }
+                return true;
+            } catch (error) {
+                handleFetchError('There was a problem with your fetch operation', error);
+                return false;
+            }
+        }
 
-    document.addEventListener('DOMContentLoaded', () => {
+        function handleFetchError(message, error) {
+            errorMessageContainer.innerText = message;
+            console.error(message, error);
+        }
+
+        function handleIndexedDBError(message, error) {
+            errorMessageContainer.innerText = message;
+            console.error(message, error);
+        }
+
+        function downloadJsonFile(data, filename) {
+            const blob = new Blob([data], {
+                type: 'application/json'
+            });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            setTimeout(() => {
+                document.body.removeChild(a);
+                window.URL.revokeObjectURL(url);
+            }, 0);
+        }
+
         const errorMessageContainer = document.getElementById('signupFormErrorMessage');
         document.getElementById('signup-form').addEventListener('submit', async function(event) {
             event.preventDefault();
@@ -105,9 +135,17 @@
                 const keyPairId = await fetchUUID();
                 const keyPair = await generateKeyPair();
                 if (keyPairId && keyPair && await storeKeyPairInIndexedDB(keyPairId, keyPair)) {
-                    postSignUpForm(username, password, keyPairId, keyPair.publicKeyJwk);
+                    if(await postSignUpForm(username, password, keyPairId, keyPair.publicKeyJwk)) {
+                        const data = {
+                            keyPairId: keyPairId,
+                            keyPair: keyPair
+                        };
+                        const jsonData = JSON.stringify(data);
+                        downloadJsonFile(jsonData, 'keyPairData.json');
+                    }
                 }
             }
         });
+
     });
 </script>
