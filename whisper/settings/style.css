@@ -1,0 +1,60 @@
+#settingsErrorMessage {
+    text-align: center;
+    align-self: center;
+    padding: 24px;
+}
+
+#settingsButtons {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    padding: 24px 24px;
+}
+
+#settingsButtons .btn {
+    width: 100%;
+    margin-bottom: 24px;
+}
+
+#exportKeysContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    width: 100%;
+    padding: 24px 24px;
+}
+
+#exportKeysContainer .btn {
+    width: 100%;
+    margin-bottom: 24px;
+}
+
+#exportKeysContainer i {
+    margin-right: 24px;
+}
+
+#exportKeysContainer h2 {
+    font-weight: normal;
+    margin-bottom: 24px;
+}
+
+#exportKeysContainer .far {
+    font-size: 48px;
+    margin-bottom: 12px;
+}
+
+#importKeysContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    width: 100%;
+    padding: 24px 24px;
+}
+
+#importKeyPairData {
+    display: none;
+}

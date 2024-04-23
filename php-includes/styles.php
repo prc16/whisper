@@ -13,6 +13,7 @@
 <link rel="stylesheet" href="/whisper/messages/style.css">
 <link rel="stylesheet" href="/whisper/following/style.css">
 <link rel="stylesheet" href="/whisper/search/style.css">
+<link rel="stylesheet" href="/whisper/settings/style.css">
 
 <link rel="stylesheet" href="/styles/all-classes.css">
 

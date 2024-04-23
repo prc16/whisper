@@ -16,7 +16,7 @@ if(!isset($_GET['username'])) {
 
 $conn = getConnection();
 if(!$conn) {
-    header('Location: /whisper/maintenance/');
+    header('Location: /maintenance');
     exit;
 }
 

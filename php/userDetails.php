@@ -5,7 +5,7 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/php/database.php';
 
 $conn = getConnection();
 if(!$conn) {
-    header('Location: /whisper/maintenance/');
+    header('Location: /maintenance');
     exit;
 }
 

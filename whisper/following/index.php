@@ -1,3 +1,12 @@
+<?php
+// Validate session
+session_start();
+if (!isset($_SESSION['user_id'])) {
+    header('Location: /unauthorized');
+    exit;
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 

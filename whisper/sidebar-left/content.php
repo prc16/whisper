@@ -7,6 +7,7 @@
             <a href="/u/<?= htmlspecialchars($username) ?>"><i class="far fa-user"></i>Profile</a>
             <a href="/following"><i class="far fa-user-friends"></i>Following</a>
             <a href="/messages"><i class="far fa-envelope"></i>Messages</a>
+            <a href="/settings"><i class="far fa-cog"></i>settings</a>
             <a href="/logout"><i class="far fa-sign-out"></i>Log Out</a>
         <?php else : ?>
             <a href="/login"><i class="far fa-sign-in-alt"></i>Log In</a>

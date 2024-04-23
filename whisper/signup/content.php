@@ -17,7 +17,7 @@
             <div id="filenameContainer"></div>
         </button>
         <p>
-            These keys are needed to encrypt and decrypt your message.
+            These keys are used to encrypt and decrypt your message.
             <br>These keys are stored in your web browser's database.
             <br>If you clear your browser data or switch browsers, you'll need to import these keys to access your messages again.
         </p>
