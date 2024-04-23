@@ -18,7 +18,7 @@
         </button>
         <p>
             These keys are used to encrypt and decrypt your message.
-            <br>These keys are not stored on the server.
+            <br>They are not stored on the server.
             <br>If you clear your browser data or switch browsers, you'll need to import these keys to access your messages again.
         </p>
     </div>

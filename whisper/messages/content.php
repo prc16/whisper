@@ -175,7 +175,7 @@
         messageElement.innerHTML = `
                 <br><p><b>Your Message Box is Locked.</b><br><br><br>
                 We could not find your encryption keys in this browser.<br>
-                To unlock your message box, got settings and import your keys.</p><br><br>`;
+                To unlock your message box, go to settings and import your keys.</p><br><br>`;
         messageElement.classList.add('system');
 
         messageFeedContainer.prepend(messageElement);
