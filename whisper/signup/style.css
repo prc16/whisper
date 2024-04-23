@@ -27,7 +27,7 @@
 
 #signup-form h2 {
     margin-top: 24px;
-    margin-bottom:  14px;
+    margin-bottom: 14px;
 }
 
 #signup-form input[type="text"],
@@ -42,4 +42,38 @@
 
 #signup-form input[type="submit"] {
     width: 100%;
+}
+
+#downloadButtonContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    width: 100%;
+    padding: 24px 24px;
+}
+
+#downloadButtonContainer .btn {
+    width: 100%;
+    margin-bottom: 24px;
+}
+
+#downloadButtonContainer i {
+    margin-right: 24px;
+}
+
+#downloadButtonContainer h2 {
+    font-weight: normal;
+    margin-bottom: 24px;
+}
+
+#downloadButtonContainer .far {
+    font-size: 48px;
+    margin-bottom: 12px;
+}
+
+.successMessage {
+    color: green;
+    font-weight: bold;
 }

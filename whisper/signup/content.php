@@ -7,10 +7,32 @@
         <input type="password" id="confirm-password" name="confirm-password" placeholder="Confirm Password" autocomplete="new-password" required>
         <input type="submit" value="Sign Up" class="btn">
     </form>
+    <div id="downloadButtonContainer" class="hidden">
+        <h2>
+            <div class="successMessage">Sign Up Successful!!</div><br><br>
+            Please Download your key pair data
+        </h2>
+        <button id="keyPairDownloadButton" class="btn btn2">
+            <i class="fas fa-download"></i>
+            <div id="filenameContainer"></div>
+        </button>
+        <p>
+            These keys are needed to encrypt and decrypt your message.
+            <br>These keys are stored in your web browser's database.
+            <br>If you clear your browser data or switch browsers, you'll need to import these keys to access your messages again.
+        </p>
+    </div>
 </div>
 <script src="/scripts/webCrypto.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', () => {
+        const errorMessageContainer = document.getElementById('signupFormErrorMessage');
+        const signupForm = document.getElementById('signup-form');
+        const downloadButtonContainer = document.getElementById('downloadButtonContainer');
+        const keyPairDownloadButton = document.getElementById('keyPairDownloadButton');
+        const filenameContainer = document.getElementById('filenameContainer');
+
+
         async function fetchUUID() {
             try {
                 const response = await fetch('/server/getUUID');
@@ -121,8 +143,7 @@
             }, 0);
         }
 
-        const errorMessageContainer = document.getElementById('signupFormErrorMessage');
-        document.getElementById('signup-form').addEventListener('submit', async function(event) {
+        signupForm.addEventListener('submit', async function(event) {
             event.preventDefault();
             const username = document.getElementById('signup_username').value;
             const password = document.getElementById('signup_password').value;
@@ -135,13 +156,21 @@
                 const keyPairId = await fetchUUID();
                 const keyPair = await generateKeyPair();
                 if (keyPairId && keyPair && await storeKeyPairInIndexedDB(keyPairId, keyPair)) {
-                    if(await postSignUpForm(username, password, keyPairId, keyPair.publicKeyJwk)) {
+                    if (await postSignUpForm(username, password, keyPairId, keyPair.publicKeyJwk)) {
                         const data = {
                             keyPairId: keyPairId,
                             keyPair: keyPair
                         };
                         const jsonData = JSON.stringify(data);
-                        downloadJsonFile(jsonData, 'keyPairData.json');
+                        const filename = username + '_keyPairData.json';
+                        keyPairDownloadButton.addEventListener('click', () => {
+                            downloadJsonFile(jsonData, filename);
+                            // Redirect to home page
+                            window.location.href = '/home';
+                        });
+                        signupForm.classList.add('hidden');
+                        filenameContainer.innerText = filename;
+                        downloadButtonContainer.classList.remove('hidden');
                     }
                 }
             }
