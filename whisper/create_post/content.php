@@ -19,7 +19,7 @@
                 <input type="checkbox" id="createPostAnonCheckbox" class="hidden" name="createPostAnonCheckbox">
                 <label for="createPostAnonCheckbox" class="btn btn2" title="Anonymous Post"><i class="fas fa-user-shield"></i></label>
 
-                <label for="createPostTimerButton" class="btn btn2" title="Self Destruct"><i class="fas fa-clock"></i></label>
+                <label id="createPostTimerButtonLabel" for="createPostTimerButton" class="btn btn2" title="Self Destruct"><i class="fas fa-clock"></i></label>
                 <button id="createPostTimerButton" class="hidden" title="Self Destruct"></button>
 
                 <!-- Dropdown menu for selecting time interval -->
@@ -42,47 +42,113 @@
     </div>
 </div>
 <script>
-    // Get the button and dropdown elements
-    const button = document.getElementById("createPostTimerButton");
-    const dropdown = document.getElementById("timerDropdown");
-    var dropDownValue = 0;
+    document.addEventListener('DOMContentLoaded', () => {
+        const button = document.getElementById("createPostTimerButton");
+        const dropdown = document.getElementById("timerDropdown");
+        const createPostTextArea = document.getElementById("createPostTextArea");
+        const createPostMediaUpload = document.getElementById("createPostMediaUpload");
+        const createPostMediaPreview = document.getElementById("createPostMediaPreview");
+        const createPostPostButton = document.getElementById("createPostPostButton");
+        const postsFeedContainer = document.getElementById("postsFeedContainer");
+        const createPostClearButton = document.getElementById("createPostClearButton");
+        const createPostErrorMessage = document.getElementById('createPostErrorMessage');
+        const createPostAnonCheckbox = document.getElementById('createPostAnonCheckbox');
+        const createPostTimerButtonLabel = document.getElementById('createPostTimerButtonLabel');
+        let dropDownValue = 0;
 
-    // Toggle dropdown when button is clicked
-    button.addEventListener("click", function() {
-        dropdown.classList.toggle("show");
-    });
+        document.addEventListener('click', function(event) {
+            const target = event.target;
+            if (target.id === "createPostTimerButton") {
+                dropdown.classList.toggle("show");
+            } else if (!target.matches(".dropdown-content")) {
+                dropdown.classList.remove('show');
+            }
+        });
 
-    // Close the dropdown if the user clicks outside of it
-    window.addEventListener("click", function(event) {
-        if (!event.target.matches("#createPostTimerButton")) {
-            var dropdowns = document.getElementsByClassName("dropdown-content");
-            for (var i = 0; i < dropdowns.length; i++) {
-                var openDropdown = dropdowns[i];
-                if (openDropdown.classList.contains('show')) {
-                    openDropdown.classList.remove('show');
+        dropdown.addEventListener("click", function(event) {
+            const target = event.target;
+            if (target.tagName === "A") {
+                const selectedTime = target.getAttribute("data-time");
+                console.log("Selected time: " + selectedTime + " minutes");
+                dropdown.classList.remove("show");
+                dropDownValue = parseInt(selectedTime);
+                if (dropDownValue > 0) {
+                    createPostTimerButtonLabel.classList.add("btn-selected");
+                    createPostTimerButtonLabel.setAttribute("title", target.textContent);
+                } else {
+                    createPostTimerButtonLabel.classList.remove("btn-selected");
+                    createPostTimerButtonLabel.setAttribute("title", "Self Destruct");
                 }
             }
-        }
-    });
+        });
 
-    // Set the selected time when a dropdown option is clicked
-    dropdown.addEventListener("click", function(event) {
-        if (event.target.tagName === "A") {
-            var selectedTime = event.target.getAttribute("data-time");
-            // Do something with the selected time value, like triggering an action
-            console.log("Selected time: " + selectedTime + " minutes");
-            // You can close the dropdown here if needed
-            dropdown.classList.remove("show");
-            dropDownValue = parseInt(selectedTime);
-            const timerBtn = document.querySelector('label[for="createPostTimerButton"]');
-            if (dropDownValue > 0) {
-                timerBtn.classList.add("btn-selected");
-                timerBtn.setAttribute("title", event.target.textContent);
-            } else {
-                timerBtn.classList.remove("btn-selected");
-                timerBtn.setAttribute("title", "Self Destruct");
+        createPostTextArea.addEventListener("input", function() {
+            this.style.height = "auto";
+            this.style.height = this.scrollHeight + "px";
+            createPostErrorMessage.innerText = "";
+        });
+
+        createPostClearButton.addEventListener('click', function() {
+            createPostMediaUpload.value = "";
+            createPostMediaPreview.innerHTML = "";
+            createPostClearButton.classList.add('hidden');
+            createPostErrorMessage.innerText = "";
+        });
+
+        createPostMediaUpload.addEventListener("change", function() {
+            const file = this.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const mediaType = file.type.split("/")[0];
+                    if (mediaType === "image") {
+                        createPostErrorMessage.innerText = "";
+                        createPostClearButton.classList.remove('hidden');
+                        createPostMediaPreview.innerHTML = `<img src="${e.target.result}" alt="Image Preview" class="image-preview">`;
+                    } else {
+                        createPostClearButton.click(); // Clear inputs and hide button
+                        createPostErrorMessage.innerText = "Only images are allowed";
+                    }
+                };
+                reader.readAsDataURL(file);
             }
-        }
+        });
+
+        createPostPostButton.addEventListener("click", function() {
+            const postText = createPostTextArea.value.trim();
+            const file = createPostMediaUpload.files[0];
+
+            console.log(dropDownValue);
+            const formData = new FormData();
+            formData.append("post_text", postText);
+            formData.append("media_file", file);
+            formData.append("anon_post", createPostAnonCheckbox.checked);
+            formData.append("expire_at", dropDownValue);
+
+            fetch('/server/create/post', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => {
+                if (response.ok) {
+                    createPostClearButton.click(); // Clear inputs and hide button
+                    createPostTextArea.value = "";
+                    createPostTextArea.style.height = "auto";
+                    createPostAnonCheckbox.checked = false;
+                    dropDownValue = 0;
+                    createPostTimerButtonLabel.classList.remove("btn-selected");
+                    createPostTimerButtonLabel.setAttribute("title", "Self Destruct");
+                    postsFeedContainer.dispatchEvent(new Event('updateNeeded'));
+                } else {
+                    return response.json().then(data => {
+                        createPostErrorMessage.innerText = data.message;
+                        console.log(data.message);
+                    });
+                }
+            })
+            .catch(error => {
+                console.error('There was a problem with your fetch operation:', error);
+            });
+        });
     });
 </script>
-<script src="/scripts/create_post.js"></script>
