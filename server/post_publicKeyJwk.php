@@ -25,9 +25,20 @@ if (!isset($data->publicKeyJwk)) {
     exit;
 }
 
+if (!isset($data->keyPairId)) {
+    errorResponse(400, 'No key pair id provided');
+    exit;
+}
+
+// Validate keyPairId
+if (strlen($data->keyPairId) !== 16) {
+    errorResponse(400, 'Invalid key pair id');
+    exit;
+}
+
 // Validate form data
 $publicKeyJwk = json_encode($data->publicKeyJwk);
-$keyPairId  = genUUID();
+$keyPairId  = $data->keyPairId;
 // Request is valid, handle vote request
 $userId = $_SESSION['user_id'];
 
