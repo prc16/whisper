@@ -24,7 +24,7 @@
         </h2>
         <button id="keyPairDownloadButton" class="btn btn2">
             <i class="fas fa-download"></i>
-            <div id="filenameContainer"><?= htmlspecialchars($username) ?>_keyPairId_<?= htmlspecialchars($keyPairId) ?>.json</div>
+            <div id="filenameContainer"><?= htmlspecialchars($username) ?>_keyPairData_<?= htmlspecialchars($keyPairId) ?>.json</div>
         </button>
         <p>
             These keys are used to encrypt and decrypt your message.
@@ -164,7 +164,7 @@
                     keyPair: keyPair
                 };
                 const jsonData = JSON.stringify(data);
-                const filename = '<?= htmlspecialchars($username) ?>_keyPairId_<?= htmlspecialchars($keyPairId) ?>.json';
+                const filename = '<?= htmlspecialchars($username) ?>_keyPairData_<?= htmlspecialchars($keyPairId) ?>.json';
                 downloadJsonFile(jsonData, filename);
             }
         });

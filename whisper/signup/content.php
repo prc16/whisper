@@ -162,7 +162,7 @@
                             keyPair: keyPair
                         };
                         const jsonData = JSON.stringify(data);
-                        const filename = username + '_keyPairId_' + keyPairId +'.json';
+                        const filename = username + '_keyPairData_' + keyPairId +'.json';
                         keyPairDownloadButton.addEventListener('click', () => {
                             downloadJsonFile(jsonData, filename);
                             // Redirect to home page
