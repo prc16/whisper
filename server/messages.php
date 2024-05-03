@@ -30,11 +30,15 @@ if (!$conn) {
 
 if (!usernameExists($conn, $reqUsername)) {
     $conn->close();
+    if (isset($_SESSION[$reqUsername])) {
+        unset($_SESSION['reqUsername']);
+    }
     errorResponse(404, 'User not found');
     exit;
 }
 
 $reqUserId = getUserId($conn, $reqUsername);
+$_SESSION['reqUsername'] = $reqUsername;
 
 // Set character encoding to UTF-8
 header('Content-Type: application/json; charset=utf-8');

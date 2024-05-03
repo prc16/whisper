@@ -17,6 +17,12 @@ if (!isset($_SESSION['user_id'])) {
     exit;
 }
 
+// Check if username is not set to "Anonymous"
+if (strcasecmp($_GET['username'] ?? null, 'Anonymous') === 0) {
+    header('Location: /messages');
+    exit;
+}
+
 $_SESSION['reqUsername'] = $_GET['username'] ?? null;
 
 header('Location: /messages');

@@ -156,6 +156,7 @@
             privateKeyJwk
         } = keyPair;
         displayMessage("Your messages are End-to-End Encrypted.", 'system');
+        await receiveAndDecryptMessage(username, privateKeyJwk);
         fetchMessagesPeriodically(username, privateKeyJwk);
     }
 

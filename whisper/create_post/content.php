@@ -69,7 +69,6 @@
             const target = event.target;
             if (target.tagName === "A") {
                 const selectedTime = target.getAttribute("data-time");
-                console.log("Selected time: " + selectedTime + " minutes");
                 dropdown.classList.remove("show");
                 dropDownValue = parseInt(selectedTime);
                 if (dropDownValue > 0) {
@@ -118,7 +117,6 @@
             const postText = createPostTextArea.value.trim();
             const file = createPostMediaUpload.files[0];
 
-            console.log(dropDownValue);
             const formData = new FormData();
             formData.append("post_text", postText);
             formData.append("media_file", file);
